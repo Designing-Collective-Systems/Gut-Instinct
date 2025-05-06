@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 import {
     UserEmail,
@@ -11,7 +15,7 @@ Template.telluswhatyouknownow.onCreated(function() {});
 
 Template.telluswhatyouknownow.helpers({
     isEmailAsked: function() {
-        var currentUser = Meteor.user().username;
+        var currentUser = Meteor.userAsync().username;
 
         var fetchResult = UserEmail.findOne({
             "username": currentUser
@@ -38,12 +42,12 @@ Template.telluswhatyouknownow.events({
         const userRes = $('#userAnswerText').val().trim();
 
         var checkExist = (typeof UserTestResponse.findOne({
-            "username": Meteor.user().username
+            "username": Meteor.userAsync().username
         }) !== 'undefined');
 
         if (checkExist) {
             var targetID = UserTestResponse.findOne({
-                "username": Meteor.user().username
+                "username": Meteor.userAsync().username
             })._id;
             UserTestResponse.update({
                 _id: targetID
@@ -55,7 +59,7 @@ Template.telluswhatyouknownow.events({
 
         } else {
             UserTestResponse.insert({
-                "username": Meteor.user().username,
+                "username": Meteor.userAsync().username,
                 "posttest_response": userRes
             });
         }

@@ -1,4 +1,5 @@
-import './_.jade'
+import './_.html';
+import { Template } from 'meteor/templating';
 
 Template.exampleLayout.events({
     'click .example-header': function(event) {

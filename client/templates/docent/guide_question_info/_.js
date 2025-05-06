@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 // import {
 //     PersonalQuestions,
@@ -13,9 +16,9 @@ var maxDisplay = 7;
 Template.guide_question_info.rendered = function() {
 
     try {
-        if (Meteor.user()) {
-            const toured = Meteor.user().profile.toured.guide_question_info;
-            //console.log("intro_completed is " + Meteor.user().profile.intro_completed);
+        if (Meteor.userAsync()) {
+            const toured = Meteor.userAsync().profile.toured.guide_question_info;
+            //console.log("intro_completed is " + Meteor.userAsync().profile.intro_completed);
             if (!toured) {
                 introJs().setOption('showProgress', true).onchange(function(target) {
                     Meteor.call('user.updateProfileTouredGuideQuestionInfo');
@@ -101,8 +104,8 @@ Template.guide_question_info.events({
 
                 var targetUser;
                 try {
-                    if (Meteor.user()) {
-                        targetUser = Meteor.user().username;
+                    if (Meteor.userAsync()) {
+                        targetUser = Meteor.userAsync().username;
                     }
                 } catch (e) {}
 
@@ -123,12 +126,12 @@ Template.guide_question_info.events({
             }).pop();
 
             // store the personal question status in tag db
-            var targetUserName = Meteor.user().username;
+            var targetUserName = Meteor.userAsync().username;
             Meteor.call('tags.pushViewedStatus', currentQueryTag, targetUserName);
             // var targetTagID = Tags.findOne({
             //     name: currentQueryTag
             // })._id;
-            // var targetUserName = Meteor.user().username;
+            // var targetUserName = Meteor.userAsync().username;
 
             // Tags.update({
             //     _id: targetTagID
@@ -165,7 +168,7 @@ Template.guide_question_info.events({
         // }
     },
     'click #backSliderControl': function(event) {
-        const guide_completed = Meteor.user().profile.guide_completed;
+        const guide_completed = Meteor.userAsync().profile.guide_completed;
         if (guide_completed) {
             $('#backSliderControl').attr('href', '/guide');
             //window.location.replace('/guide');
@@ -247,8 +250,8 @@ Template.guide_question_info.events({
 Template.guide_question_info.helpers({
     isIntroCompleted: function() {
         try {
-            if (Meteor.user()) {
-                const intro_completed = Meteor.user().profile.intro_completed;
+            if (Meteor.userAsync()) {
+                const intro_completed = Meteor.userAsync().profile.intro_completed;
                 //console.log("intro_completed check in isintrocompleted is " + intro_completed);
                 //alert("hanging in");
                 return intro_completed;
@@ -257,8 +260,8 @@ Template.guide_question_info.helpers({
     },
     isGuideCompleted: function() {
         try {
-            if (Meteor.user()) {
-                const guide_completed = Meteor.user().profile.guide_completed;
+            if (Meteor.userAsync()) {
+                const guide_completed = Meteor.userAsync().profile.guide_completed;
                 //console.log("intro_completed check in isintrocompleted is " + intro_completed);
                 //alert("hanging in");
                 return guide_completed;

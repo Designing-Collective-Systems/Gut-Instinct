@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 var requireIntuitionAmount = 3;
 
@@ -12,12 +15,13 @@ Template.gaIntuition.onCreated(function() {
 
     var inst = this;
 
-    this.intuitions = new ReactiveArray();
-    this.sampleTopics = new ReactiveArray();
+    this.intuitions = new ReactiveVar([]);
+    this.sampleTopics = new ReactiveVar([]);
 
     this.startTime = new Date();
 
     Meteor.call("galileo.intuition.getFirstThreeIntuitions", function(err, ints) {
+        console.log(ints);
         inst.intuitions.set(ints);
     });
 

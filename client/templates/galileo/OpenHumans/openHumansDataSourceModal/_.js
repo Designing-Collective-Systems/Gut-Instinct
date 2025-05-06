@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 import {
     OpenHumansDataList
 } from "../../../../../imports/api/ga-models/constants";
@@ -41,36 +44,36 @@ function getGridDataFromOHList(data) {
 }
 
 
-Template.gaOpenHumansDataSourceModal.rendered = function() {
+Template.gaOpenHumansDataSourceModal.rendered = function () {
     markSelectedItems();
 };
 
-Template.gaOpenHumansDataSourceModal.onCreated(function() {
+Template.gaOpenHumansDataSourceModal.onCreated(function () {
     this.gridData = getGridDataFromOHList(OpenHumansDataList);
 });
 
 
 Template.gaOpenHumansDataSourceModal.helpers({
-    measureVariable: function() {
+    measureVariable: function () {
         let data = Template.instance().data;
         if (data && data.measureVariable) {
             return data.measureVariable.get();
         }
     },
-    ohGridRows: function() {
+    ohGridRows: function () {
         return Template.instance().gridData;
     }
 });
 
 Template.gaOpenHumansDataSourceModal.events({
 
-    'click .oh-item': function(event) {
+    'click .oh-item': function (event) {
         let elem = $(event.currentTarget);
         elem.toggleClass('selected');
         elem.find('.selected-triangle').toggleClass('hide');
     },
 
-    'click #openHumansSubmit': function(event, instance) {
+    'click #openHumansSubmit': function (event, instance) {
         let selectedData = [0]; // IMPORTANT - index 0 is the default value, i.e. Gut instinct messaging
         let idSuffix = instance.data.idSuffix;
 
@@ -83,11 +86,11 @@ Template.gaOpenHumansDataSourceModal.events({
         parentData.ohDataSourceVariable.set(selectedData);
     },
 
-    'show .modal': function() {
+    'show .modal': function () {
         markSelectedItems();
     },
 
-    'click #openHumansCancel': function(event, instance) {
+    'click #openHumansCancel': function (event, instance) {
         let selectedIds = Template.instance().data.ohDataSourceVariable.get();
         let idSuffix = instance.data.idSuffix;
 

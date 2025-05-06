@@ -1,0 +1,29 @@
+<template name="tag">
+  {{#if isIntroCompleted}}
+  {{> header}}
+  {{else}}
+  {{> header_gray getProgressData}}
+  {{/if}}
+
+  <div class="container content tag-page">
+    {{#if isIntroCompleted}}
+    {{#unless isCondition2or4or7or0or6or9or11}}
+    <div class="to-back">
+      <a href="/gutboard/{{getMendelCode}}">
+        <span class="oi" data-glyph="chevron-left"></span> &nbsp; Back to <i class="fa fa-comments-o"
+          aria-hidden="true"></i> GutBoard
+      </a>
+    </div>
+    {{else}}
+    <div class="to-back">
+      <a href="/topics">
+        <span class="oi" data-glyph="chevron-left"></span> &nbsp; Back to <i class="fa fa-book" aria-hidden="true"></i>
+        Topics
+      </a>
+    </div>
+    {{/unless}}
+    {{/if}}
+
+  
+  </div>
+</template>

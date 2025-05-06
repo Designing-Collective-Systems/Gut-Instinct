@@ -1,30 +1,34 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+
+
 import {
     NotificationType
 } from "../../../../imports/api/ga-models/constants";
 
-Template.gaConsole.onCreated(function() {
+Template.gaConsole.onCreated(function () {
     this.result = new ReactiveVar();
 });
 
 Template.gaConsole.helpers({
-    result: function() {
+    result: function () {
         let res = Template.instance().result.get();
         return res ? res : "No Result Right Now";
     }
 });
 
 Template.gaConsole.events({
-    "click #check-single-pilot-end": function(event) {
+    "click #check-single-pilot-end": function (event) {
         let inst = Template.instance();
-        Meteor.call("galileo.pilot.checkIfSinglePilotEnded", function(err, updated) {
+        Meteor.call("galileo.pilot.checkIfSinglePilotEnded", function (err, updated) {
             if (err) inst.result.set(err);
             else inst.result.set(JSON.stringify(updated));
         });
     },
-    "click #check-all-pilots-end": function(event) {
+    "click #check-all-pilots-end": function (event) {
         let inst = Template.instance();
-        Meteor.call("galileo.pilot.checkIfPilotsEndedPerExperiment", function(err, updated) {
+        Meteor.call("galileo.pilot.checkIfPilotsEndedPerExperiment", function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -32,9 +36,9 @@ Template.gaConsole.events({
             }
         });
     },
-    "click #send-cause-effect-pilot": function() {
+    "click #send-cause-effect-pilot": function () {
         let inst = Template.instance();
-        Meteor.call("galileo.pilot.sendCauseEffectMessage", function(err, updated) {
+        Meteor.call("galileo.pilot.sendCauseEffectMessage", function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -44,16 +48,16 @@ Template.gaConsole.events({
     },
 
 
-    "click #check-experiment-end": function(event) {
+    "click #check-experiment-end": function (event) {
         let inst = Template.instance();
-        Meteor.call("galileo.run.checkExperimentEnd", function(err, updated) {
+        Meteor.call("galileo.run.checkExperimentEnd", function (err, updated) {
             if (err) inst.result.set(err);
             else inst.result.set(JSON.stringify(updated));
         });
     },
-    "click #check-experiment-start": function(event) {
+    "click #check-experiment-start": function (event) {
         let inst = Template.instance();
-        Meteor.call("galileo.run.checkExperimentStart", function(err, updated) {
+        Meteor.call("galileo.run.checkExperimentStart", function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -61,9 +65,9 @@ Template.gaConsole.events({
             }
         });
     },
-    "click #check-experiment-run-day1": function() {
+    "click #check-experiment-run-day1": function () {
         let inst = Template.instance();
-        Meteor.call("galileo.run.check1DayBeforeExpStart", function(err, updated) {
+        Meteor.call("galileo.run.check1DayBeforeExpStart", function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -71,9 +75,9 @@ Template.gaConsole.events({
             }
         });
     },
-    "click #send-cause-effect-msg ": function() {
+    "click #send-cause-effect-msg ": function () {
         let inst = Template.instance();
-        Meteor.call("galileo.run.sendCauseEffectMessage", function(err, updated) {
+        Meteor.call("galileo.run.sendCauseEffectMessage", function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -81,9 +85,9 @@ Template.gaConsole.events({
             }
         });
     },
-    "click #send-morning-msg-pilot ": function() {
+    "click #send-morning-msg-pilot ": function () {
         let inst = Template.instance();
-        Meteor.call("galileo.pilot.sendStartOfDayMessage", function(err, updated) {
+        Meteor.call("galileo.pilot.sendStartOfDayMessage", function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -91,9 +95,9 @@ Template.gaConsole.events({
             }
         });
     },
-    "click #send-morning-msg-exp ": function() {
+    "click #send-morning-msg-exp ": function () {
         let inst = Template.instance();
-        Meteor.call("galileo.run.sendStartOfDayMessage", function(err, updated) {
+        Meteor.call("galileo.run.sendStartOfDayMessage", function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -102,7 +106,7 @@ Template.gaConsole.events({
         });
     },
 
-    "click #send-test-email": function() {
+    "click #send-test-email": function () {
         let args = {
             creatorName: "test-exp-creator",
             otherUser: "test-email",
@@ -118,7 +122,7 @@ Template.gaConsole.events({
         let type = NotificationType.RUN_STARTED_FOR_PARTICIPANT;
 
         let inst = Template.instance();
-        Meteor.call('galileo.console.emailNotify', toEmail, type, args, function(err, updated) {
+        Meteor.call('galileo.console.emailNotify', toEmail, type, args, function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -127,7 +131,7 @@ Template.gaConsole.events({
         });
     },
 
-    "click #send-remind-email": function() {
+    "click #send-remind-email": function () {
         let args = {
             creator: "test-exp-creator",
             username: "dingmei",
@@ -145,7 +149,7 @@ Template.gaConsole.events({
         let type = NotificationType.RUN_REMIND_PARTICIPANT;
 
         let inst = Template.instance();
-        Meteor.call('galileo.console.emailNotify', toEmail, type, args, function(err, updated) {
+        Meteor.call('galileo.console.emailNotify', toEmail, type, args, function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -154,7 +158,7 @@ Template.gaConsole.events({
         });
     },
 
-    "click #send-remind-email": function() {
+    "click #send-remind-email": function () {
         let args = {
             creator: "test-exp-creator",
             username: "dingmei",
@@ -172,7 +176,7 @@ Template.gaConsole.events({
         let type = NotificationType.RUN_REMIND_PARTICIPANT;
 
         let inst = Template.instance();
-        Meteor.call('galileo.console.emailNotify', toEmail, type, args, function(err, updated) {
+        Meteor.call('galileo.console.emailNotify', toEmail, type, args, function (err, updated) {
             if (err) {
                 inst.result.set(err);
             } else {
@@ -181,11 +185,11 @@ Template.gaConsole.events({
         });
     },
 
-    "click #send-test-sms": function() {
+    "click #send-test-sms": function () {
         let inst = Template.instance();
         let countryCode = "+55"; //brazil
         let phoneNumber = "enter phone here"; //brazil
-        Meteor.call('galileo.console.testSms', countryCode, phoneNumber, "hi, tushar here", function(err, updated) {
+        Meteor.call('galileo.console.testSms', countryCode, phoneNumber, "hi, tushar here", function (err, updated) {
             console.log('inside meteor call');
             if (err) {
                 inst.result.set(err);
@@ -209,7 +213,7 @@ Template.gaConsole.events({
         expReviewList.push(expToAdd);
 
         let expJoinList = [];
-        let exp =  {
+        let exp = {
             mendel: "KEFIR",
             title: "Does drink kombucha affect digest?"
         }
@@ -225,7 +229,7 @@ Template.gaConsole.events({
         };
 
         let toEmail = "d3gu@ucsd.edu";
-        Meteor.call('galileo.console.emailNotify', toEmail, type, args, function(err, updated) {
+        Meteor.call('galileo.console.emailNotify', toEmail, type, args, function (err, updated) {
             if (err) {
                 console.log(err);
             } else {

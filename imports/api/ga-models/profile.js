@@ -18,6 +18,42 @@ import {
 const PHONE_NUM_REGEX = /^\d{10}$/;
 
 const NUM_CONDITIONS = 2;
+const DEFAULT_PROFILE = {
+    condition: 0,
+    //permission_group: PERMISSION.SUDO_ADMIN,
+    consent_agreed: false,
+    toured: {
+        articles: false,
+        bookmark: false,
+        consent: false,
+        username_page: false,
+        guide_question_bin: false,
+        guide_question_info: false,
+        guide_question_module: false,
+        guide_question_result: false,
+        gutboard: false,
+        gutboard_slider: false,
+        landing: false,
+        learn_discussions: false,
+        personal_question: false,
+        personal_question_bin: false,
+        personal_question_module: false,
+        personal_tag_question: false,
+        problems: false,
+        qmodule: false,
+        tag: false,
+        topics: false,
+        tutorial: false,
+        welcome_step2: false
+    },
+    topics_investigated: {},
+    answered: {},
+    discussed: {},
+    voted: {},
+    learn_questions_viewed: {},
+    learn_questions_answered: {},
+    learn_questions_discussed: {}
+};
 
 const DEFAULT_GALILEO_PROFILE = {
     notification: {
@@ -46,9 +82,21 @@ const DEFAULT_GALILEO_PROFILE = {
     finishedEthicsTraining: true // TODO remove once ethics is complete
 };
 
+async function fetchUser() {
+    try {
+        const currentUser = await Meteor.userAsync();
+
+        return currentUser;
+
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return null;
+    }
+}
+
 Meteor.methods({
-    'galileo.profile.setMendel': function(mendel) {
-        Meteor.users.update({
+    'galileo.profile.setMendel': function (mendel) {
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -57,7 +105,7 @@ Meteor.methods({
         });
     },
 
-    'galileo.profile.getMendel': function() {
+    'galileo.profile.getMendel': function () {
         let mendel = Meteor.users.find({
             _id: Meteor.userId()
         }, {
@@ -73,7 +121,7 @@ Meteor.methods({
         }
     },
 
-    'galileo.profile.hasProfile': function() {
+    'galileo.profile.hasProfile': function () {
 
         // Check user authorized
         if (!Meteor.userId()) {
@@ -81,9 +129,9 @@ Meteor.methods({
         }
 
         // Check if galileo exists in user object
-        return ('galileo' in Meteor.user());
+        return ('galileo' in Meteor.userAsync());
     },
-    'galileo.profile.isAdmin': function() {
+    'galileo.profile.isAdmin': function () {
 
         // Check user authorized
         if (!Meteor.userId()) {
@@ -91,9 +139,9 @@ Meteor.methods({
         }
 
         // Check if galileo exists in user object
-        return (Meteor.user().profile.is_admin);
+        return (Meteor.userAsync() && Meteor.userAsync().profile && Meteor.userAsync().profile.is_admin);
     },
-    'galileo.profile.hasPhoneNumber': function(expId) {
+    'galileo.profile.hasPhoneNumber': function (expId) {
         let userId = Meteor.userId();
         let users = Meteor.users.find({
             _id: userId
@@ -116,7 +164,7 @@ Meteor.methods({
         }
         return true;
     },
-    'galileo.profile.hasUsername': function(userId) {
+    'galileo.profile.hasUsername': function (userId) {
         let users = Meteor.users.find({
             _id: userId
         }, {
@@ -126,12 +174,12 @@ Meteor.methods({
             limit: 1
         }).fetch();
         let user = users[0];
-        if (!user.username || user.username === "") {
+        if (!user || !user.username || user.username === "") {
             return false;
         }
         return true;
     },
-    'galileo.profile.hasEmail': function(userId) {
+    'galileo.profile.hasEmail': function (userId) {
         let users = Meteor.users.find({
             _id: userId
         }, {
@@ -141,32 +189,40 @@ Meteor.methods({
             limit: 1
         }).fetch();
         let user = users[0];
-        if (!user.emails || user.emails[0].address === "") {
+        if (!user || !user.emails || user.emails[0].address === "") {
             return false;
         }
         return true;
     },
-    'galileo.profile.updateProfile': function() {
+    'galileo.profile.updateProfile': function () {
         // Check user authorized
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
         // Check if the galileo profile has already existed
-        if ('galileo' in Meteor.user()) {
+        if ('galileo' in Meteor.userAsync()) {
             return;
         }
 
         // Generate random condition for the user
+        let setprofobj = JSON.parse(JSON.stringify(DEFAULT_PROFILE));
+
         let setobj = JSON.parse(JSON.stringify(DEFAULT_GALILEO_PROFILE));
         setobj.condition = Math.floor(Math.random() * NUM_CONDITIONS);
 
         // Get the current user and add the default galileo profile
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
-                'galileo': setobj
+                'galileo': setobj,
+                'profile': setprofobj
             }
         });
+        if ('galileo' in Meteor.userAsync()) {
+            console.log("GALILEO ADDED");
+        } else {
+            console.log("GALILEO NOT ADDED");
+        }
     },
 
     /*
@@ -196,8 +252,8 @@ Meteor.methods({
     },
 
 
-    'galileo.profile.deleteProfile': function() {
-        Meteor.users.update(Meteor.userId(), {
+    'galileo.profile.deleteProfile': function () {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $unset: {
                 'galileo': ""
             }
@@ -211,19 +267,27 @@ Meteor.methods({
         if (user_id === undefined || user_id === null) {
             user_id = Meteor.userId();
         }
-        return Meteor.users.find(user_id).fetch()[0].galileo;
+
+        let user = Meteor.users.findOneAsync({
+            _id: user_id
+        });
+        
+        fetchUser().then(userData => {
+            return userData.profile;
+        });
+        //return Meteor.userAsync().;
     },
-    'galileo.profile.getCtryFlagByArray': function(id_array) {
+    'galileo.profile.getCtryFlagByArray': function (id_array) {
         let result = [];
-        id_array.forEach(function(elt) {
+        id_array.forEach(function (elt) {
             result.push(getFlagHelper("", elt));
         });
         return result;
     },
-    'galileo.profile.getCtryFlag': function(username, user_id) {
+    'galileo.profile.getCtryFlag': function (username, user_id) {
         return getFlagHelper(username, user_id);
     },
-    'galileo.profile.getExperimentStatsSidebar': function() {
+    'galileo.profile.getExperimentStatsSidebar': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
@@ -250,12 +314,12 @@ Meteor.methods({
 
         return expStats;
     },
-    'galileo.profile.getUnderReviewExperiments': function() {
+    'galileo.profile.getUnderReviewExperiments': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        return Experiments.find({
+        const experimentsCursor = Experiments.find({
             "user_id": Meteor.userId(),
             "status": {
                 $gte: ExperimentStatus.OPEN_FOR_REVIEW,
@@ -268,14 +332,24 @@ Meteor.methods({
             sort: {
                 "create_date_time": -1
             }
-        }).fetch().map(exp => Meteor.call("galileo.experiments.getExperiment", exp._id));
+        });
+        const experimentsArray = Array.from(experimentsCursor.fetch());
+
+        const getExperiment = Meteor.wrapAsync(Meteor.call, Meteor);
+
+        return experimentsArray.map(exp => getExperiment("galileo.experiments.getExperiment", exp._id));
+
+
+
+
+
     },
-    'galileo.profile.getReadyToRunExperiments': function() {
+    'galileo.profile.getReadyToRunExperiments': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        return Experiments.find({
+        const experimentsCursor = Experiments.find({
             "user_id": Meteor.userId(),
             "status": ExperimentStatus.READY_TO_RUN
         }, {
@@ -285,14 +359,22 @@ Meteor.methods({
             sort: {
                 "create_date_time": -1
             }
-        }).fetch().map(exp => Meteor.call("galileo.experiments.getExperiment", exp._id));
+        });
+        const experimentsArray = Array.from(experimentsCursor.fetch());
+
+        const getExperiment = Meteor.wrapAsync(Meteor.call, Meteor);
+
+        return experimentsArray.map(exp => getExperiment("galileo.experiments.getExperiment", exp._id));
+
+
+
     },
-    'galileo.profile.getCreatedExperiments': function() {
+    'galileo.profile.getCreatedExperiments': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        return Experiments.find({
+        const experimentsCursor = Experiments.find({
             "user_id": Meteor.userId(),
             "status": {
                 $gte: ExperimentStatus.DESIGNED
@@ -304,14 +386,19 @@ Meteor.methods({
             sort: {
                 "create_date_time": -1
             }
-        }).fetch().map(exp => Meteor.call("galileo.experiments.getExperiment", exp._id));
+        });
+        const experimentsArray = Array.from(experimentsCursor.fetch());
+
+        const getExperiment = Meteor.wrapAsync(Meteor.call, Meteor);
+
+        return experimentsArray.map(exp => getExperiment("galileo.experiments.getExperiment", exp._id));
     },
-    'galileo.profile.getCompletedExperiments': function() {
+    'galileo.profile.getCompletedExperiments': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        return Experiments.find({
+        const experimentsCursor = Experiments.find({
             "user_id": Meteor.userId(),
             "status": {
                 $gte: ExperimentStatus.FINISHED
@@ -323,14 +410,20 @@ Meteor.methods({
             sort: {
                 "create_date_time": -1
             }
-        }).fetch().map(exp => Meteor.call("galileo.experiments.getExperiment", exp._id));
+        });
+        const experimentsArray = Array.from(experimentsCursor.fetch());
+
+        const getExperiment = Meteor.wrapAsync(Meteor.call, Meteor);
+
+        return experimentsArray.map(exp => getExperiment("galileo.experiments.getExperiment", exp._id));
     },
-    'galileo.profile.getOngoingExperiments': function() {
+    'galileo.profile.getOngoingExperiments': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        return Experiments.find({
+
+        const experimentsCursor = Experiments.find({
             "user_id": Meteor.userId(),
             "status": {
                 $gte: ExperimentStatus.PREPARING_TO_START,
@@ -343,9 +436,14 @@ Meteor.methods({
             sort: {
                 "create_date_time": -1
             }
-        }).fetch().map(exp => Meteor.call("galileo.experiments.getExperiment", exp._id));
+        });
+        const experimentsArray = Array.from(experimentsCursor.fetch());
+
+        const getExperiment = Meteor.wrapAsync(Meteor.call, Meteor);
+
+        return experimentsArray.map(exp => getExperiment("galileo.experiments.getExperiment", exp._id));
     },
-    'galileo.profile.getPilotingExperiments': function() {
+    'galileo.profile.getPilotingExperiments': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
@@ -370,23 +468,27 @@ Meteor.methods({
 
         return Object.values(expMap);
     },
-    'galileo.profile.getUnfinishedExperiments': function() {
+    'galileo.profile.getUnfinishedExperiments': function () {
 
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        let exps = Experiments.find({
+
+
+        const experimentsCursor = Experiments.find({
             "user_id": Meteor.userId(),
             "status": ExperimentStatus.CREATED
         }, {
             fields: {
                 _id: 1
             }
-        }).fetch().map(exp => Meteor.call("galileo.experiments.getExperiment", exp._id));
+        });
+        const experimentsArray = Array.from(experimentsCursor.fetch());
+        const getExperiment = Meteor.wrapAsync(Meteor.call, Meteor);
 
-        return exps
+        return experimentsArray.map(exp => getExperiment("galileo.experiments.getExperiment", exp._id));
     },
-    'galileo.profile.getReviewingExperiments': function() {
+    'galileo.profile.getReviewingExperiments': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
@@ -417,21 +519,28 @@ Meteor.methods({
             }
         }
     },
-    'galileo.profile.getParticipatingExperiments': function() {
-        return Participations.find({
+    'galileo.profile.getParticipatingExperiments': function () {
+
+        const participationsCursor = Participations.find({
             "user_id": Meteor.userId()
         }, {
             fields: {
                 "exp_id": 1
             }
-        }).fetch().map((part) => Meteor.call("galileo.experiments.getExperiment", part.exp_id));
+        });
+        const participationsArray = Array.from(participationsCursor.fetch());
+
+        const getParticipations = Meteor.wrapAsync(Meteor.call, Meteor);
+
+        return participationsArray.map(exp => getParticipations("galileo.experiments.getExperiment", exp.exp_id));
+
     },
 
-    'galileo.profile.getPhone': function() {
+    'galileo.profile.getPhone': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        let user = Meteor.user();
+        let user = Meteor.userAsync();
         if (!user) {
             throw new Meteor.Error("user-not-exists");
         }
@@ -441,7 +550,7 @@ Meteor.methods({
             return user.galileo.phone;
         }
     },
-    'galileo.profile.setPhone': function(phone) {
+    'galileo.profile.setPhone': function (phone) {
 
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
@@ -452,19 +561,19 @@ Meteor.methods({
             throw new Meteor.Error('Invalid Phone Number');
         }
 
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.phone": phone
             }
         });
     },
-    'galileo.profile.setEmail': function(email) {
+    'galileo.profile.setEmail': function (email) {
 
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "emails": [{
                     "address": email,
@@ -473,25 +582,25 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.setUsername': function(username) {
+    'galileo.profile.setUsername': function (username) {
 
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "username": username
             }
         });
     },
-    'galileo.profile.setEmailReminder': function(boolVal) {
+    'galileo.profile.setEmailReminder': function (boolVal) {
 
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.remindByEmail": boolVal
             }
@@ -499,80 +608,80 @@ Meteor.methods({
     },
 
 
-    'galileo.profile.setCountry': function(country) {
+    'galileo.profile.setCountry': function (country) {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.country": country
             }
         });
     },
-    'galileo.profile.setCity': function(city) {
+    'galileo.profile.setCity': function (city) {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.city": city
             }
         });
     },
-    'galileo.profile.setTimeZone': function(timezone, isDst) {
+    'galileo.profile.setTimeZone': function (timezone, isDst) {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.timezone": timezone,
                 "galileo.isDst": isDst
             }
         });
     },
-    'galileo.profile.setTimeZoneOnly': function(timezone) {
+    'galileo.profile.setTimeZoneOnly': function (timezone) {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.timezone": timezone,
             }
         });
     },
-    'galileo.profile.setIsDstOnly': function(isDst) {
+    'galileo.profile.setIsDstOnly': function (isDst) {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.isDst": isDst,
             }
         });
     },
-    'galileo.profile.setInterest': function(interest) {
+    'galileo.profile.setInterest': function (interest) {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.interest": interest
             }
         });
     },
-    'galileo.profile.getInterest': function() {
+    'galileo.profile.getInterest': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        return Meteor.user().galileo.interest;
+        return Meteor.userAsync().galileo.interest;
     },
 
     // TODO Deprecated
-    'galileo.profile.setIntuitionTime': function(time) {
+    'galileo.profile.setIntuitionTime': function (time) {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 "galileo.intuitionTime": time
             }
@@ -580,27 +689,27 @@ Meteor.methods({
     },
 
     //
-    'users.hasUsername': function() {
+    'users.hasUsername': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        return Meteor.user().username !== undefined;
+        return Meteor.userAsync().username !== undefined;
     },
-    'users.getUsername': function() {
+    'users.getUsername': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        return Meteor.user().username;
+        return Meteor.userAsync().username;
     },
 
     // TODO @Vineet
-    'galileo.profile.updateEthicsCertificate': function(url) {
+    'galileo.profile.updateEthicsCertificate': function (url) {
         let currentUserId = Meteor.userId();
         if (!currentUserId) {
             throw new Meteor.Error("not-authorized");
         }
-        Meteor.users.update(currentUserId, {
+        Meteor.users.updateAsync(currentUserId, {
             $set: {
                 "galileo.ethicsCertificate": url,
                 "galileo.finishedEthicsTraining": true
@@ -608,7 +717,7 @@ Meteor.methods({
         });
 
         //update all experiments created by user that were "designed" to become "open for review"
-        Experiments.update({
+        Experiments.updateAsync({
             user_id: currentUserId,
             status: ExperimentStatus.DESIGNED
         }, {
@@ -617,11 +726,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.getEthicsCertificate': function() {
+    'galileo.profile.getEthicsCertificate': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-        let user = Meteor.user();
+        let user = Meteor.userAsync();
         if (!user) {
             throw new Meteor.Error("user-not-found");
         }
@@ -632,16 +741,16 @@ Meteor.methods({
         }
     },
 
-    'galileo.profile.hasFinishedEthics': function() {
+    'galileo.profile.hasFinishedEthics': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized')
         }
-        return Meteor.user().galileo.finishedEthicsTraining;
+        return Meteor.userAsync().galileo.finishedEthicsTraining;
     },
 
-    'galileo.profile.setUsernameToured': function() {
+    'galileo.profile.setUsernameToured': function () {
         console.log('marking username toured = true');
-        Meteor.users.update(Meteor.userId(), {
+        Meteor.users.updateAsync(Meteor.userId(), {
             $set: {
                 'profile.toured.username_page': true
             }
@@ -649,17 +758,17 @@ Meteor.methods({
     },
 
     //
-    'galileo.profile.getNotificationSetting': function() {
+    'galileo.profile.getNotificationSetting': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        return Meteor.user().galileo.notification;
+        return Meteor.userAsync().galileo.notification;
     },
-    'galileo.profile.notification.enableOnMyExp': function() {
+    'galileo.profile.notification.enableOnMyExp': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -667,11 +776,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.disableOnMyExp': function() {
+    'galileo.profile.notification.disableOnMyExp': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -679,11 +788,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.enableOnFollowingExp': function() {
+    'galileo.profile.notification.enableOnFollowingExp': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -691,11 +800,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.disableOnFollowingExp': function() {
+    'galileo.profile.notification.disableOnFollowingExp': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -703,11 +812,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.enableOnJoinedExp': function() {
+    'galileo.profile.notification.enableOnJoinedExp': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -715,11 +824,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.disableOnJoinedExp': function() {
+    'galileo.profile.notification.disableOnJoinedExp': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -727,11 +836,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.enableOnFeedbackProvidedExp': function() {
+    'galileo.profile.notification.enableOnFeedbackProvidedExp': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -739,11 +848,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.disableOnFeedbackProvidedExp': function() {
+    'galileo.profile.notification.disableOnFeedbackProvidedExp': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -751,11 +860,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.enableOnNewExpAdded': function() {
+    'galileo.profile.notification.enableOnNewExpAdded': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -763,11 +872,11 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.notification.disableOnNewExpAdded': function() {
+    'galileo.profile.notification.disableOnNewExpAdded': function () {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
-        Meteor.users.update({
+        Meteor.users.updateAsync({
             _id: Meteor.userId()
         }, {
             $set: {
@@ -775,13 +884,13 @@ Meteor.methods({
             }
         });
     },
-    'galileo.profile.getRelativeExperiments': function(userId) {
+    'galileo.profile.getRelativeExperiments': function (userId) {
         let exps = [],
             participations = [],
             relativeExps = [],
             reviewing = [];
         exps = getExperimentsByUserHelper(userId);
-        exps.forEach(function(exp) {
+        exps.forEach(function (exp) {
             relativeExps.push(exp);
         });
         reviewing = Experiments.find({
@@ -791,7 +900,7 @@ Meteor.methods({
                 $lte: ExperimentStatus.REVIEWED
             }
         }).fetch();
-        reviewing.forEach(function(exp) {
+        reviewing.forEach(function (exp) {
             relativeExps.push(exp);
         })
         participations = Participations.find({
@@ -801,7 +910,7 @@ Meteor.methods({
                 $lte: ParticipationStatus.FINISHED,
             }
         }).fetch();
-        participations.forEach(function(p) {
+        participations.forEach(function (p) {
             relativeExps.push(p);
         });
         return relativeExps;
@@ -813,7 +922,7 @@ function getExperimentsByUserHelper(targetUserID) {
     if (!targetUserID) {
         return null;
     } else {
-        let syncfunc = Meteor.wrapAsync(function(callback) {
+        let syncfunc = Meteor.wrapAsync(function (callback) {
             Experiments.rawCollection().aggregate([ // Raw Collection returns the original mongo db collection so that we can do aggregate on it
                 {
                     $match: { // First matching all the experiments that has status greater than merely created.
@@ -840,7 +949,7 @@ function getExperimentsByUserHelper(targetUserID) {
 function getFlagHelper(username, user_id) {
     let ctry = "";
     if (username && username.length > 0) {
-        ctry = Meteor.users.find({"username":username}).fetch()[0].galileo.country;
+        ctry = Meteor.users.find({ "username": username }).fetch()[0].galileo.country;
     } else {
         ctry = Meteor.users.find(user_id).fetch()[0].galileo.country;
     }

@@ -1,4 +1,6 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+
 
 Template.gaHome.onCreated(function() {
     Session.setDefault('isDemo', true);

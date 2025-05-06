@@ -1,4 +1,5 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
 import {
     Session
 } from 'meteor/session'
@@ -8,8 +9,8 @@ Template.gaCriteriaDemo.rendered = function() {
 };
 
 Template.gaCriteriaDemo.onCreated(function() {
-    this.inclusionCriteria = new ReactiveArray();
-    this.exclusionCriteria = new ReactiveArray();
+    this.inclusionCriteria = new ReactiveVar([]);
+    this.exclusionCriteria = new ReactiveVar([]);
     this.exp = new ReactiveVar(undefined);
 
     let inst = this;

@@ -1,7 +1,10 @@
 // import { emailList } from '/imports/api/models';
+import './_.html';
+import { Template } from 'meteor/templating';
+
 
 Template.cardLayout.helpers({
-    nextButtonText: function() {
+    nextButtonText: function () {
         let data = Template.instance().data;
         if (data && data.nextButtonText) {
             return data.nextButtonText
@@ -16,12 +19,12 @@ Template.cardLayout.helpers({
 });
 
 Template.cardLayout.events({
-    'click #nextBtn': function() {
+    'click #nextBtn': function () {
         let type = Template.instance().data.type;
         let designId = Template.instance().data.designId;
         Meteor.call("galileo.experiments.design.setTimeStamp", designId, type);
     },
-    'click #finishBtn': function() {
+    'click #finishBtn': function () {
         let type = Template.instance().data.type;
         let designId = Template.instance().data.designId;
         Meteor.call("galileo.experiments.design.setTimeStamp", designId, type);

@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import {
     Session
@@ -80,16 +83,16 @@ Template.gaCreateDemo.onCreated(function() {
     this.exp.effectOhDataSourceIds = new ReactiveVar(undefined);
 
     this.exp.hasInclusionCriteria = new ReactiveVar(false);
-    this.exp.inclusionCriteria = new ReactiveArray();
+    this.exp.inclusionCriteria = new ReactiveVar([]);
     this.exp.hasExclusionCriteria = new ReactiveVar(false);
-    this.exp.exclusionCriteria = new ReactiveArray();
+    this.exp.exclusionCriteria = new ReactiveVar([]);
 
     this.exp.controlCondition = new ReactiveVar(undefined);
     this.exp.experimentalCondition = new ReactiveVar(undefined);
-    this.exp.controlSteps = new ReactiveArray();
-    this.exp.experimentalSteps = new ReactiveArray();
-    this.exp.experimentalPrepSteps = new ReactiveArray();
-    this.exp.controlPrepSteps = new ReactiveArray();
+    this.exp.controlSteps = new ReactiveVar([]);
+    this.exp.experimentalSteps = new ReactiveVar([]);
+    this.exp.experimentalPrepSteps = new ReactiveVar([]);
+    this.exp.controlPrepSteps = new ReactiveVar([]);
 
     /////////////////////////
     this.design_cause = new ReactiveVar(undefined);

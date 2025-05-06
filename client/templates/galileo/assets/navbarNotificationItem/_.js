@@ -1,4 +1,5 @@
-import "./_.jade";
+import './_.html';
+import { Template } from 'meteor/templating';
 
 Template.gaNavbarNotificationItem.events({
     "click .navbar-ind": function(event) {

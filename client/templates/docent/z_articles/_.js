@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 import {
     Articles,
@@ -21,11 +25,11 @@ Template.articles.rendered = function() {
     } catch (e) {}
 
     try {
-        const toured = Meteor.user().profile.toured.articles;
+        const toured = Meteor.userAsync().profile.toured.articles;
 
         if (!toured) {
             introJs().setOption('showProgress', true).onchange(function(target) {
-                Meteor.users.update(Meteor.userId(), {
+                Meteor.users.updateAsync(Meteor.userId(), {
                     $set: {
                         'profile.toured.articles': true
                     }

@@ -1,6 +1,18 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { redirect } from '../../../imports/api/ga-routes.js';
 
+
+Template.consent.rendered = function() {
+    console.log("Template.consent.rendered");
+    if (Meteor.user()) {
+        console.log(Meteor.user().profile);
+    }
+}
 Template.consent.events({
+    "click #logout": function () {
+        redirect("/galileo/logout");
+    },
     'submit form': function(event) {
         event.preventDefault();
 
@@ -16,11 +28,11 @@ Template.consent.events({
 
         if (window.location.pathname === '/galileo/consent') {
             // Router.go('/galileo/landing');
-            Router.go('/galileo/username');
+            redirect('/galileo/username');
         } else {
             //Router.go('/intro');
             //Vineet editing to hardcode Galileo rather than giving an intro
-            Router.go('/galileo/username');
+            redirect('/galileo/username');
         }
     }
 });

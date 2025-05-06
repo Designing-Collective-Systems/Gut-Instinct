@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 import {
     Questions
@@ -21,7 +25,7 @@ Template.test.helpers({
         var result = false;
         var condition = "default";
         try {
-            var participant = Meteor.user().username;
+            var participant = Meteor.userAsync().username;
             if (participant[0] === 'p' && !isNaN(parseInt(participant.substring(1)))) {
                 participant = parseInt(participant.substring(1));
                 if (participant >= 11 && participant <= 15) {
@@ -32,12 +36,12 @@ Template.test.helpers({
                 const added = Questions.find({
                     owner: {
                         _id: Meteor.userId(),
-                        username: Meteor.user().username
+                        username: Meteor.userAsync().username
                     }
                 });
                 var count = added.fetch().length;
                 result = count < 3;
-                // const answered = Meteor.user().profile.answered;
+                // const answered = Meteor.userAsync().profile.answered;
                 // var count = 0;
                 // for (var question in answered) {
                 //     if (answered.hasOwnProperty(question)) {
@@ -47,7 +51,7 @@ Template.test.helpers({
                 // Template.instance().completed.set(count);
                 // result = count < 3;
             } else {
-                const topics_investigated = Meteor.user().profile.topics_investigated;
+                const topics_investigated = Meteor.userAsync().profile.topics_investigated;
                 var count = 0;
                 for (var topic in topics_investigated) {
                     if (topics_investigated.hasOwnProperty(topic)) {
@@ -84,7 +88,7 @@ Template.test.helpers({
         return count > 3 ? 0 : 3 - count;
     },
     isWorkCondition: function() {
-        var participant = Meteor.user().username;
+        var participant = Meteor.userAsync().username;
         if (participant[0] === 'p' && !isNaN(parseInt(participant.substring(1)))) {
             participant = parseInt(participant.substring(1));
             if (participant >= 11 && participant <= 15) {

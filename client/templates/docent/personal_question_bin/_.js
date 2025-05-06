@@ -1,15 +1,19 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 import {
     PersonalQuestions
 } from '../../../../imports/api/models.js';
 
 Template.personal_question_bin.rendered = function() {
-    if (Meteor.user()) {
-        const toured = Meteor.user().profile.toured.personal_question;
+    if (Meteor.userAsync()) {
+        const toured = Meteor.userAsync().profile.toured.personal_question;
         if (!toured) {
             introJs().setOption('showProgress', true).onchange(function(target) {
-                Meteor.users.update(Meteor.userId(), {
+                Meteor.users.updateAsync(Meteor.userId(), {
                     $set: {
                         'profile.toured.personal_question': true
                     }

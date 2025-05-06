@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 import {
     ParticipationStatus
 } from "../../../../../imports/api/ga-models/constants";
@@ -7,9 +11,9 @@ import {
 Template.gaJoinCriteria.onCreated(function() {
     let inst = this;
     this.isSubmitLoading = new ReactiveVar(false);
-    // this.criteria = new ReactiveArray();
-    this.criteria_inclusion = new ReactiveArray();
-    this.criteria_exclusion = new ReactiveArray();
+    // this.criteria = new ReactiveVar([]);
+    this.criteria_inclusion = new ReactiveVar([]);
+    this.criteria_exclusion = new ReactiveVar([]);
     this.isCriteriaLoading = new ReactiveVar(true);
     this.experiment = new ReactiveVar(undefined);
 

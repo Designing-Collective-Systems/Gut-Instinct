@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 import {
     Time
 } from "../../../../../../imports/api/ga-models/time";
@@ -6,7 +10,7 @@ import {
 Template.gaMeExperimentPilotSheets.onCreated(function() {
     let self = this;
     self.exp = new ReactiveVar();
-    self.versions = new ReactiveArray();
+    self.versions = new ReactiveVar([]);
     Meteor.call("galileo.experiments.getExperiment", this.data.id, function(err, exp) {
         self.exp.set(exp);
         self.versions.set(exp.versions);

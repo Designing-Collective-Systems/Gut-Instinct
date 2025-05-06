@@ -1,4 +1,7 @@
-import './_.jade'
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 Template.gaIntuitionBoard.rendered = function() {
 
@@ -8,7 +11,7 @@ Template.gaIntuitionBoard.onCreated(function() {
 
     var self = this;
 
-    this.intuitions = new ReactiveArray();
+    this.intuitions = new ReactiveVar([]);
     Meteor.call("galileo.intuition.getIntuitions", function(err, result) {
         if (err) {
             alert("Server Connection Error")
@@ -17,7 +20,7 @@ Template.gaIntuitionBoard.onCreated(function() {
         }
     });
 
-    this.tags = new ReactiveArray();
+    this.tags = new ReactiveVar([]);
     this.filter = new ReactiveVar(undefined);
     Meteor.call("galileo.intuition.getIntuitionTags", function(err, result) {
         if (err) {
@@ -61,7 +64,8 @@ Template.gaIntuitionBoard.helpers({
         return Template.instance().tags.get();
     },
     hasIntuition: function() {
-        return Template.instance().intuitions.get().length > 0;
+        return true;
+        //Template.instance().intuitions.get().length > 0;
     }
 });
 

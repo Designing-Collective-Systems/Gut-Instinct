@@ -1,4 +1,7 @@
-import "./_.jade";
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 Template.gaMeSidebar.rendered = function() {
     $("a[href='" + window.location.pathname + "']").addClass("active");
@@ -114,7 +117,7 @@ Template.gaMeSidebar.events({
     },
     "click #logout": function(event) {
         if (confirm("Are you sure you want to log out? You can just close the tab and open it later without having to log back in.")) {
-            window.location.href = "/logout";
+            window.location.href = "/galileo/logout";
         }
     },
     // "click .help": function (event) {

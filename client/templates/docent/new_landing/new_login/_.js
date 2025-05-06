@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 Template.new_login.onRendered = function() {
     var swiper = new Swiper('.swiper-container', {
@@ -152,7 +156,7 @@ Template.new_login.onCreated(function() {
 //         } else {
 //             UserMetrics.insert({
 //                 user_id: Meteor.userId(),
-//                 username: Meteor.user().username,
+//                 username: Meteor.userAsync().username,
 //                 login_counter: 0,
 //                 visit_counter: {
 //                     gutboard: 0,

@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 import {
     UserEmail
@@ -17,7 +21,7 @@ Template.welcome.onCreated(function() {
 
 Template.welcome.helpers({
     isEmailAsked: function() {
-        var currentUser = Meteor.user().username;
+        var currentUser = Meteor.userAsync().username;
 
         var fetchResult = UserEmail.findOne({
             "username": currentUser

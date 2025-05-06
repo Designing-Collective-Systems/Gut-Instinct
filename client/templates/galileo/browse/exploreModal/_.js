@@ -1,4 +1,6 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+
 import {
     ExperimentStatus,
     ErrorMessage,
@@ -11,46 +13,46 @@ let roles = {
     PARTICIPANT: 'Participant'
 };
 
-Template.gaExploreModal.onCreated(function() {
+Template.gaExploreModal.onCreated(function () {
     this.selectedRole = new ReactiveVar('');
 });
 
 Template.gaExploreModal.helpers({
-    experimentObjective: function() {
+    experimentObjective: function () {
         let data = Template.instance().data;
         if (data && data.exp) {
             return "Does " + data.exp.design.cause + " affect " + data.exp.design.effect + "?";
         }
     },
-    selectedRole: function() {
+    selectedRole: function () {
         return Template.instance().selectedRole.get();
     },
-    showPilot: function() {
+    showPilot: function () {
         return (Template.instance().data && Template.instance().data.showPilot);
     },
-    showNotOpenForPilot: function() {
+    showNotOpenForPilot: function () {
         let selectedRole = Template.instance().selectedRole.get();
         return (selectedRole === roles.PILOT && !isOpenForPilot());
     },
-    showNotOpenForWaitlist: function() {
+    showNotOpenForWaitlist: function () {
         let selectedRole = Template.instance().selectedRole.get();
         return (selectedRole === roles.PARTICIPANT && isOpenForWaitlist());
     },
-    isRunning: function() {
+    isRunning: function () {
         let data = Template.instance().data;
 
         if (data && data.exp) {
             return (data.exp.status === ExperimentStatus.STARTED)
         }
     },
-    isEnded: function() {
+    isEnded: function () {
         let data = Template.instance().data;
 
         if (data && data.exp) {
             return (data.exp.status === ExperimentStatus.FINISHED)
         }
     },
-    inclusion: function() {
+    inclusion: function () {
         if (Template.instance().data.exp) {
             return Template.instance().data.exp.design.criteria.inclusion.map((str, i) => {
                 return {
@@ -60,7 +62,7 @@ Template.gaExploreModal.helpers({
             });
         }
     },
-    exclusion: function() {
+    exclusion: function () {
         if (Template.instance().data.exp) {
             return Template.instance().data.exp.design.criteria.exclusion.map((str, i) => {
                 return {
@@ -73,7 +75,7 @@ Template.gaExploreModal.helpers({
 });
 
 Template.gaExploreModal.events({
-    'click #reviewerBtn': function(event, instance) {
+    'click #reviewerBtn': function (event, instance) {
         $("#reviewerBtn").attr('class', 'btn light-blue');
         $("#pilotBtn").attr('class', 'btn light-blue darken-4');
         $("#participantBtn").attr('class', 'btn light-blue darken-4');
@@ -87,7 +89,7 @@ Template.gaExploreModal.events({
         instance.selectedRole.set(roles.REVIEWER);
     },
 
-    'click #pilotBtn': function(event, instance) {
+    'click #pilotBtn': function (event, instance) {
         $("#reviewerBtn").attr('class', 'btn light-blue darken-4');
         $("#pilotBtn").attr('class', 'btn light-blue');
         $("#participantBtn").attr('class', 'btn light-blue darken-4');
@@ -101,7 +103,7 @@ Template.gaExploreModal.events({
         instance.selectedRole.set(roles.PILOT);
     },
 
-    'click #participantBtn': function(event, instance) {
+    'click #participantBtn': function (event, instance) {
         $("#reviewerBtn").attr('class', 'btn light-blue darken-4');
         $("#pilotBtn").attr('class', 'btn light-blue darken-4');
         $("#participantBtn").attr('class', 'btn light-blue');
@@ -115,7 +117,7 @@ Template.gaExploreModal.events({
         instance.selectedRole.set(roles.PARTICIPANT);
     },
 
-    'click #proceedBtn': function(event, instance) {
+    'click #proceedBtn': function (event, instance) {
         if (!Meteor.user()) {
             $('#sign-in-modal').modal('open');
             return;
@@ -139,7 +141,7 @@ Template.gaExploreModal.events({
 
 function proceedAsReviewer(expId) {
 
-    Meteor.call('galileo.feedback.joinAsReviewer', expId, function(err) {
+    Meteor.call('galileo.feedback.joinAsReviewer', expId, function (err) {
         if (err) {
             Materialize.toast(err, 4000, "toast rounded");
         } else {
@@ -152,9 +154,9 @@ function proceedAsReviewer(expId) {
 
 function proceedExplore(methodName, url, expId, arr) {
     let inst = Template.instance();
-    Meteor.call(methodName, expId, function(err, can) {
+    Meteor.call(methodName, expId, function (err, can) {
         if (!err && can && "galileo.run.canParticipate" === methodName) {
-            Meteor.call("galileo.run.getParticipantStatus", expId, function(err, result) {
+            Meteor.call("galileo.run.getParticipantStatus", expId, function (err, result) {
                 if (result === ParticipationStatus.PASSED_CRITERIA || result === ParticipationStatus.PREPARING) {
                     window.location.href = "/galileo/me/dashboard";
                 } else if (result === ParticipationStatus.FAILED_CRITERIA) {
@@ -168,7 +170,7 @@ function proceedExplore(methodName, url, expId, arr) {
                         arr.push($("label[for=" + $list.eq(i).attr("id") + "]").text());
                     }
 
-                    Meteor.call("galileo.run.submitCriteria", expId, arr, function(err, success) {
+                    Meteor.call("galileo.run.submitCriteria", expId, arr, function (err, success) {
                         if (!err && success) {
                             //Materialize.toast("Congratulations, you've successfully joined this experiment!!", 3000, "toast rounded");
                             window.location.href = "/galileo/join/consent/" + expId;
@@ -184,7 +186,7 @@ function proceedExplore(methodName, url, expId, arr) {
             if (err.error === ErrorMessage.MISSING_PHONE) {
                 showPhoneModal(inst);
             } else if (err.error === ErrorMessage.EXP_END || err.error === ErrorMessage.EXP_START) {
-                Meteor.call("galileo.run.addToWaitlist", expId, function(err) {
+                Meteor.call("galileo.run.addToWaitlist", expId, function (err) {
                     $("#explore-item-modal").modal('close');
                     window.location.href = '/galileo/browse'
                 });
@@ -216,10 +218,10 @@ function showPhoneModal(instance) {
     let phoneModal = $('#add-phone-modal');
     phoneModal.modal({
         dismissible: true, // Modal can be dismissed by clicking outside of the modal
-        ready: function() {
+        ready: function () {
             phoneModal.trigger('show');
         },
-        complete: function() {
+        complete: function () {
             if (phoneModal.data('goToJoin')) {
                 $("#proceedBtn").click();
             }

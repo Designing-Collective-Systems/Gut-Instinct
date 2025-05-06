@@ -1,6 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
 
-Template.gaEmailDropdown.rendered = function() {
+Template.gaEmailDropdown.rendered = function () {
     $('select').material_select();
     $('.dropdown-button').dropdown({
         // inDuration: 300,
@@ -14,7 +16,7 @@ Template.gaEmailDropdown.rendered = function() {
 
 };
 
-Template.gaEmailDropdown.onCreated(function() {
+Template.gaEmailDropdown.onCreated(function () {
     this.causePrevTimeDisabled = new ReactiveVar(undefined);
     this.effectPrevTimeDisabled = new ReactiveVar(undefined);
     if (Template.instance().data.id === "thank-email") {
@@ -27,7 +29,7 @@ Template.gaEmailDropdown.onCreated(function() {
 Template.gaEmailDropdown.helpers({});
 
 Template.gaEmailDropdown.events({
-    'click .frequency-dropdown-option': function(event, instance) {
+    'click .frequency-dropdown-option': function (event, instance) {
         let labelId = '#' + this.id;
         let textId = '#frequency-text-' + this.id;
         let $label = $(labelId);
@@ -54,7 +56,7 @@ Template.gaEmailDropdown.events({
 
         try {
             Template.instance().data.time.set(dataValue);
-        } catch (err) {}
+        } catch (err) { }
 
         if (dataValue === "0") {
             localStorage.setItem("sendTo", "missingDataYesterday");
@@ -69,7 +71,7 @@ Template.gaEmailDropdown.events({
         }
     },
 
-    'click .dropdown-div': function(event, instance) {
+    'click .dropdown-div': function (event, instance) {
         // if text box is visible, clicking on div should do nothing
         let textId = '#frequency-text-' + this.id;
         if ($(textId).is(":visible")) {
@@ -83,7 +85,7 @@ Template.gaEmailDropdown.events({
 
 function disableTime(dataValue, prevDisabled) {
     let list = document.querySelectorAll(".frequency-dropdown-option");
-    list.forEach(function(element) {
+    list.forEach(function (element) {
         let value = element.getAttribute('data-value');
         if (value === dataValue) {
             element.classList.add('disabled');

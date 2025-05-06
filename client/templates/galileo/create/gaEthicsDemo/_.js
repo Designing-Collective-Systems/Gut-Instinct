@@ -1,4 +1,5 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
 
 Template.gaEthicsDemo.rendered = function() {
     $(".card-frame").show().trigger("show");

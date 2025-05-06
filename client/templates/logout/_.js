@@ -1,1 +1,1 @@
-import './_.jade';
+import './_.html';

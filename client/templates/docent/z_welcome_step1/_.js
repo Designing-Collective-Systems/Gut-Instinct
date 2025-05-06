@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 import {
     Questions,
@@ -22,7 +26,7 @@ Template.welcome_step1.onCreated(function() {
 
 Template.welcome_step1.helpers({
     isEmailAsked: function() {
-        var currentUser = Meteor.user().username;
+        var currentUser = Meteor.userAsync().username;
 
         var fetchResult = UserEmail.findOne({
             "username": currentUser
@@ -39,7 +43,7 @@ Template.welcome_step1.helpers({
 Template.welcome_step1.events({
     'submit form': function(event) {
         event.preventDefault();
-        var currentUser = Meteor.user().username;
+        var currentUser = Meteor.userAsync().username;
 
         console.log("storing agid");
 

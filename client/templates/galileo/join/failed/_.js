@@ -1,12 +1,16 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 import {
     ErrorMessage
 } from "../../../../../imports/api/ga-models/constants";
 
 Template.gaJoinFailed.onCreated(function() {
     let inst = this;
-    this.failedInclusionList = new ReactiveArray();
-    this.failedExclusionList = new ReactiveArray();
+    this.failedInclusionList = new ReactiveVar([]);
+    this.failedExclusionList = new ReactiveVar([]);
     this.isReviewer = new ReactiveVar(false);
 
     //Meteor.call("galileo.experiments.getShuffledCriteria", this.data.id,

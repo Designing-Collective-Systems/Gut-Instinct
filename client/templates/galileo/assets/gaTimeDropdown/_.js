@@ -1,4 +1,6 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 Template.gaTimeDropdown.rendered = function() {
     $('select').material_select();

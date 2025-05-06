@@ -1,21 +1,23 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
 
-Template.checklist.rendered = function() {};
+
+Template.checklist.rendered = function () { };
 
 
-Template.checklist.onCreated(function() {
+Template.checklist.onCreated(function () {
     this.checklistItems = Template.parentData(0).checklistItems;
 });
 
 
 Template.checklist.helpers({
-    checklistItems: function() {
+    checklistItems: function () {
         return Template.instance().checklistItems.get();
     },
 });
 
 Template.checklist.events({
-    'click .option-add': function(event, instance) {
+    'click .option-add': function (event, instance) {
         let id = $(event.currentTarget).attr('id');
         let index = parseInt(id.split('-')[3]);
 
@@ -31,13 +33,13 @@ Template.checklist.events({
 
         // setting new option to array
         Template.instance().checklistItems.set(options);
-        setTimeout(function() {
+        setTimeout(function () {
             $('#option-input-' + id.split('-')[2] + '-' + (index + 1)).focus();
         }, 100);
 
     },
 
-    'click .option-delete': function(event) {
+    'click .option-delete': function (event) {
         let options = Template.instance().checklistItems.get();
         if (options.length <= 1)
             return;
@@ -56,7 +58,7 @@ Template.checklist.events({
         Template.instance().checklistItems.set(options);
     },
 
-    'change .option-input': function(event) {
+    'change .option-input': function (event) {
         // called when some change happens in text input, and then user leaves the element
         let options = Template.instance().checklistItems.get();
         let optionId = event.currentTarget.id.split('-')[3];

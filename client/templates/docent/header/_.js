@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 import {
     Questions,
@@ -21,8 +25,8 @@ Template.header.rendered = function() {
     }
 
     try {
-        if (Meteor.user()) {
-            if (Meteor.user().username.length < 5) {
+        if (Meteor.userAsync()) {
+            if (Meteor.userAsync().username.length < 5) {
                 $("#userDrop").css('padding-left', '50px');
             }
 
@@ -66,15 +70,15 @@ Template.header.helpers({
     },
     user: function() {
         try {
-            return Meteor.user().username;
+            return Meteor.userAsync().username;
         } catch (e) {
             return '';
         }
     },
     counter: function() {
         try {
-            if (Meteor.user()) {
-                const answered = Meteor.user().profile.answered;
+            if (Meteor.userAsync()) {
+                const answered = Meteor.userAsync().profile.answered;
                 const questions = Questions.find({}).fetch();
 
                 var answered_count = 0;
@@ -101,13 +105,13 @@ Template.header.helpers({
     },
     isLearnCondition: function() {
         try {
-            var condition = Meteor.user().profile.condition;
+            var condition = Meteor.userAsync().profile.condition;
             return condition == 1;
         } catch (e) {
             return false;
         }
 
-        // var username = Meteor.user().username;
+        // var username = Meteor.userAsync().username;
         // if (username[0] === 'p' && !isNaN(parseInt(username.substring(1)))) {
         //     const participant = parseInt(username.substring(1));
         //     if (participant >= 6 && participant <= 10) {
@@ -118,8 +122,8 @@ Template.header.helpers({
     },
     isWorkCondition: function() {
         try {
-            if (Meteor.user()) {
-                var condition = Meteor.user().profile.condition;
+            if (Meteor.userAsync()) {
+                var condition = Meteor.userAsync().profile.condition;
                 return condition == 2;
             }
         } catch (e) {
@@ -128,8 +132,8 @@ Template.header.helpers({
     },
     isCondition1or3or5or8or10: function() {
         try {
-            if (Meteor.user()) {
-                var condition = Meteor.user().profile.condition;
+            if (Meteor.userAsync()) {
+                var condition = Meteor.userAsync().profile.condition;
                 //console.log("my condition is in" + condition);
                 return condition == 1 || condition == 3 || condition == 5 || condition == 8 || condition == 10;
             }
@@ -139,8 +143,8 @@ Template.header.helpers({
     },
     isCondition1: function() {
         try {
-            if (Meteor.user()) {
-                var condition = Meteor.user().profile.condition;
+            if (Meteor.userAsync()) {
+                var condition = Meteor.userAsync().profile.condition;
                 //console.log("my condition is in" + condition);
                 return condition == 1;
             }
@@ -150,8 +154,8 @@ Template.header.helpers({
     },
     isCondition2: function() {
         try {
-            if (Meteor.user()) {
-                var condition = Meteor.user().profile.condition;
+            if (Meteor.userAsync()) {
+                var condition = Meteor.userAsync().profile.condition;
                 //console.log("my condition is in" + condition);
                 return condition == 2;
             }
@@ -161,8 +165,8 @@ Template.header.helpers({
     },
     isCondition7: function() {
         try {
-            if (Meteor.user()) {
-                var condition = Meteor.user().profile.condition;
+            if (Meteor.userAsync()) {
+                var condition = Meteor.userAsync().profile.condition;
                 //console.log("my condition is in" + condition);
                 return condition == 7;
             }
@@ -173,8 +177,8 @@ Template.header.helpers({
     },
     isCondition1or2or7or8or9: function() {
         try {
-            if (Meteor.user()) {
-                var condition = Meteor.user().profile.condition;
+            if (Meteor.userAsync()) {
+                var condition = Meteor.userAsync().profile.condition;
                 //console.log("my condition is in" + condition);
                 return condition == 1 || condition == 2 || condition == 7 || condition == 8 || condition == 9;
             }
@@ -184,7 +188,7 @@ Template.header.helpers({
     },
     renderNotification: function() {
         var dbNotificationCheck = _.sortBy(Notifications.find({
-            raw_owner_name: Meteor.user().username,
+            raw_owner_name: Meteor.userAsync().username,
             isRead: 0
         }).fetch(), function(object) {
             return object.created_at.getTime();
@@ -194,7 +198,7 @@ Template.header.helpers({
     },
     getNotificationCount: function() {
         var dbNotificationCheck = Notifications.find({
-            raw_owner_name: Meteor.user().username,
+            raw_owner_name: Meteor.userAsync().username,
             isRead: 0
         }).fetch();
         return dbNotificationCheck.length;
@@ -202,19 +206,19 @@ Template.header.helpers({
     getBookmarkCount: function() {
         var dbBkCheck = Bookmarks.find({
             owner: {
-                'username': Meteor.user().username,
+                'username': Meteor.userAsync().username,
                 '_id': Meteor.userId()
             }
         }).fetch();
         return dbBkCheck.length;
     },
     isUnreadNotification: function() {
-        if (typeof Meteor.user() === 'undefined') {
+        if (typeof Meteor.userAsync() === 'undefined') {
             return false;
         }
 
         var dbNotificationCheck = Notifications.find({
-            raw_owner_name: Meteor.user().username,
+            raw_owner_name: Meteor.userAsync().username,
             isRead: 0
         }).fetch();
         if (dbNotificationCheck.length == 0) {
@@ -225,13 +229,13 @@ Template.header.helpers({
 
     },
     isBookmarkCount: function() {
-        if (typeof Meteor.user() === 'undefined') {
+        if (typeof Meteor.userAsync() === 'undefined') {
             return false;
         }
 
         var dbBkCheck = Bookmarks.find({
             owner: {
-                'username': Meteor.user().username,
+                'username': Meteor.userAsync().username,
                 '_id': Meteor.userId()
             }
         }).fetch();
@@ -247,9 +251,9 @@ Template.header.helpers({
     },
     hasEmail: function() {
         try {
-            if (Meteor.user()) {
+            if (Meteor.userAsync()) {
                 let searchEmail = UserEmail.findOne({
-                    username: Meteor.user().username
+                    username: Meteor.userAsync().username
                 }).email;
                 if (searchEmail === undefined || searchEmail === '' || searchEmail === 'no-email@example.com')
                     return false;
@@ -260,8 +264,8 @@ Template.header.helpers({
     },
     visitedTopics: function() {
         try {
-            if (Meteor.user())
-                return Meteor.user().profile.toured.topics;
+            if (Meteor.userAsync())
+                return Meteor.userAsync().profile.toured.topics;
         } catch (e) {}
     }
 });
@@ -282,10 +286,10 @@ Template.header.events({
     },
     'click #addQuestionControlHeader': function(event, instance) {
 
-        const guide_completed = Meteor.user().profile.guide_completed;
+        const guide_completed = Meteor.userAsync().profile.guide_completed;
         console.log("guide_completed is " + guide_completed);
 
-        var condition = Meteor.user().profile.condition;
+        var condition = Meteor.userAsync().profile.condition;
         //console.log("my condition is in" + condition);
         //docent-exp
         if (condition == 3 || condition == 4 || condition == 5 || condition == 6) {
@@ -310,7 +314,7 @@ Template.header.events({
     },
     /*'click #bugControlHeader': function(event, instance) {
 
-     const guide_completed = Meteor.user().profile.guide_completed;
+     const guide_completed = Meteor.userAsync().profile.guide_completed;
      console.log("guide_completed is "+guide_completed);
 
      //if(!doneTraining) {

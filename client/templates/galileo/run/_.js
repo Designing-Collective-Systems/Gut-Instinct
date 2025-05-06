@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 Template.gaRun.onRendered(function() {
     $('select').material_select();
@@ -17,7 +20,7 @@ Template.gaRun.onRendered(function() {
 
 Template.gaRun.onCreated(function() {
     this.exp = new ReactiveVar(null);
-    this.visitedSteps = new ReactiveArray();
+    this.visitedSteps = new ReactiveVar([]);
     this.step = new ReactiveVar(1);
     this.duration = new ReactiveVar();
     this.durationDisabled = new ReactiveVar(true);

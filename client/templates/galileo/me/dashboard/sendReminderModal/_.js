@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 import {
     OpenHumansDataList
 } from "../../../../../../imports/api/ga-models/constants";
@@ -13,12 +17,12 @@ Template.gaSendReminderModal.rendered = function() {
 Template.gaSendReminderModal.onCreated(function() {
     let inst = this;
 
-    this.myOngoingExp = new ReactiveArray();
-    this.reminderListToday = new ReactiveArray();
-    this.hasDataListToday = new ReactiveArray();
-    this.reminderListYesterday = new ReactiveArray();
-    this.hasDataListYesterday = new ReactiveArray();
-    this.allPartList = new ReactiveArray();
+    this.myOngoingExp = new ReactiveVar([]);
+    this.reminderListToday = new ReactiveVar([]);
+    this.hasDataListToday = new ReactiveVar([]);
+    this.reminderListYesterday = new ReactiveVar([]);
+    this.hasDataListYesterday = new ReactiveVar([]);
+    this.allPartList = new ReactiveVar([]);
     this.isLoaded = new ReactiveVar(false);
     this.userId = new ReactiveVar();
 

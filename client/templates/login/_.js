@@ -1,18 +1,21 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import {
     Questions,
     UserMetrics
 } from '../../../imports/api/models.js';
 
-Template.login.rendered = function() {
+Template.login.rendered = function () {
     $('#login-slider').slick();
 
     $('.sign_in').hide();
 
 };
 
-Template.login.onCreated(function() {
+Template.login.onCreated(function () {
     this.error = new ReactiveVar('');
     this.state = new ReactiveDict();
     this.state.set('signin', true);
@@ -21,28 +24,28 @@ Template.login.onCreated(function() {
 
 
 Template.login.helpers({
-    signin: function() {
+    signin: function () {
         return Template.instance().state.get('signin');
     },
-    signup: function() {
+    signup: function () {
         return Template.instance().state.get('signup');
     },
-    error_message: function() {
+    error_message: function () {
         return Template.instance().error.get();
     },
-    s4tg: function() { //vineet - this does not need to be fixed using qcondition - this shows
+    s4tg: function () { //vineet - this does not need to be fixed using qcondition - this shows
         //up on login screen
-        return _.first(_.sortBy(Questions.find({}).fetch(), function(question) {
+        return _.first(_.sortBy(Questions.find({}).fetch(), function (question) {
             return -question.upvote_count;
         }), 3);
     },
-    getInstance: function() {
+    getInstance: function () {
         return Template.instance();
     },
-    getAlerts: function() {
+    getAlerts: function () {
         alert("fearfawfa");
     },
-    getRandomIntInclusive: function(min, max) {
+    getRandomIntInclusive: function (min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -51,7 +54,7 @@ Template.login.helpers({
 
 
 Template.login.events({
-    'submit form': function(event, instance) {
+    'submit form': function (event, instance) {
         event.preventDefault();
         const username = event.target.username.value;
         const password = event.target.password.value;
@@ -64,17 +67,17 @@ Template.login.events({
             handleCreateUser(username, password, instance);
         }
     },
-    'click #login-facebook': function(event, instance) {
+    'click #login-facebook': function (event, instance) {
         event.preventDefault();
         Meteor.loginWithFacebook({
             requestPermissions: ['public_profile, email']
-        }, function(err) {
+        }, function (err) {
             if (err) {
                 handleBasicError(err, instance);
             }
         });
     },
-    'click #login-google': function(event, instance) {
+    'click #login-google': function (event, instance) {
         event.preventDefault();
 
         // THIS IS NEEDED FOR GOOGLE DRIVE ACCESS, CHECK IN LATER
@@ -84,22 +87,22 @@ Template.login.events({
         //     requestPermissions: ['profile', 'email', 'https://www.googleapis.com/auth/drive.file']}, function(err){
         Meteor.loginWithGoogle({
             requestPermissions: ['profile', 'email']
-        }, function(err) {
+        }, function (err) {
             if (err) {
                 handleBasicError(err, instance);
             }
         });
     },
-    'click #login-coursera': function(e) {
+    'click #login-coursera': function (e) {
         e.preventDefault();
 
-        Meteor.loginWithCoursera(function(err) {
+        Meteor.loginWithCoursera(function (err) {
             if (err) {
                 handleBasicError(err, instance);
             }
         });
     },
-    'click .toggle': function(event, instance) {
+    'click .toggle': function (event, instance) {
         console.log('TOGGLE');
         event.preventDefault();
         const state = {
@@ -109,7 +112,7 @@ Template.login.events({
         instance.state.set('signin', !state.signin);
         instance.state.set('signup', !state.signup);
     },
-    'click .to-login': function(event) {
+    'click .to-login': function (event) {
         handleClickToLogin(event)
     }
 });
@@ -143,7 +146,7 @@ function handleBasicError(err, instance) {
 
 
 function handleLogin(username, password, instance) {
-    Meteor.loginWithPassword(username, password, function(err) {
+    Meteor.loginWithPassword(username, password, function (err) {
         if (err) {
             handleBasicError(err, instance);
         } else {
@@ -167,14 +170,14 @@ function handleCreateUser(username, password, instance) {
     Accounts.createUser({
         username: username,
         password: password
-    }, function(err) {
+    }, function (err) {
         if (err) {
             handleBasicError(err, instance);
             return;
         } else {
             UserMetrics.insert({
                 user_id: Meteor.userId(),
-                username: Meteor.user().username,
+                username: Meteor.userAsync().username,
                 login_counter: 0,
                 visit_counter: {
                     gutboard: 0,

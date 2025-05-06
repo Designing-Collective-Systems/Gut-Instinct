@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+
+
 import {
     Session
 } from 'meteor/session'

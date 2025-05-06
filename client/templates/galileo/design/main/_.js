@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 import Helper from '../helper';
 
 Template.gaExperimentDesign.onCreated(function() {
@@ -45,12 +48,12 @@ Template.gaExperimentDesign.onCreated(function() {
     this.expId = new ReactiveVar(undefined);
     this.guestMode = new ReactiveVar(false);
 
-    this.editableExclusionCriteria = new ReactiveArray();
-    this.editableInclusionCriteria = new ReactiveArray();
-    this.editableControlSteps = new ReactiveArray();
-    this.editableExperimentalSteps = new ReactiveArray();
-    this.editableExperimentalPrepSteps = new ReactiveArray();
-    this.editableControlPrepSteps = new ReactiveArray();
+    this.editableExclusionCriteria = new ReactiveVar([]);
+    this.editableInclusionCriteria = new ReactiveVar([]);
+    this.editableControlSteps = new ReactiveVar([]);
+    this.editableExperimentalSteps = new ReactiveVar([]);
+    this.editableExperimentalPrepSteps = new ReactiveVar([]);
+    this.editableControlPrepSteps = new ReactiveVar([]);
 
     this.causeOhDataSourceIds = new ReactiveVar(null);
     this.effectOhDataSourceIds = new ReactiveVar(null);

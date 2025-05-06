@@ -1,4 +1,8 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 
 import {
     PersonalQuestions
@@ -6,16 +10,16 @@ import {
 
 Template.personal_question_module.onCreated(function() {
     this.tag_editable = new ReactiveVar(false);
-    this.tags = new ReactiveArray();
+    this.tags = new ReactiveVar([]);
     this.first = new ReactiveVar(false);
 });
 
 Template.personal_question_module.rendered = function() {
     // if user exist
     try {
-        if (Meteor.user()) {
+        if (Meteor.userAsync()) {
             //console.log("here1")
-            var targetUser = Meteor.user().username;
+            var targetUser = Meteor.userAsync().username;
             var currentQueryTag = window.location.pathname.split('/').filter(function(el) {
                 return !!el;
             }).pop();
@@ -37,11 +41,11 @@ Template.personal_question_module.rendered = function() {
                 }
             }
 
-            const toured = Meteor.user().profile.toured.personal_question_module;
+            const toured = Meteor.userAsync().profile.toured.personal_question_module;
             if (!toured) {
                 introJs().setOption('showProgress', true).onchange(function(target) {
                     Meteor.call("user.updateProfileTouredPersonalQuestionModule");
-                    // Meteor.users.update(Meteor.userId(), {
+                    // Meteor.users.updateAsync(Meteor.userId(), {
                     //     $set: {
                     //         'profile.toured.personal_question_module': true
                     //     }
@@ -78,7 +82,7 @@ Template.personal_question_module.events({
             for (var i = 0; i < personalFetchResult.length; i++) {
                 var userRes = $($("input:radio:checked")[i]).attr("personal-id");
                 var targetID = personalFetchResult[i]._id;
-                var targetUser = Meteor.user().username;
+                var targetUser = Meteor.userAsync().username;
                 // PersonalQuestions.update( { _id: targetID }, { $push: { answers: {username: targetUser, response: userRes} } } );
             }
             var redirectURL = "/t/" + window.location.pathname.split('/').filter(function(el) {
@@ -112,7 +116,7 @@ Template.personal_question_module.events({
 
         var newIndex = this.cluster + "-" + personalFetch.choices.length
 
-        Meteor.call("personalQuestions.addOption", personalFetch._id, this.cluster, newIndex, "None", newOption, Meteor.user().username);
+        Meteor.call("personalQuestions.addOption", personalFetch._id, this.cluster, newIndex, "None", newOption, Meteor.userAsync().username);
 
         $(event.target).parent().find('#tag-' + this.cluster + '-answer-extra-text-text').val("")
         $(event.target).parent().hide();

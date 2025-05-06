@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 Template.gaPilot.rendered = function() {
     $('select').material_select();
@@ -18,7 +21,7 @@ Template.gaPilot.rendered = function() {
 Template.gaPilot.onCreated(function() {
     let self = this;
     this.exp = new ReactiveVar(null);
-    this.visitedSteps = new ReactiveArray();
+    this.visitedSteps = new ReactiveVar([]);
     this.step = new ReactiveVar(1);
     this.group = new ReactiveVar(null);
     this.groupDisabled = new ReactiveVar(true);

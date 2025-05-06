@@ -1,4 +1,5 @@
-import "./_.jade";
+import './_.html';
+import { Template } from 'meteor/templating';
 
 Template.fileUploadBtn.rendered = function() {
     initiate(this.data.id);

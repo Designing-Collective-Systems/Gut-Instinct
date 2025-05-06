@@ -1,8 +1,11 @@
-import './_.jade'
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 Template.gaMeReviewingExperiments.onCreated(function() {
     let inst = this;
-    this.exps = new ReactiveArray();
+    this.exps = new ReactiveVar([]);
     this.isLoaded = new ReactiveVar(false);
     Tracker.autorun(function() {
         Meteor.call("galileo.profile.getReviewingExperiments", function(err, result) {

@@ -1,4 +1,9 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
+
+
 import {
     ExperimentStatus
 } from '/imports/api/ga-models/constants';
@@ -98,7 +103,7 @@ Template.gaMeExperimentInfo.onCreated(function() {
 
     let inst = this;
     inst.exp = new ReactiveVar(undefined);
-    inst.statusList = new ReactiveArray(statusList);
+    inst.statusList = new ReactiveVar([statusList]);
     inst.reviewedPilots = new ReactiveVar(null);
     inst.isLoading = new ReactiveVar(true);
     inst.showPilot = new ReactiveVar(false);

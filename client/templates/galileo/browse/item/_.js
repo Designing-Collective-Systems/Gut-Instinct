@@ -1,4 +1,5 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
 
 import {
     UserEmail
@@ -8,13 +9,13 @@ import {
 } from '../../../../../imports/api/ga-models/constants.js';
 
 
-Template.gaExperimentBoardItem.onCreated(function() {
+Template.gaExperimentBoardItem.onCreated(function () {
     let inst = Template.instance();
 
     this.exp = new ReactiveVar(inst.data.exp);
     this.userflag = new ReactiveVar();
-    this.reviewerFlags = new ReactiveArray();
-    this.participantsInfo = new ReactiveArray();
+    this.reviewerFlags = new ReactiveVar([]);
+    this.participantsInfo = new ReactiveVar([]);
     this.isPilot = new ReactiveVar(false);
     this.isFeedbacking = new ReactiveVar(false);
     this.isParticipant = new ReactiveVar(false);
@@ -31,23 +32,23 @@ Template.gaExperimentBoardItem.onCreated(function() {
     let reviewers = inst.data.exp.feedback_users;
     let exp_id = inst.data.exp._id;
     if (username) {
-        Meteor.call("galileo.profile.getCtryFlag", username, "", function(err, result) {
+        Meteor.call("galileo.profile.getCtryFlag", username, "", function (err, result) {
             inst.userflag.set(result);
         })
     }
 
     if (reviewers) {
-        Meteor.call("galileo.profile.getCtryFlagByArray", reviewers, function(err, result) {
+        Meteor.call("galileo.profile.getCtryFlagByArray", reviewers, function (err, result) {
             inst.reviewerFlags.set(result);
         })
     }
 
     if (exp_id) {
-        Meteor.call("galileo.experiments.getExperimentWithParticipantData", exp_id, function(err, result) {
+        Meteor.call("galileo.experiments.getExperimentWithParticipantData", exp_id, function (err, result) {
             inst.participantsInfo.set(result.participantInfoResults);
         })
     }
-    Tracker.autorun(function() {
+    Tracker.autorun(function () {
         let expId = inst.exp.get()._id;
         if (!expId) {
             return;
@@ -72,7 +73,7 @@ Template.gaExperimentBoardItem.onCreated(function() {
         //     inst.stats.set('participantCount', result.participantCount);
         // });
 
-        Meteor.call("galileo.experiments.getCurrentUserRole", expId, function(err, result) {
+        Meteor.call("galileo.experiments.getCurrentUserRole", expId, function (err, result) {
             if (!err && result) {
                 inst.isFeedbacking.set(result.isReviewer);
                 inst.isPilot.set(result.isPilotUser);
@@ -97,76 +98,76 @@ Template.gaExperimentBoardItem.onCreated(function() {
 });
 
 Template.gaExperimentBoardItem.helpers({
-    related_works: function() {
+    related_works: function () {
         let exp = Template.instance().exp.get();
 
         if (exp && exp.design && exp.design.related_works) {
             return exp.design.related_works;
         }
     },
-    isAdmin: function() {
+    isAdmin: function () {
         return Meteor.user().profile.is_admin;
     },
-    isEnded: function() {
+    isEnded: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             return exp.status == ExperimentStatus.FINISHED;
         }
     },
-    isRunning: function() {
+    isRunning: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             return exp.status == ExperimentStatus.STARTED;
         }
     },
-    show: function() {
+    show: function () {
 
         // TODO
         return true;
     },
-    index: function() {
+    index: function () {
         return Template.instance().data.index;
     },
-    showPilot: function() {
+    showPilot: function () {
         return Template.instance().data && Template.instance().data.showPilot;
     },
-    expId: function() {
+    expId: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             return Template.instance().exp.get()._id;
         }
     },
-    hypothesis: function() {
+    hypothesis: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             return exp.design.cause + " " + exp.design.relation + " " + exp.design.effect;
         }
     },
-    experimentObjective: function() {
+    experimentObjective: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             return "Does " + exp.design.cause + " affect " + exp.design.effect + "?";
         }
     },
-    username: function() {
+    username: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             return exp.username;
         }
     },
-    userflag: function() {
+    userflag: function () {
         let flag = Template.instance().userflag.get();
         if (flag) {
             return flag;
         }
     },
-    createDate: function() {
+    createDate: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             return exp["create_date_time"];
         }
     },
-    isNew: function() {
+    isNew: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             let date = exp["create_date_time"];
@@ -176,45 +177,45 @@ Template.gaExperimentBoardItem.helpers({
             }
         }
     },
-    encodeUrl: function(exp) {
+    encodeUrl: function (exp) {
         return encodeURIComponent("http://gutinstinct.ucsd.edu/galileo/experiment/" + exp._id);
     },
-    isCreator: function() {
+    isCreator: function () {
         let exp = Template.instance().exp.get();
         if (exp) {
             return exp.user_id === Meteor.userId();
         }
     },
-    isPilot: function() {
+    isPilot: function () {
         return Template.instance().isPilot.get();
     },
-    isFeedbacking: function() {
+    isFeedbacking: function () {
         return Template.instance().isFeedbacking.get();
     },
-    isParticipant: function() {
+    isParticipant: function () {
         return Template.instance().isParticipant.get();
     },
-    isLookingForReviewers: function() {
+    isLookingForReviewers: function () {
         return Template.instance().exp.get() &&
             Template.instance().exp.get().status >= ExperimentStatus.OPEN_FOR_REVIEW &&
             Template.instance().exp.get().status < ExperimentStatus.REVIEWED;
     },
-    isLookingForParticipants: function() {
+    isLookingForParticipants: function () {
         return Template.instance().exp.get() &&
             ((Template.instance().exp.get().status >= ExperimentStatus.READY_TO_RUN &&
-                    Template.instance().exp.get().status <= ExperimentStatus.PREPARING_TO_START) ||
+                Template.instance().exp.get().status <= ExperimentStatus.PREPARING_TO_START) ||
                 (Template.instance().exp.get().status == ExperimentStatus.REVIEWED));
     },
-    isFailedCriteria: function() {
+    isFailedCriteria: function () {
         return Template.instance().isFailedCriteria.get();
     },
-    isWaitlist: function() {
+    isWaitlist: function () {
         return Template.instance().isWaitlist.get();
     },
-    isAbuse: function() {
+    isAbuse: function () {
         return Template.instance().isAbuse.get();
     },
-    isFlagged: function() {
+    isFlagged: function () {
         let exp = Template.instance().exp.get();
         // console.log(exp.flag_status);
         //return exp.flag_status;
@@ -229,39 +230,39 @@ Template.gaExperimentBoardItem.helpers({
             return false;
         }
     },
-    renderAbuseDetails: function() {
+    renderAbuseDetails: function () {
         let exp = Template.instance().exp.get();
         console.log("vineet " + exp.flag_reason);
         return exp.flag_reason;
     },
-    getReviewerCount: function() {
+    getReviewerCount: function () {
         return Template.instance().stats.get('reviewerCount');
     },
-    getReviewerFlags: function() {
+    getReviewerFlags: function () {
         let flags = Template.instance().reviewerFlags.get();
         if (flags) {
             return flags;
         }
     },
-    getPilotCount: function() {
+    getPilotCount: function () {
         return Template.instance().stats.get('pilotCount');
     },
-    getParticipantCount: function() {
+    getParticipantCount: function () {
         return Template.instance().stats.get('participantCount');
     },
-    getParticipantFlags: function() {
+    getParticipantFlags: function () {
         let partInfo = Template.instance().participantsInfo.get();
         if (partInfo) {
             return partInfo;
         }
     },
-    isSpecificExp: function() {
+    isSpecificExp: function () {
         return (Template.instance().data.exp._id === "6ZzYBqgPADJGqJvgW");
     }
 });
 
 Template.gaExperimentBoardItem.events({
-    "click .report-abuse-action": function() {
+    "click .report-abuse-action": function () {
         if (!Meteor.user()) {
             $('#sign-in-modal').modal('open');
             return;
@@ -269,7 +270,7 @@ Template.gaExperimentBoardItem.events({
         let inst = Template.instance();
         let expId = Template.instance().exp.get()._id;
         let reportReason = $("#" + expId + "-report-reason").val();
-        Meteor.call("galileo.experiments.reportAbuse", expId, reportReason, function(err, can) {
+        Meteor.call("galileo.experiments.reportAbuse", expId, reportReason, function (err, can) {
             if (!err && can) {
                 inst.isAbuse.set(true);
                 Materialize.toast("Successfully reported an issue. Thank you for looking out for the Gut Instinct Community!", 3000, "toast rounded");
@@ -279,7 +280,7 @@ Template.gaExperimentBoardItem.events({
             // document.location.reload(true);
         });
     },
-    "click .unreport-abuse": function() {
+    "click .unreport-abuse": function () {
 
         let inst = Template.instance();
         if (!Meteor.user()) {
@@ -295,7 +296,7 @@ Template.gaExperimentBoardItem.events({
         }
 
         let expId = Template.instance().exp.get()._id;
-        Meteor.call("galileo.experiments.unreportAbuse", expId, function(err, can) {
+        Meteor.call("galileo.experiments.unreportAbuse", expId, function (err, can) {
             if (!err && can) {
                 inst.isAbuse.set(false);
                 Materialize.toast("Successfully cleared the issue", 3000, "toast rounded");
@@ -305,16 +306,16 @@ Template.gaExperimentBoardItem.events({
             // document.location.reload(true);
         });
     },
-    "click .copy-exp-btn": function(event, instance) {
+    "click .copy-exp-btn": function (event, instance) {
         let expId = $(event.target).attr("id").split('-')[2];
         let modal = $("#copy-exp-modal");
         modal.data('expId', expId);
         modal.modal({
             dismissible: true,
-            ready: function() {
+            ready: function () {
                 modal.trigger('show');
             },
-            complete: function() {
+            complete: function () {
 
             },
         });

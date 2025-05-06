@@ -1,26 +1,27 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
 
-Template.editable.onCreated(function() {
+Template.editable.onCreated(function () {
     this.showInput = new ReactiveVar(false);
 });
 
 Template.editable.helpers({
-    showValue: function() {
+    showValue: function () {
         return !this.showInput.get();
     },
-    showInput: function() {
+    showInput: function () {
         return this.showInput.get();
     },
-    value: function() {
+    value: function () {
         return Template.instance().data.value.get();
     }
 });
 
 Template.editable.events({
-    "edit .editable": function() {
+    "edit .editable": function () {
 
     },
-    "submit .editable-form": function(event, instance) {
+    "submit .editable-form": function (event, instance) {
 
     }
 });

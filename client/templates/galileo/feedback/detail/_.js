@@ -1,4 +1,7 @@
-import './_.jade';
+import './_.html';
+import { Template } from 'meteor/templating';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 import FeedbackSourceHelper from '../FeedbackSourceHelper';
 import CHECKLIST from '../checklist';
 import {
@@ -15,9 +18,9 @@ Template.gaExperimentFeedbackDetail.onCreated(function() {
     // console.log("rendering with expId... " + inst.data.expId)
 
     // Main data
-    inst.feedbacks = new ReactiveArray();
-    inst.checklist = new ReactiveArray();
-    inst.suggestions = new ReactiveArray();
+    inst.feedbacks = new ReactiveVar([]);
+    inst.checklist = new ReactiveVar([]);
+    inst.suggestions = new ReactiveVar([]);
     inst.exp = new ReactiveVar();
     inst.canReviewAdmin = new ReactiveVar(undefined);
     inst.hasRelatedWork = new ReactiveVar(true);
