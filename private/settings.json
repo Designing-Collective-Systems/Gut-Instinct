@@ -1,0 +1,7 @@
+{
+    "galaxy.meteor.com": {
+     "env": {
+      "MONGO_URL": "mongodb://admin:maGJDXS1ddL3iOAd@shreemanpgautam_gutinstinct-01.mongodb.galaxy-cloud.io:31026/admin?authSource=admin"
+     }
+    }
+}
