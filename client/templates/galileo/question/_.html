@@ -1,3 +1,4 @@
+<!-- Updated _.html -->
 <template name="gaQuestions">
     <main id="ga-main">
         <div class="wrapper">
@@ -7,7 +8,17 @@
                         <img class="responsive-img" src="/images/galileo/galileo-flask.png" style="width:90%;" />
                     </div>
                     <div class="col s12">
-                        <h5>How does age and height affect microbiome diversity across samples?</h5>
+                        <!-- Add input fields for two variables -->
+                        <div class="input-field">
+                            <input id="variable1" type="text" placeholder="Enter first variable">
+                            <label for="variable1">Variable 1:</label>
+                        </div>
+                        
+                        <div class="input-field">
+                            <input id="variable2" type="text" placeholder="Enter second variable">
+                            <label for="variable2">Variable 2:</label>
+                        </div>
+                        
                         <a href="#" id="seeViz" class="viz-link">Click to see viz</a>
                     </div>
                 </div>
