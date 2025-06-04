@@ -51,7 +51,7 @@ Template.gaQuestions.events({
                 // Small delay to ensure file is fully written and server is ready
                 setTimeout(() => {
                     window.location.href = '/galileo/visualization';
-                }, 4000); // Half second delay
+                }, 5000); // Half second delay
             }
         });
     }
