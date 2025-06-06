@@ -7,6 +7,9 @@ from scipy.spatial.distance import pdist, squareform
 import os
 import re
 import sys
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import json
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -18,6 +21,38 @@ else:
     variable1 = "age"  # Default coloring variable
     variable2 = "height"  # Default shape variable
     print("No variables provided, using defaults")
+
+# Define variables that should be treated as discrete
+DISCRETE_VARIABLES = {
+    'administration', 'allergies', 'allergy_specific', 'anxiety', 'asthma', 
+    'birth_method', 'breastfeeding', 'depression', 'diet_no_special_needs', 
+    'diet_special_needs', 'disease', 'disease_course', 'disease_course_control', 
+    'dmt', 'eating_disorder', 'eczema', 'education', 'ethnicity', 'manic_depression_bipolar', 
+    'ms_family', 'nsaids', 'nsaids_specifics', 'occupation', 'ocd', 'ocps_y_n', 
+    'otc_meds', 'pets', 'postpartum_depression', 'probiotics', 'recreational_drug', 
+    'sex', 'site', 'smoke', 'treated', 'treatment_status', 
+    'treatments', 'treatments_control', 'type2diabetes', 'weight_change', 
+    'which_ocp'
+}
+
+# Define variables that should always be treated as continuous (override other detection)
+FORCE_CONTINUOUS = {
+    'ADDSUG', 'age', 'Alcohol % of cals (%)', 'B1, B2 (mg)', 'Beta-carotene (mcg)', 'bmi', 
+    'Bread, pasta, rice (1)', 'Calcium (mg)','Calories (Kcal)','Carbohydrate (g)', 
+    'Carbohydrate (g) as % of cals', 'children_number', 'Cholestrol (mg)', 'csf_results', 
+    'Dietary Fiber(g)', 'disease_duration', 'edss', 'FATTYACID', 'Fat (g)', 
+    'Fat (g) as % of cals', 'Folate (mcg)', 'Fruits, fruit juices (cups)', 
+    'Good oils, in foods ("teaspoons")', 'GREEN_AND_BEAN', 'HEI2015_TOTAL_SCORE', 'height', 
+    'Iron (mg)', 'Magnesium (mg)',  'Meat, eggs, or beans (1)', 'Milk, cheese, yogurt (cups)', 
+    'Monounsaturated fat (g)', 'MSSS', 'Niacin (mg)', 'otc_number', 'Polyunsaturated fat (g)', 
+    'Potassium (mg)', 'Protein (g)', 'Protein (g) as % of cals', 'REFINEDGRAIN', 'relapse_number', 
+    'roommates', 'rxmeds', 'rxmeds_number', 'Saturated fat (g)','Saturated fat (g) as % of cals',
+    'SEAPLANT_PROT', 'SFA', 'SODIUM', 'Sodium (salt) (mg)', 'spms_year', 'Sweets % of cals (%)', 
+    'Vegetables group (cups)', 'Vitamdietpairsumin A (RAE)', 'TOTALDAIRY', 'TOTALFRUIT','TOTALVEG', 
+    'TOTPROT', 'Vitamin B6 (mg)', 'Vitamin C (mg)', 'vitamin D (IU)', 'Vitamin E (mg)',  'weight', 
+    'WHOLEFRUIT','WHOLEGRAIN', 'Whole grains (1)', 'without potatoes (cups)', 'year_of_onset', 
+    'Zinc (mg)',       
+}
 
 # Define variable-specific bin counts
 VARIABLE_BIN_COUNTS = {
@@ -133,6 +168,143 @@ VARIABLE_BIN_COUNTS = {
     # Add more variables and their desired bin counts as needed
 }
 
+# Function to safely escape strings for JavaScript
+def escape_for_js(text):
+    """
+    Safely escape a string for use in JavaScript.
+    Handles quotes, backslashes, newlines, and other special characters.
+    """
+    if text is None:
+        return 'null'
+    
+    # Convert to string and handle NaN/null values
+    text = str(text)
+    if text.lower() in ['nan', 'none', 'null']:
+        return 'null'
+    
+    # Use JSON encoding which properly escapes all special characters
+    return json.dumps(text)
+
+# Function to safely convert dictionary to JavaScript object
+def dict_to_js_object(d):
+    """
+    Convert a Python dictionary to a JavaScript object string with proper escaping.
+    """
+    js_pairs = []
+    for key, value in d.items():
+        escaped_key = escape_for_js(str(key))
+        escaped_value = escape_for_js(str(value))
+        js_pairs.append(f"{escaped_key}: {escaped_value}")
+    
+    return "{" + ", ".join(js_pairs) + "}"
+
+# Function to determine if a variable should be treated as discrete
+def is_discrete_variable(variable_name, data_series):
+    """
+    Determine if a variable should be treated as discrete based on:
+    1. Forced continuous variables (always continuous)
+    2. Predefined list of discrete variables
+    3. Data type (string/object columns are discrete)
+    4. Number of unique values relative to total samples (for original numeric data)
+    """
+    # Check forced continuous variables first
+    if variable_name in FORCE_CONTINUOUS:
+        return False
+    
+    # Check predefined discrete variables
+    if variable_name in DISCRETE_VARIABLES:
+        return True
+    
+    # If no data provided, default to discrete
+    if data_series is None or len(data_series) == 0:
+        return True
+    
+    # Check if data is non-numeric (strings/categories)
+    if data_series.dtype == 'object' or data_series.dtype.name.startswith('str'):
+        return True
+    
+    # For numeric data, check the characteristics of the original data
+    non_null_data = data_series.dropna()
+    if len(non_null_data) == 0:
+        return True
+    
+    unique_values = non_null_data.unique()
+    num_unique = len(unique_values)
+    total_samples = len(non_null_data)
+    
+    # If fewer than 8 unique values total, treat as discrete
+    # This catches small categorical scales (1-5 ratings, etc.)
+    if num_unique < 8:
+        return True
+    
+    # Check if all values are integers and there aren't many of them
+    # This catches things like Likert scales, small counts, etc.
+    if all(float(val).is_integer() for val in unique_values if not pd.isna(val)):
+        # If range is small (less than 15) and most values are represented, treat as discrete
+        value_range = max(unique_values) - min(unique_values)
+        if value_range < 15 and num_unique > (value_range * 0.5):
+            return True
+    
+    # If less than 15% of values are unique, treat as discrete
+    # This is more restrictive than before to avoid misclassifying continuous variables
+    unique_ratio = num_unique / total_samples
+    if unique_ratio < 0.15:
+        return True
+    
+    # If we have many unique values and they're spread out, treat as continuous
+    return False
+
+# Function to generate discrete color palette
+def generate_discrete_colors(num_categories):
+    """Generate distinct colors for discrete categories"""
+    # Extended color palette for discrete variables
+    discrete_colors = [
+        '#1f77b4',  # blue
+        '#ff7f0e',  # orange
+        '#2ca02c',  # green
+        '#d62728',  # red
+        '#9467bd',  # purple
+        '#8c564b',  # brown
+        '#e377c2',  # pink
+        '#7f7f7f',  # gray
+        '#bcbd22',  # olive
+        '#17becf',  # cyan
+        '#aec7e8',  # light blue
+        '#ffbb78',  # light orange
+        '#98df8a',  # light green
+        '#ff9896',  # light red
+        '#c5b0d5',  # light purple
+        '#c49c94',  # light brown
+        '#f7b6d3',  # light pink
+        '#c7c7c7',  # light gray
+        '#dbdb8d',  # light olive
+        '#9edae5'   # light cyan
+    ]
+    
+    # If we need more colors than available, generate additional ones
+    if num_categories > len(discrete_colors):
+        import matplotlib.pyplot as plt
+        import matplotlib.colors as mcolors
+        
+        # Use matplotlib's tab20 colormap for additional colors
+        tab20 = plt.cm.get_cmap('tab20')
+        additional_colors = [mcolors.rgb2hex(tab20(i)) for i in np.linspace(0, 1, num_categories)]
+        return additional_colors
+    
+    return discrete_colors[:num_categories]
+
+# Function to generate gradient colors (YlOrRd scheme)
+def generate_gradient_colors(num_bins):
+    """Generate gradient colors using Yellow-Orange-Red scheme"""
+    
+    # Use matplotlib's YlOrRd colormap
+    cmap = plt.cm.get_cmap('YlOrRd')
+    # Generate colors from light (0.2) to dark (1.0) to ensure we get the full range
+    # Starting at 0.2 instead of 0.0 to avoid too pale colors
+    colors = [mcolors.rgb2hex(cmap(0.2 + (0.8 * i / (num_bins - 1)))) for i in range(num_bins)]
+    
+    return colors
+
 # Get bin counts for our variables
 variable1_bins = VARIABLE_BIN_COUNTS.get(variable1, 5)  # Default to 5 if not specified
 variable2_bins = VARIABLE_BIN_COUNTS.get(variable2, 4)  # Default to 4 if not specified
@@ -145,6 +317,12 @@ print(f"Processing with Variable 2 (shapes): {variable2} ({variable2_bins} bins)
 def convert_column_to_ranges(df, column_name, num_bins=4):
     if column_name not in df.columns:
         print(f"Warning: '{column_name}' column not found in data.")
+        return df
+    
+    original_data = df[column_name].copy()
+    if is_discrete_variable(column_name, original_data):
+        # For discrete variables, keep original values but ensure they're strings
+        df[column_name] = df[column_name].astype(str)
         return df
     
     # Check if column is already converted to categories
@@ -266,6 +444,21 @@ demographic_data = (sheet1_2
                    .merge(sheet2, on='iMSMS_ID', how='inner')
                    )
 
+print(demographic_data.columns.tolist())
+
+# Store original data for discrete/continuous analysis before any processing
+original_variable1_data = demographic_data[variable1].copy() if variable1 in demographic_data.columns else None
+original_variable2_data = demographic_data[variable2].copy() if variable2 in demographic_data.columns else None
+
+# Determine if variable1 should use discrete or continuous color scheme BEFORE binning
+variable1_is_discrete = is_discrete_variable(variable1, original_variable1_data) if original_variable1_data is not None else True
+variable2_is_discrete = is_discrete_variable(variable2, original_variable2_data) if original_variable2_data is not None else True
+
+
+print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
+print(f"Original data type: {original_variable1_data.dtype if original_variable1_data is not None else 'Unknown'}")
+print(f"Unique values in original data: {len(original_variable1_data.dropna().unique()) if original_variable1_data is not None else 'Unknown'}")
+
 # Convert variable1 (coloring variable) to its specified number of bins
 demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
 
@@ -275,7 +468,7 @@ demographic_data = convert_column_to_ranges(demographic_data, variable2, num_bin
 # Convert other numeric columns, excluding our target variables
 demographic_data = convert_to_ranges(demographic_data, num_bins=5, exclude_columns=[variable1, variable2])
 
-print(demographic_data)
+# print(demographic_data)
 
 sheet6_class = sheet6_class.merge(demographic_data[['iMSMS_ID']], on='iMSMS_ID', how='inner')
 demographic_data = demographic_data.set_index('iMSMS_ID')
@@ -303,39 +496,53 @@ else:
         index=demographic_data.index
     )
 
-# Define colors for variable1 (coloring variable) - ROBUST HANDLING
+# Sort ranges properly - if they contain numeric ranges, sort by the first number
+def sort_ranges_numerically(ranges):
+    def extract_first_number(range_str):
+        try:
+            # Extract the first number before the dash
+            if '-' in str(range_str):
+                return float(str(range_str).split('-')[0])
+            else:
+                # If no dash, try to convert the whole string to float
+                return float(str(range_str))
+        except (ValueError, AttributeError):
+            # If conversion fails, return the string for alphabetical sorting
+            return str(range_str)
+    
+    return sorted(ranges, key=extract_first_number)
+
+# Define colors for variable1 (coloring variable) - ADAPTIVE COLOR SCHEME
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
-variable1_ranges.sort()  # Sort the ranges
 
-# Define colors (expand color palette to handle more bins)
-available_colors = [
-    '#1f77b4',  # blue
-    '#2ca02c',  # green
-    '#ffff00',  # yellow
-    '#ff7f0e',  # orange
-    '#d62728',  # red
-    '#9467bd',  # purple
-    '#8c564b',  # brown
-    '#e377c2',  # pink
-    '#7f7f7f',  # gray
-    '#bcbd22'   # olive
-]
+if variable1_is_discrete:
+    variable1_ranges.sort()  # Simple alphabetical sort for discrete variables
+else:
+    variable1_ranges = sort_ranges_numerically(variable1_ranges)  # Numeric sort for continuous
 
-# Create custom color mapping based on actual number of ranges
+# Generate appropriate color scheme based on the original data analysis
+if variable1_is_discrete:
+    colors_list = generate_discrete_colors(len(variable1_ranges))
+    color_scheme_type = "discrete"
+else:
+    colors_list = generate_gradient_colors(len(variable1_ranges))
+    color_scheme_type = "gradient (YlOrRd)"
+
+# Create custom color mapping
 custom_colors = {}
 for i, range_val in enumerate(variable1_ranges):
-    if i < len(available_colors):
-        custom_colors[range_val] = available_colors[i]
-    else:
-        # If we have more ranges than colors, cycle through colors
-        custom_colors[range_val] = available_colors[i % len(available_colors)]
+    custom_colors[range_val] = colors_list[i]
 
 print(f"Variable1 ({variable1}) ranges found: {variable1_ranges}")
+print(f"Color scheme: {color_scheme_type}")
 print(f"Color mapping: {custom_colors}")
 
 # Define shapes for variable2 (shape variable) - ROBUST HANDLING
 variable2_ranges = demographic_data[variable2].dropna().unique().tolist()
-variable2_ranges.sort()  # Sort the ranges
+if variable2_is_discrete:
+    variable2_ranges.sort()  # Simple alphabetical sort for discrete variables
+else:
+    variable2_ranges = sort_ranges_numerically(variable2_ranges)  # Numeric sort for continuous
 
 # Define shapes (expand shape palette to handle more bins)
 available_shapes = [
@@ -402,12 +609,12 @@ viz.opacity_by(variable1, opacity_dict)
 emperor_html = viz.make_emperor(standalone=True)
 
 # Create the direct shape override JavaScript (updated to use variable2)
-# Convert the shape mapping to JavaScript format
-js_shape_mapping = {}
-for key, value in custom_shapes.items():
-    js_shape_mapping[key] = value
+# Convert the shape mapping to JavaScript format using safe escaping
+shape_mapping_js = dict_to_js_object(custom_shapes)
 
-shape_mapping_js = str(js_shape_mapping).replace("'", '"')
+# Safely escape variable names for JavaScript
+safe_variable1 = escape_for_js(variable1)
+safe_variable2 = escape_for_js(variable2)
 
 direct_shape_js = f"""// This script directly manipulates the THREE.js objects in Emperor
 // Map of shape names to THREE.js geometry creation functions
@@ -460,6 +667,18 @@ const SHAPE_GEOMETRIES = {{
   }},
   'Torus': function() {{
     return new THREE.TorusGeometry(0.4, 0.2, 8, 16);
+  }},
+  'Diamond': function() {{
+    return new THREE.OctahedronGeometry(0.5);
+  }},
+  'Ring': function() {{
+    return new THREE.TorusGeometry(0.4, 0.1, 8, 16);
+  }},
+  'Icosahedron': function() {{
+    return new THREE.IcosahedronGeometry(0.5);
+  }},
+  'Square': function() {{
+    return new THREE.BoxGeometry(0.8, 0.8, 0.2);
   }}
 }};
 
@@ -476,21 +695,21 @@ function replaceGeometries() {{
   const metadata = window.data.plot.metadata;
   const metadataHeaders = window.data.plot.metadata_headers;
   
-  // Find {variable2} index in metadata
+  // Find variable2 index in metadata
   let variable2Index = -1;
   for (let i = 0; i < metadataHeaders.length; i++) {{
-    if (metadataHeaders[i] === '{variable2}') {{
+    if (metadataHeaders[i] === {safe_variable2}) {{
       variable2Index = i;
       break;
     }}
   }}
   
   if (variable2Index === -1) {{
-    console.log("{variable2} field not found in metadata");
+    console.log("Variable2 field not found in metadata");
     return false;
   }}
   
-  // Create a map from sample ID to {variable2} value
+  // Create a map from sample ID to variable2 value
   const sampleToVariable2 = {{}};
   for (const sampleId in metadata) {{
     if (metadata.hasOwnProperty(sampleId)) {{
@@ -498,7 +717,7 @@ function replaceGeometries() {{
     }}
   }}
   
-  // Map {variable2} values to shape types - DYNAMIC MAPPING
+  // Map variable2 values to shape types - DYNAMIC MAPPING
   const variable2ToShape = {shape_mapping_js};
   
   // Go through all objects in the scene
@@ -537,7 +756,7 @@ function replaceGeometries() {{
           const g = colors[j * 3 + 1];
           const b = colors[j * 3 + 2];
           
-          // Determine which shape to use based on sample ID and {variable2}
+          // Determine which shape to use based on sample ID and variable2
           let shapeName = 'Sphere'; // Default
           
           if (j < sampleIds.length) {{
@@ -623,31 +842,79 @@ document.addEventListener('DOMContentLoaded', function() {{
 """
 
 # Also add standard JavaScript to select variable1 for coloring
+# Use safe escaping for custom_colors
+custom_colors_js = dict_to_js_object(custom_colors)
+
 custom_js = f"""
-// Set the metadata field to '{variable1}' for coloring
+// Set the metadata field to variable1 for coloring
 setTimeout(function() {{
-  // HANDLE COLORING BY {variable1.upper()}
+  // HANDLE COLORING BY VARIABLE1
   if (ec.controllers && ec.controllers.color) {{
     var colorController = ec.controllers.color;
     
-    // First check if '{variable1}' is available in the dropdown
+    // First check if variable1 is available in the dropdown
     var colorSelect = colorController.$select[0];
     var hasVariable1 = false;
     
     for (var i = 0; i < colorSelect.options.length; i++) {{
-      if (colorSelect.options[i].value === '{variable1}') {{
+      if (colorSelect.options[i].value === {safe_variable1}) {{
         hasVariable1 = true;
         colorSelect.selectedIndex = i;
         
-        // Trigger change event to apply the selection
-        $(colorSelect).trigger('change');
-        console.log('Auto-selected {variable1} for coloring');
+        // IMPORTANT: Don't trigger change event to preserve our custom color scheme
+        // The Python code has already set up the correct colors
+        console.log('Auto-selected variable1 for coloring (preserving custom color scheme)');
         break;
       }}
     }}
     
     if (!hasVariable1) {{
-      console.log('{variable1} category not found in available metadata');
+      console.log('Variable1 category not found in available metadata');
+    }}
+    
+    // Preserve the custom color mapping that was set in Python
+    // Store our custom colors to prevent Emperor from overriding them
+    var customColorMapping = {custom_colors_js};
+    
+    // Override Emperor's color update function to preserve our colors
+    if (colorController.setPlottableAttributes) {{
+      var originalSetPlottableAttributes = colorController.setPlottableAttributes;
+      colorController.setPlottableAttributes = function(group) {{
+        // Call the original function
+        originalSetPlottableAttributes.call(this, group);
+        
+        // Then restore our custom colors
+        var decomp = ec.sceneViews[0].decomp;
+        if (decomp && decomp.plottable) {{
+          var metadata = decomp.plottable.metadata;
+          var metadataHeaders = decomp.plottable.metadata_headers;
+          
+          // Find variable1 index
+          var variable1Index = metadataHeaders.indexOf({safe_variable1});
+          if (variable1Index !== -1) {{
+            for (var i = 0; i < decomp.plottable.sample_ids.length; i++) {{
+              var sampleId = decomp.plottable.sample_ids[i];
+              var variable1Value = metadata[sampleId][variable1Index];
+              
+              if (customColorMapping[variable1Value]) {{
+                var color = customColorMapping[variable1Value];
+                // Convert hex to RGB
+                var r = parseInt(color.slice(1, 3), 16) / 255;
+                var g = parseInt(color.slice(3, 5), 16) / 255;
+                var b = parseInt(color.slice(5, 7), 16) / 255;
+                
+                decomp.plottable.colors[i] = [r, g, b];
+              }}
+            }}
+            
+            // Force update of the visualization
+            decomp.plottable.needsUpdate = true;
+            if (ec.sceneViews[0].needsUpdate !== undefined) {{
+              ec.sceneViews[0].needsUpdate = true;
+            }}
+          }}
+        }}
+      }};
     }}
   }}
   
@@ -745,11 +1012,13 @@ with open(output_path, 'w') as f:
     f.write(emperor_html)
 
 print(f"Emperor visualization saved to {output_path}")
-print(f"- {variable1} binned into {len(variable1_ranges)} categories with colors")
+print(f"- {variable1} binned into {len(variable1_ranges)} categories with {color_scheme_type} colors")
 print(f"- {variable2} binned into {len(variable2_ranges)} categories with shapes")
 print(f"- Using {variable1} for coloring and {variable2} for shapes")
 print("- Variable-specific binning: each variable maintains its designated number of bins")
+print("- Adaptive color scheme: discrete variables use distinct colors, continuous variables use YlOrRd gradient")
 print("- Direct THREE.js manipulation for shapes included")
 print("- Axes renamed from PC1, PC2, PC3 to Axis 1, Axis 2, Axis 3")
 print("- Relative paths for better portability")
+print("- Safe JavaScript escaping for special characters")
 print("\nScript completed.")
