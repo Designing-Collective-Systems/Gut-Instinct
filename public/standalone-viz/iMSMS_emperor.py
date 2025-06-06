@@ -168,6 +168,124 @@ VARIABLE_BIN_COUNTS = {
     # Add more variables and their desired bin counts as needed
 }
 
+VARIABLE_DESCRIPTIONS = {
+    'ADDSUG': 'Added sugar content in diet - measures the amount of refined sugars consumed daily',
+    'administration': 'Method of medication delivery - oral, injection, or infusion routes',
+    'age': 'Patient age in years at time of data collection',
+    'Alcohol % of cals (%)': 'Percentage of daily calories derived from alcoholic beverages',
+    'allergies': 'Presence of known allergic reactions to foods or environmental triggers',
+    'allergy_specific': 'Detailed description of specific allergens and reaction severity',
+    'anxiety': 'Clinical assessment of anxiety levels using standardized psychological scales',
+    'asthma': 'Respiratory condition status and current management approach',
+    'B1, B2 (mg)': 'Daily intake of thiamine and riboflavin vitamins in milligrams',
+    'Beta-carotene (mcg)': 'Antioxidant precursor to vitamin A measured in micrograms',
+    'birth_method': 'Delivery method - natural birth, cesarean section, or assisted delivery',
+    'bmi': 'Body Mass Index calculated from height and weight measurements',
+    'Bread, pasta, rice (1)': 'Daily servings of refined carbohydrate food sources',
+    'breastfeeding': 'Duration and exclusivity of breastfeeding in early infancy',
+    'Calcium (mg)': 'Daily calcium intake from dietary and supplement sources',
+    'Calories (Kcal)': 'Total daily energy intake measured in kilocalories',
+    'Carbohydrate (g)': 'Total carbohydrate consumption in grams per day',
+    'Carbohydrate (g) as % of cals': 'Proportion of daily calories from carbohydrate sources',
+    'children_number': 'Total number of biological children in family unit',
+    'Cholestrol (mg)': 'Daily dietary cholesterol intake from food sources',
+    'csf_results': 'Cerebrospinal fluid analysis results for neurological markers',
+    'depression': 'Clinical depression assessment using validated screening tools',
+    'diet_no_special_needs': 'Standard dietary pattern without medical restrictions',
+    'diet_special_needs': 'Modified diet for medical conditions or personal preferences',
+    'Dietary Fiber(g)': 'Insoluble and soluble fiber intake promoting digestive health',
+    'disease': 'Primary disease classification and diagnostic category',
+    'disease_course': 'Progression pattern of the primary medical condition',
+    'disease_course_control': 'Effectiveness of current treatment in controlling disease progression',
+    'disease_duration': 'Time elapsed since initial diagnosis in years',
+    'dmt': 'Disease-modifying therapy status and treatment regimen',
+    'eating_disorder': 'Presence of disordered eating patterns or clinical eating disorders',
+    'eczema': 'Atopic dermatitis severity and current management strategies',
+    'edss': 'Expanded Disability Status Scale score for neurological function',
+    'education': 'Highest level of formal education completed',
+    'ethnicity': 'Self-reported ethnic background and cultural identity',
+    'Fat (g)': 'Total daily fat intake from all dietary sources',
+    'Fat (g) as % of cals': 'Percentage of daily calories derived from fat sources',
+    'FATTYACID': 'Essential fatty acid profile and omega-3/omega-6 ratios',
+    'Folate (mcg)': 'Folate intake crucial for DNA synthesis and cell division',
+    'Fruits, fruit juices (cups)': 'Daily fruit consumption including fresh and processed forms',
+    'Good oils, in foods ("teaspoons")': 'Healthy oil consumption from cooking and food preparation',
+    'GREEN_AND_BEAN': 'Combined intake of green vegetables and legume protein sources',
+    'HEI2015_TOTAL_SCORE': 'Healthy Eating Index score reflecting overall diet quality',
+    'height': 'Standing height measurement in centimeters or inches',
+    'household': 'Household composition and family structure characteristics',
+    'Iron (mg)': 'Daily iron intake essential for oxygen transport and energy',
+    'Magnesium (mg)': 'Magnesium consumption supporting muscle and nerve function',
+    'manic_depression_bipolar': 'Bipolar disorder diagnosis and mood episode history',
+    'Meat, eggs, or beans (1)': 'Daily protein servings from animal and plant sources',
+    'Milk, cheese, yogurt (cups)': 'Dairy product consumption providing calcium and protein',
+    'Monounsaturated fat (g)': 'Heart-healthy fat intake from olive oil and nuts',
+    'ms_family': 'Family history of multiple sclerosis in blood relatives',
+    'MSSS': 'Multiple Sclerosis Severity Score assessing disease progression',
+    'Niacin (mg)': 'Vitamin B3 intake supporting cellular energy metabolism',
+    'nsaids': 'Non-steroidal anti-inflammatory drug usage and frequency',
+    'nsaids_specifics': 'Detailed NSAID medications, dosages, and administration schedule',
+    'occupation': 'Primary employment or professional activity classification',
+    'ocd': 'Obsessive-compulsive disorder symptoms and behavioral patterns',
+    'ocps_y_n': 'Oral contraceptive pill usage history and current status',
+    'otc_meds': 'Over-the-counter medication usage and self-treatment practices',
+    'otc_number': 'Total count of different OTC medications used regularly',
+    'pets': 'Household pet ownership and animal exposure history',
+    'Polyunsaturated fat (g)': 'Essential fatty acid intake from fish and plant oils',
+    'postpartum_depression': 'Depression occurring after childbirth and its severity',
+    'Potassium (mg)': 'Potassium intake supporting heart function and blood pressure',
+    'probiotics': 'Beneficial bacteria supplementation and fermented food consumption',
+    'Protein (g)': 'Total daily protein intake from all food sources',
+    'Protein (g) as % of cals': 'Proportion of daily calories from protein sources',
+    'recreational_drug': 'Non-medical substance use patterns and frequency',
+    'REFINEDGRAIN': 'Processed grain consumption lacking fiber and nutrients',
+    'relapse_number': 'Count of disease exacerbations or symptom flare-ups',
+    'roommates': 'Number of people sharing living space and household',
+    'rxmeds': 'Prescription medication categories and therapeutic classes',
+    'rxmeds_number': 'Total count of different prescription medications taken',
+    'Saturated fat (g)': 'Saturated fat intake primarily from animal products',
+    'Saturated fat (g) as % of cals': 'Percentage of calories from saturated fat sources',
+    'SEAPLANT_PROT': 'Protein intake from seafood and plant-based sources',
+    'sex': 'Biological sex assigned at birth - male or female',
+    'SFA': 'Saturated fatty acid profile and cardiovascular risk assessment',
+    'site': 'Research study location or clinical site identifier',
+    'smoke': 'Smoking history including current status and pack-years',
+    'SODIUM': 'Sodium intake affecting blood pressure and fluid balance',
+    'Sodium (salt) (mg)': 'Daily salt consumption from food and added sources',
+    'spms_year': 'Year of secondary progressive multiple sclerosis diagnosis',
+    'Sweets % of cals (%)': 'Percentage of daily calories from sugar and confections',
+    'TOTALDAIRY': 'Combined dairy product consumption across all categories',
+    'TOTALFRUIT': 'Complete fruit intake including whole and processed forms',
+    'TOTALVEG': 'Total vegetable consumption from all preparation methods',
+    'TOTPROT': 'Complete protein intake from animal and plant sources',
+    'treated': 'Treatment status and therapeutic intervention history',
+    'treatment_status': 'Current treatment response and medication effectiveness',
+    'treatments': 'Comprehensive list of current and past therapeutic approaches',
+    'treatments_control': 'Control group treatment protocols in clinical studies',
+    'type2diabetes': 'Type 2 diabetes diagnosis and glycemic control status',
+    'Vegetables group (cups)': 'Daily vegetable servings excluding starchy varieties',
+    'Vitamdietpairsumin A (RAE)': 'Vitamin A intake in retinol activity equivalents',
+    'Vitamin B6 (mg)': 'Vitamin B6 consumption supporting protein metabolism',
+    'Vitamin C (mg)': 'Ascorbic acid intake for immune function and antioxidant protection',
+    'vitamin D (IU)': 'Vitamin D intake crucial for bone health and immunity',
+    'Vitamin E (mg)': 'Vitamin E antioxidant intake protecting cell membranes',
+    'weight': 'Current body weight in kilograms or pounds',
+    'weight_change': 'Recent weight fluctuation patterns and magnitude',
+    'which_ocp': 'Specific oral contraceptive formulation and hormone composition',
+    'Whole grains (1)': 'Daily servings of unprocessed grain products',
+    'WHOLEFRUIT': 'Whole fruit consumption excluding juices and processed forms',
+    'WHOLEGRAIN': 'Complete whole grain intake supporting digestive health',
+    'without potatoes (cups)': 'Vegetable servings excluding starchy potato varieties',
+    'year_of_onset': 'Calendar year when disease symptoms first appeared',
+    'Zinc (mg)': 'Zinc intake supporting immune function and wound healing'
+}
+
+
+# Sheet description
+SHEET_DESCRIPTIONS = {
+    'Dataset S1.2': 'Primary demographic and clinical characteristics dataset containing patient baseline information, medical history, and socioeconomic factors collected at study enrollment'
+}
+
 # Function to safely escape strings for JavaScript
 def escape_for_js(text):
     """
@@ -436,7 +554,7 @@ S6_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S6.xlsx')
 sheet1_2 = pd.read_excel(S1_PATH, sheet_name='Dataset S1.2')
 sheet2 = pd.read_excel(S2_PATH, sheet_name='Dataset S2')
 sheet3 = pd.read_excel(S3_PATH, sheet_name='Dataset S3')
-sheet6_class = pd.read_excel(S6_PATH, sheet_name='class')
+sheet6_class = pd.read_excel(S6_PATH, sheet_name='order')
 
 # Merge the demographic data
 demographic_data = (sheet1_2
@@ -444,11 +562,12 @@ demographic_data = (sheet1_2
                    .merge(sheet2, on='iMSMS_ID', how='inner')
                    )
 
-print(demographic_data.columns.tolist())
+# print(demographic_data.columns.tolist())
 
 # Store original data for discrete/continuous analysis before any processing
 original_variable1_data = demographic_data[variable1].copy() if variable1 in demographic_data.columns else None
 original_variable2_data = demographic_data[variable2].copy() if variable2 in demographic_data.columns else None
+
 
 # Determine if variable1 should use discrete or continuous color scheme BEFORE binning
 variable1_is_discrete = is_discrete_variable(variable1, original_variable1_data) if original_variable1_data is not None else True
@@ -948,23 +1067,529 @@ setTimeout(function() {{
 }}, 1000);
 """
 
-# Look for the specific marker pattern in the HTML
+# More precise hiding that preserves Color and Shape AND hides settings button
+precise_hide_js = """
+// Precise tab hiding that preserves Color and Shape + hides settings
+function preciseHideUnwantedTabs() {
+    console.log("Starting precise tab hiding (preserving Color and Shape, hiding settings)...");
+    
+    // Exact text matches to hide (case-sensitive)
+    const exactTextsToHide = ['Visibility', 'Opacity', 'Scale', 'Axes', 'Animations'];
+    
+    // Exact text matches to preserve (case-insensitive)
+    const exactTextsToKeep = ['color', 'shape'];
+    
+    let hiddenCount = 0;
+    let keptCount = 0;
+    
+    // Method 1: Find tabs by exact text content and hide only unwanted ones
+    const allClickableElements = document.querySelectorAll('a, button, [role="tab"], .nav-link');
+    
+    allClickableElements.forEach(element => {
+        const elementText = element.textContent.trim();
+        const elementTextLower = elementText.toLowerCase();
+        
+        // Check if this is a tab we want to keep
+        const shouldKeep = exactTextsToKeep.some(keepText => 
+            elementTextLower.includes(keepText)
+        );
+        
+        if (shouldKeep) {
+            // Force show this element
+            element.style.display = '';
+            element.style.visibility = 'visible';
+            keptCount++;
+            console.log(`KEEPING tab: "${elementText}"`);
+            return; // Skip to next element
+        }
+        
+        // Check if this is a tab we want to hide
+        const shouldHide = exactTextsToHide.some(hideText => 
+            elementText === hideText
+        );
+        
+        if (shouldHide) {
+            element.style.display = 'none';
+            hiddenCount++;
+            console.log(`HIDDEN tab: "${elementText}"`);
+            
+            // Hide associated content panel
+            const target = element.getAttribute('href') || 
+                         element.getAttribute('data-target') ||
+                         element.getAttribute('aria-controls');
+            
+            if (target) {
+                const targetElement = document.querySelector(target) || 
+                                   document.getElementById(target.replace('#', ''));
+                if (targetElement) {
+                    targetElement.style.display = 'none';
+                    console.log(`Hidden content panel: ${target}`);
+                }
+            }
+        }
+    });
+    
+    // Method 2: Hide specific content panels by ID, but preserve color and shape
+    const contentIdsToHide = [
+        '#visibility-tab', '#opacity-tab', '#scale-tab', '#axes-tab', '#animations-tab',
+        '#visibility', '#opacity', '#scale', '#axes', '#animations'
+    ];
+    
+    contentIdsToHide.forEach(id => {
+        const element = document.querySelector(id);
+        if (element) {
+            element.style.display = 'none';
+            hiddenCount++;
+            console.log(`Hidden content by ID: ${id}`);
+        }
+    });
+    
+    // Method 3: Force show Color and Shape elements
+    const forceShowSelectors = [
+        'a[href*="color"]', 'a[href*="shape"]',
+        'button[data-target*="color"]', 'button[data-target*="shape"]',
+        '[id*="color"]', '[id*="shape"]',
+        '[aria-controls*="color"]', '[aria-controls*="shape"]'
+    ];
+    
+    forceShowSelectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(element => {
+            element.style.display = '';
+            element.style.visibility = 'visible';
+            console.log(`Force showing element:`, element);
+        });
+    });
+    
+    // Method 4: Hide the settings button (gear icon)
+    console.log("Hiding settings button...");
+    
+    // Common selectors for settings buttons
+    const settingsSelectors = [
+        '.settings-btn', '.gear-icon', '.fa-gear', '.fa-cog', '.fa-settings',
+        'button[title*="setting"]', 'button[title*="Setting"]',
+        'button[aria-label*="setting"]', 'button[aria-label*="Setting"]',
+        '[data-toggle="modal"]', '.btn[data-target*="setting"]',
+        '.btn[data-target*="Setting"]', '.navbar-btn', '.btn-toolbar button'
+    ];
+    
+    settingsSelectors.forEach(selector => {
+        try {
+            document.querySelectorAll(selector).forEach(element => {
+                // Don't hide if it's related to color or shape
+                const elementText = element.textContent.toLowerCase();
+                if (!elementText.includes('color') && !elementText.includes('shape')) {
+                    element.style.display = 'none';
+                    console.log(`Hidden settings element by selector "${selector}":`, element);
+                    hiddenCount++;
+                }
+            });
+        } catch (e) {
+            // Some selectors might not work in all browsers, ignore errors
+        }
+    });
+    
+    // Hide by checking button content for gear/settings icons
+    const allButtons = document.querySelectorAll('button, a, .btn');
+    allButtons.forEach(button => {
+        const innerHTML = button.innerHTML.toLowerCase();
+        const title = (button.getAttribute('title') || '').toLowerCase();
+        const ariaLabel = (button.getAttribute('aria-label') || '').toLowerCase();
+        const textContent = button.textContent.toLowerCase();
+        
+        // Don't hide if it's related to color or shape
+        if (textContent.includes('color') || textContent.includes('shape')) {
+            return;
+        }
+        
+        // Check if it contains gear/settings related content
+        const hasSettingsIndicators = [
+            innerHTML.includes('fa-gear'),
+            innerHTML.includes('fa-cog'),
+            innerHTML.includes('fa-setting'),
+            innerHTML.includes('gear'),
+            innerHTML.includes('setting'),
+            title.includes('setting'),
+            ariaLabel.includes('setting'),
+            innerHTML.includes('⚙'), // gear Unicode symbol
+            innerHTML.includes('🔧'), // wrench Unicode symbol
+        ];
+        
+        if (hasSettingsIndicators.some(indicator => indicator)) {
+            button.style.display = 'none';
+            console.log('Hidden settings button by content:', button);
+            hiddenCount++;
+        }
+    });
+    
+    console.log(`Precise hiding completed. Hidden: ${hiddenCount}, Kept: ${keptCount}`);
+    return hiddenCount;
+}
+
+// Run the precise hiding function
+setTimeout(preciseHideUnwantedTabs, 1000);
+setTimeout(preciseHideUnwantedTabs, 3000);
+setTimeout(preciseHideUnwantedTabs, 5000);
+
+// Monitor for dynamic content changes
+if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver((mutations) => {
+        let shouldRun = false;
+        mutations.forEach(mutation => {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                shouldRun = true;
+            }
+        });
+        
+        if (shouldRun) {
+            setTimeout(preciseHideUnwantedTabs, 100);
+        }
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+"""
+
+# Precise CSS that doesn't use positional selectors + hides settings
+precise_hide_css = """
+<style>
+/* Hide specific tab links by href patterns - but preserve color and shape */
+a[href*="visibility"]:not([href*="color"]):not([href*="shape"]),
+a[href*="opacity"]:not([href*="color"]):not([href*="shape"]),
+a[href*="scale"]:not([href*="color"]):not([href*="shape"]),
+a[href*="axes"]:not([href*="color"]):not([href*="shape"]),
+a[href*="animation"]:not([href*="color"]):not([href*="shape"]) {
+    display: none !important;
+}
+
+/* Hide specific content panels by ID - but preserve color and shape */
+[id="visibility-tab"], [id="opacity-tab"], [id="scale-tab"],
+[id="axes-tab"], [id="animations-tab"],
+[id="visibility"], [id="opacity"], [id="scale"],
+[id="axes"], [id="animations"] {
+    display: none !important;
+}
+
+/* Hide by data-target attributes - but preserve color and shape */
+button[data-target*="visibility"]:not([data-target*="color"]):not([data-target*="shape"]),
+button[data-target*="opacity"]:not([data-target*="color"]):not([data-target*="shape"]),
+button[data-target*="scale"]:not([data-target*="color"]):not([data-target*="shape"]),
+button[data-target*="axes"]:not([data-target*="color"]):not([data-target*="shape"]),
+button[data-target*="animation"]:not([data-target*="color"]):not([data-target*="shape"]) {
+    display: none !important;
+}
+
+/* Hide settings button by common patterns */
+.settings-btn, .gear-icon, .fa-gear, .fa-cog, .fa-settings,
+button[title*="setting" i]:not([class*="color"]):not([class*="shape"]),
+button[aria-label*="setting" i]:not([class*="color"]):not([class*="shape"]),
+[data-toggle="modal"]:not([class*="color"]):not([class*="shape"]),
+.btn[data-target*="setting" i]:not([class*="color"]):not([class*="shape"]) {
+    display: none !important;
+}
+
+/* Hide toolbar buttons except essential ones */
+.btn-toolbar button:not([class*="color"]):not([class*="shape"]):not(.btn-primary) {
+    display: none !important;
+}
+
+/* Force show Color and Shape elements */
+a[href*="color"], a[href*="shape"],
+button[data-target*="color"], button[data-target*="shape"],
+[id*="color"], [id*="shape"],
+[aria-controls*="color"], [aria-controls*="shape"] {
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Alternative: Hide by aria-controls but preserve color and shape */
+[aria-controls="visibility"], [aria-controls="opacity"],
+[aria-controls="scale"], [aria-controls="axes"],
+[aria-controls="animations"] {
+    display: none !important;
+}
+
+/* Don't hide color and shape controls */
+[aria-controls*="color"], [aria-controls*="shape"] {
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Overlay styles */
+.info-overlay {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    z-index: 10000;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.overlay-title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+.overlay-variable {
+    font-weight: bold;
+    color: #0066cc;
+    margin-bottom: 5px;
+}
+
+.overlay-description {
+    color: #555;
+    margin-bottom: 15px;
+}
+
+#overlay1 { top: 20px; }
+#overlay2 { top: 160px; }
+#overlay3 { top: 300px; }
+</style>
+"""
+
+# Debug function to see what's actually happening
+debug_preservation_js = """
+// Debug function to see what tabs are found and what we're doing to them
+function debugTabPreservation() {
+    console.log("\\n=== DEBUGGING TAB PRESERVATION ===");
+    
+    const allTabs = document.querySelectorAll('a, button, [role="tab"], .nav-link');
+    console.log(`Found ${allTabs.length} potential tab elements`);
+    
+    allTabs.forEach((tab, index) => {
+        const text = tab.textContent.trim();
+        const href = tab.getAttribute('href') || '';
+        const dataTarget = tab.getAttribute('data-target') || '';
+        const ariaControls = tab.getAttribute('aria-controls') || '';
+        const isVisible = window.getComputedStyle(tab).display !== 'none';
+        
+        if (text.length > 0 && text.length < 50) {
+            console.log(`Tab ${index}: "${text}"`);
+            console.log(`  href: "${href}"`);
+            console.log(`  data-target: "${dataTarget}"`);
+            console.log(`  aria-controls: "${ariaControls}"`);
+            console.log(`  visible: ${isVisible}`);
+            console.log(`  element:`, tab);
+            console.log('---');
+        }
+    });
+    
+    // Specifically look for Color and Shape tabs
+    const colorTabs = Array.from(allTabs).filter(tab => 
+        tab.textContent.toLowerCase().includes('color')
+    );
+    const shapeTabs = Array.from(allTabs).filter(tab => 
+        tab.textContent.toLowerCase().includes('shape')
+    );
+    
+    console.log(`\\nColor tabs found: ${colorTabs.length}`);
+    colorTabs.forEach(tab => console.log('  Color tab:', tab.textContent.trim(), tab));
+    
+    console.log(`\\nShape tabs found: ${shapeTabs.length}`);
+    shapeTabs.forEach(tab => console.log('  Shape tab:', tab.textContent.trim(), tab));
+    
+    // Look for settings buttons
+    const settingsButtons = Array.from(document.querySelectorAll('button, a')).filter(btn => {
+        const innerHTML = btn.innerHTML.toLowerCase();
+        const title = (btn.getAttribute('title') || '').toLowerCase();
+        const ariaLabel = (btn.getAttribute('aria-label') || '').toLowerCase();
+        
+        return innerHTML.includes('gear') || innerHTML.includes('cog') || 
+               innerHTML.includes('setting') || title.includes('setting') ||
+               ariaLabel.includes('setting') || innerHTML.includes('⚙');
+    });
+    
+    console.log(`\\nSettings buttons found: ${settingsButtons.length}`);
+    settingsButtons.forEach(btn => console.log('  Settings button:', btn.textContent.trim(), btn));
+}
+
+setTimeout(debugTabPreservation, 2000);
+setTimeout(debugTabPreservation, 6000);
+"""
+
+# Add this debugging code right after the VARIABLE_DESCRIPTIONS definition:
+debug_descriptions_js = f"""
+// Debug: Check if descriptions are properly defined
+console.log("=== DEBUGGING VARIABLE DESCRIPTIONS ===");
+console.log("Variable1:", {escape_for_js(variable1)});
+console.log("Variable2:", {escape_for_js(variable2)});
+
+const testDescriptions = {dict_to_js_object(VARIABLE_DESCRIPTIONS)};
+console.log("Total descriptions loaded:", Object.keys(testDescriptions).length);
+console.log("Variable1 description:", testDescriptions[{escape_for_js(variable1)}]);
+console.log("Variable2 description:", testDescriptions[{escape_for_js(variable2)}]);
+
+const testSheetDescriptions = {dict_to_js_object(SHEET_DESCRIPTIONS)};
+console.log("Sheet descriptions:", testSheetDescriptions);
+"""
+
+# Fix the overlay JavaScript by escaping variables in Python first
+overlay_js = f"""
+// Create information overlays
+function createInfoOverlays() {{
+  console.log("=== CREATING INFO OVERLAYS ===");
+  
+  // Get variable descriptions
+  const variableDescriptions = {dict_to_js_object(VARIABLE_DESCRIPTIONS)};
+  const sheetDescriptions = {dict_to_js_object(SHEET_DESCRIPTIONS)};
+  
+  console.log("variableDescriptions loaded:", Object.keys(variableDescriptions).length);
+  console.log("sheetDescriptions loaded:", Object.keys(sheetDescriptions).length);
+  
+  // Remove existing overlays
+  const existingOverlays = document.querySelectorAll('.info-overlay');
+  console.log("Removing existing overlays:", existingOverlays.length);
+  existingOverlays.forEach(overlay => overlay.remove());
+  
+  try {{
+    // Create overlay 1 - Variable 1 info
+    console.log("Creating overlay 1 for variable:", {escape_for_js(variable1)});
+    const overlay1 = document.createElement('div');
+    overlay1.id = 'overlay1';
+    overlay1.className = 'info-overlay';
+    overlay1.style.cssText = `
+      position: fixed !important;
+      top: 340px !important;
+      right: 20px !important;
+      width: 300px !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 2px solid #333 !important;
+      border-radius: 8px !important;
+      padding: 15px !important;
+      z-index: 99999 !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 14px !important;
+    `;
+    
+    const var1Description = variableDescriptions[{escape_for_js(variable1)}] || 'No description available for this variable.';
+    console.log("Variable1 description found:", var1Description);
+    
+    overlay1.innerHTML = `
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Color Variable</div>
+      <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(variable1)}</div>
+      <div style="color: #555; margin-bottom: 15px;">${{var1Description}}</div>
+    `;
+    
+    // Create overlay 2 - Variable 2 info  
+    console.log("Creating overlay 2 for variable:", {escape_for_js(variable2)});
+    const overlay2 = document.createElement('div');
+    overlay2.id = 'overlay2';
+    overlay2.className = 'info-overlay';
+    overlay2.style.cssText = `
+      position: fixed !important;
+      top: 500px !important;
+      right: 20px !important;
+      width: 300px !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 2px solid #333 !important;
+      border-radius: 8px !important;
+      padding: 15px !important;
+      z-index: 99999 !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 14px !important;
+    `;
+    
+    const var2Description = variableDescriptions[{escape_for_js(variable2)}] || 'No description available for this variable.';
+    console.log("Variable2 description found:", var2Description);
+    
+    overlay2.innerHTML = `
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Shape Variable</div>
+      <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(variable2)}</div>
+      <div style="color: #555; margin-bottom: 15px;">${{var2Description}}</div>
+    `;
+    
+    // Create overlay 3 - Sheet info
+    console.log("Creating overlay 3 for sheet: Dataset S1.2");
+    const overlay3 = document.createElement('div');
+    overlay3.id = 'overlay3';
+    overlay3.className = 'info-overlay';
+    overlay3.style.cssText = `
+      position: fixed !important;
+      top: 660px !important;
+      right: 20px !important;
+      width: 300px !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 2px solid #333 !important;
+      border-radius: 8px !important;
+      padding: 15px !important;
+      z-index: 99999 !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 14px !important;
+    `;
+    
+    const sheetDescription = sheetDescriptions['Dataset S1.2'] || 'Primary research dataset containing clinical and demographic information.';
+    console.log("Sheet description found:", sheetDescription);
+    
+    overlay3.innerHTML = `
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Dataset Information</div>
+      <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">Dataset S1.2</div>
+      <div style="color: #555; margin-bottom: 15px;">${{sheetDescription}}</div>
+    `;
+    
+    // Add overlays to document
+    console.log("Adding overlays to document body");
+    document.body.appendChild(overlay1);
+    document.body.appendChild(overlay2);
+    document.body.appendChild(overlay3);
+    
+    // Verify they were added
+    const addedOverlays = document.querySelectorAll('.info-overlay');
+    console.log("Overlays successfully added:", addedOverlays.length);
+    
+    console.log('Information overlays created successfully');
+    
+  }} catch (error) {{
+    console.error("Error creating overlays:", error);
+  }}
+}}
+
+// Create overlays when page loads
+setTimeout(createInfoOverlays, 2000);
+
+// Recreate overlays if they get removed by dynamic content
+setInterval(function() {{
+  if (document.querySelectorAll('.info-overlay').length < 3) {{
+    createInfoOverlays();
+  }}
+}}, 5000);
+"""
+
+
+# Combine the precise solution
+complete_precise_solution = precise_hide_js + "\n\n" + debug_preservation_js
+
+# Update your script with the precise solution
+final_precise_custom_js = custom_js + "\n\n" + complete_precise_solution + "\n\n" + overlay_js
+
+# Insert the precise CSS and JavaScript
+emperor_html = emperor_html.replace('</head>', f'{precise_hide_css}</head>')
+
+# Replace the JavaScript insertion
 marker_pattern = "/*__custom_on_ready_code__*/"
 if marker_pattern in emperor_html:
-    # Replace the marker with our custom JavaScript
-    emperor_html = emperor_html.replace(marker_pattern, marker_pattern + "\n      " + custom_js)
+    emperor_html = emperor_html.replace(marker_pattern, marker_pattern + "\n      " + final_precise_custom_js)
 else:
-    # If the marker isn't found, find a suitable insertion point
     ready_function_end = "ec.ready = function () {"
-    
-    # Find the ec.ready function
     start_idx = emperor_html.find(ready_function_end)
     if start_idx != -1:
-        # Insert our code after the opening brace of ec.ready
         insertion_idx = start_idx + len(ready_function_end)
-        emperor_html = emperor_html[:insertion_idx] + "\n      " + custom_js + emperor_html[insertion_idx:]
-    else:
-        print("Warning: Could not find a suitable location to insert custom JavaScript.")
+        emperor_html = emperor_html[:insertion_idx] + "\n      " + final_precise_custom_js + emperor_html[insertion_idx:]
+
+print("Applied PRECISE tab hiding solution that preserves Color and Shape tabs AND hides settings button")
+print("This version specifically avoids hiding Color and Shape tabs while hiding the settings gear icon")
+
 
 # Also perform more aggressive text replacement in the HTML
 # This searches for any instances of PC1, PC2, PC3 with different capitalizations and spacings
