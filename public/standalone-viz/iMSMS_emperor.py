@@ -169,117 +169,215 @@ VARIABLE_BIN_COUNTS = {
 }
 
 VARIABLE_DESCRIPTIONS = {
-    'ADDSUG': 'Added sugar content in diet - measures the amount of refined sugars consumed daily',
-    'administration': 'Method of medication delivery - oral, injection, or infusion routes',
-    'age': 'Patient age in years at time of data collection',
-    'Alcohol % of cals (%)': 'Percentage of daily calories derived from alcoholic beverages',
-    'allergies': 'Presence of known allergic reactions to foods or environmental triggers',
-    'allergy_specific': 'Detailed description of specific allergens and reaction severity',
-    'anxiety': 'Clinical assessment of anxiety levels using standardized psychological scales',
-    'asthma': 'Respiratory condition status and current management approach',
-    'B1, B2 (mg)': 'Daily intake of thiamine and riboflavin vitamins in milligrams',
-    'Beta-carotene (mcg)': 'Antioxidant precursor to vitamin A measured in micrograms',
-    'birth_method': 'Delivery method - natural birth, cesarean section, or assisted delivery',
-    'bmi': 'Body Mass Index calculated from height and weight measurements',
-    'Bread, pasta, rice (1)': 'Daily servings of refined carbohydrate food sources',
-    'breastfeeding': 'Duration and exclusivity of breastfeeding in early infancy',
-    'Calcium (mg)': 'Daily calcium intake from dietary and supplement sources',
-    'Calories (Kcal)': 'Total daily energy intake measured in kilocalories',
-    'Carbohydrate (g)': 'Total carbohydrate consumption in grams per day',
-    'Carbohydrate (g) as % of cals': 'Proportion of daily calories from carbohydrate sources',
-    'children_number': 'Total number of biological children in family unit',
-    'Cholestrol (mg)': 'Daily dietary cholesterol intake from food sources',
-    'csf_results': 'Cerebrospinal fluid analysis results for neurological markers',
-    'depression': 'Clinical depression assessment using validated screening tools',
-    'diet_no_special_needs': 'Standard dietary pattern without medical restrictions',
-    'diet_special_needs': 'Modified diet for medical conditions or personal preferences',
-    'Dietary Fiber(g)': 'Insoluble and soluble fiber intake promoting digestive health',
-    'disease': 'Primary disease classification and diagnostic category',
-    'disease_course': 'Progression pattern of the primary medical condition',
-    'disease_course_control': 'Effectiveness of current treatment in controlling disease progression',
-    'disease_duration': 'Time elapsed since initial diagnosis in years',
-    'dmt': 'Disease-modifying therapy status and treatment regimen',
-    'eating_disorder': 'Presence of disordered eating patterns or clinical eating disorders',
-    'eczema': 'Atopic dermatitis severity and current management strategies',
-    'edss': 'Expanded Disability Status Scale score for neurological function',
-    'education': 'Highest level of formal education completed',
-    'ethnicity': 'Self-reported ethnic background and cultural identity',
-    'Fat (g)': 'Total daily fat intake from all dietary sources',
-    'Fat (g) as % of cals': 'Percentage of daily calories derived from fat sources',
-    'FATTYACID': 'Essential fatty acid profile and omega-3/omega-6 ratios',
-    'Folate (mcg)': 'Folate intake crucial for DNA synthesis and cell division',
-    'Fruits, fruit juices (cups)': 'Daily fruit consumption including fresh and processed forms',
-    'Good oils, in foods ("teaspoons")': 'Healthy oil consumption from cooking and food preparation',
-    'GREEN_AND_BEAN': 'Combined intake of green vegetables and legume protein sources',
-    'HEI2015_TOTAL_SCORE': 'Healthy Eating Index score reflecting overall diet quality',
-    'height': 'Standing height measurement in centimeters or inches',
-    'household': 'Household composition and family structure characteristics',
-    'Iron (mg)': 'Daily iron intake essential for oxygen transport and energy',
-    'Magnesium (mg)': 'Magnesium consumption supporting muscle and nerve function',
-    'manic_depression_bipolar': 'Bipolar disorder diagnosis and mood episode history',
-    'Meat, eggs, or beans (1)': 'Daily protein servings from animal and plant sources',
-    'Milk, cheese, yogurt (cups)': 'Dairy product consumption providing calcium and protein',
-    'Monounsaturated fat (g)': 'Heart-healthy fat intake from olive oil and nuts',
-    'ms_family': 'Family history of multiple sclerosis in blood relatives',
-    'MSSS': 'Multiple Sclerosis Severity Score assessing disease progression',
-    'Niacin (mg)': 'Vitamin B3 intake supporting cellular energy metabolism',
-    'nsaids': 'Non-steroidal anti-inflammatory drug usage and frequency',
-    'nsaids_specifics': 'Detailed NSAID medications, dosages, and administration schedule',
-    'occupation': 'Primary employment or professional activity classification',
-    'ocd': 'Obsessive-compulsive disorder symptoms and behavioral patterns',
-    'ocps_y_n': 'Oral contraceptive pill usage history and current status',
-    'otc_meds': 'Over-the-counter medication usage and self-treatment practices',
-    'otc_number': 'Total count of different OTC medications used regularly',
-    'pets': 'Household pet ownership and animal exposure history',
-    'Polyunsaturated fat (g)': 'Essential fatty acid intake from fish and plant oils',
-    'postpartum_depression': 'Depression occurring after childbirth and its severity',
-    'Potassium (mg)': 'Potassium intake supporting heart function and blood pressure',
-    'probiotics': 'Beneficial bacteria supplementation and fermented food consumption',
-    'Protein (g)': 'Total daily protein intake from all food sources',
-    'Protein (g) as % of cals': 'Proportion of daily calories from protein sources',
-    'recreational_drug': 'Non-medical substance use patterns and frequency',
-    'REFINEDGRAIN': 'Processed grain consumption lacking fiber and nutrients',
-    'relapse_number': 'Count of disease exacerbations or symptom flare-ups',
-    'roommates': 'Number of people sharing living space and household',
-    'rxmeds': 'Prescription medication categories and therapeutic classes',
-    'rxmeds_number': 'Total count of different prescription medications taken',
-    'Saturated fat (g)': 'Saturated fat intake primarily from animal products',
-    'Saturated fat (g) as % of cals': 'Percentage of calories from saturated fat sources',
-    'SEAPLANT_PROT': 'Protein intake from seafood and plant-based sources',
-    'sex': 'Biological sex assigned at birth - male or female',
-    'SFA': 'Saturated fatty acid profile and cardiovascular risk assessment',
-    'site': 'Research study location or clinical site identifier',
-    'smoke': 'Smoking history including current status and pack-years',
-    'SODIUM': 'Sodium intake affecting blood pressure and fluid balance',
-    'Sodium (salt) (mg)': 'Daily salt consumption from food and added sources',
-    'spms_year': 'Year of secondary progressive multiple sclerosis diagnosis',
-    'Sweets % of cals (%)': 'Percentage of daily calories from sugar and confections',
-    'TOTALDAIRY': 'Combined dairy product consumption across all categories',
-    'TOTALFRUIT': 'Complete fruit intake including whole and processed forms',
-    'TOTALVEG': 'Total vegetable consumption from all preparation methods',
-    'TOTPROT': 'Complete protein intake from animal and plant sources',
-    'treated': 'Treatment status and therapeutic intervention history',
-    'treatment_status': 'Current treatment response and medication effectiveness',
-    'treatments': 'Comprehensive list of current and past therapeutic approaches',
-    'treatments_control': 'Control group treatment protocols in clinical studies',
-    'type2diabetes': 'Type 2 diabetes diagnosis and glycemic control status',
-    'Vegetables group (cups)': 'Daily vegetable servings excluding starchy varieties',
-    'Vitamdietpairsumin A (RAE)': 'Vitamin A intake in retinol activity equivalents',
-    'Vitamin B6 (mg)': 'Vitamin B6 consumption supporting protein metabolism',
-    'Vitamin C (mg)': 'Ascorbic acid intake for immune function and antioxidant protection',
-    'vitamin D (IU)': 'Vitamin D intake crucial for bone health and immunity',
-    'Vitamin E (mg)': 'Vitamin E antioxidant intake protecting cell membranes',
-    'weight': 'Current body weight in kilograms or pounds',
-    'weight_change': 'Recent weight fluctuation patterns and magnitude',
-    'which_ocp': 'Specific oral contraceptive formulation and hormone composition',
-    'Whole grains (1)': 'Daily servings of unprocessed grain products',
-    'WHOLEFRUIT': 'Whole fruit consumption excluding juices and processed forms',
-    'WHOLEGRAIN': 'Complete whole grain intake supporting digestive health',
-    'without potatoes (cups)': 'Vegetable servings excluding starchy potato varieties',
-    'year_of_onset': 'Calendar year when disease symptoms first appeared',
-    'Zinc (mg)': 'Zinc intake supporting immune function and wound healing'
-}
+    'ADDSUG': 'Added sugar content in diet over 6-12 months. SEE HEI2015 information.',
+    'FATTYACID': 'Fatty acid profile in diet over 6-12 months. SEE HEI2015 information.',
+    'GREEN_AND_BEAN': 'Dark green vegetables and beans and peas in diet over 6-12 months. SEE HEI2015 information.',
+    'TOTALDAIRY': 'Fat free dairy consumption over 6-12 months. SEE HEI2015 information.',
+    'TOTALFRUIT': 'Fruit consumption(including fruit juice) over 6-12 months. SEE HEI2015 information.',
+    'TOTALVEG': 'Vegetable consumption over 6-12 months. SEE HEI2015 information.',
+    'TOTPROT': 'Protein consumption over 6-12 months. SEE HEI2015 information.',
+    'HEI2015_TOTAL_SCORE': 'The HEI2015 is the latest iteration of the Healthy Eating Index, a tool designed to measure diet quality—that is, how closely an eating pattern or mix of foods matches the Dietary Guidelines for Americans recommendations. HEI2015 is a total value of ADDSUG, FATTYACID, GREEN_AND_BEAN, TOTALDAIRY, TOTALFRUIT, TOTALVEG, TOTPROT, REFINEDGRAIN, WHOLEFRUIT, WHOLEGRAIN, SFA, SEAPLANT_PROT, SODIUM',
+    'REFINEDGRAIN': 'Refined grain consumption over 6-12 months. SEE HEI2015 information.',
+    'WHOLEFRUIT': 'Fruit consumption(without fruit juice) over 6-12 months. SEE HEI2015 information.',
+    'WHOLEGRAIN': 'Whole grain consumption over 6-12 months. SEE HEI2015 information.',
+    'SFA': 'Saturated fat consumption over 6-12 months. SEE HEI2015 information.',
+    'SEAPLANT_PROT': 'Protein consumption(seafood + plants) over 6-12 months.SEE HEI2015 information.',
+    'SODIUM': 'Sodium consumption over 6-12 months. SEE HEI2015 information.',
+    
 
+            'administration': 'How the DMTs were administered to the participant with MS',
+
+            'age': 'What is the participants age',
+
+            'Alcohol % of cals (%)': 'FFQ calculation over last 6-12 months',
+
+            'allergies': 'Does participant have an allergy',
+
+            'allergy_specific': 'Participant allergy type',
+
+            'anxiety': 'Does participant have anxiety or not',
+
+            'asthma': 'Does participant have asthma or not',
+
+    
+            'Beta-carotene (mcg)': 'FFQ calculation over last 6-12 months',
+    
+            'birth_method': 'How was participant born',
+    
+            'bmi': 'Participant BMI calculated from height(cm) and weight(kg) measurements',
+
+            'Bread, pasta, rice (1)': 'FFQ calculation over last 6-12 months',
+
+            'breastfeeding': 'Did participant breastfeed as a child',
+
+            'Calcium (mg)': 'FFQ calculation over last 6-12 months',
+                    
+            'Calories (Kcal)': 'FFQ calculation over last 6-12 months',
+
+            'Carbohydrate (g)': 'FFQ calculation over last 6-12 months',
+
+            'Carbohydrate (g) as % of cals': 'FFQ calculation over last 6-12 months',
+
+            'children_number': 'participant children number',
+
+            'Cholestrol (mg)': 'FFQ calculation over last 6-12 months',
+
+            # 'csf_results': 'Cerebrospinal fluid analysis results for neurological markers',
+
+            'depression': 'Does participant have depression or not',
+    
+            'diet_no_special_needs': 'Whether participant has dietary restrictions or not',
+    
+            'diet_special_needs': 'Dietary restriction(s) for participant',
+    
+            'Dietary Fiber(g)': 'FFQ calculation over last 6-12 months',
+
+            'disease': 'Whether participant has MS or not',
+
+    # 'disease_course': 'What type of MS the patient has: RRMS , SPMS or PPMS',
+
+            'disease_course_control': 'MS patient + their controls corresponding pair value. Patient can have RRMS or PMS(SPMS and PPMS lumped together) If MS patient has RRMS, corresponding household member(control) would be control_RRMS. ',
+            
+            'disease_duration': 'How long the patient has had MS',
+
+            'dmt': 'Among the 576 MS patients, 209 (36%) were untreated and 367 (63%) were treated with a disease modifying therapy (DMT). Note that this was done before the study. In page 17-18, we see that Participants were excluded if they received oral antibiotics within the past three months, corticosteroids within the past 30 days, or were on a disease modifying therapy for less than three months',
+    
+            'eating_disorder': 'Does participant have eating_disorder or not',
+
+            'eczema': 'Does participant have eczema or not',
+    
+            'edss': 'The Expanded Disability Status Scale (EDSS) is a tool used to measure disability in people with multiple sclerosis (MS). It ranges from 0 to 10, with 0 being normal and 10 representing death due to MS.',
+
+            'education': 'Highest level of formal education completed by participant',
+
+            'ethnicity': 'What is the participants ethincity',
+
+            'Fat (g)': 'FFQ calculation over last 6-12 months',
+
+            'Fat (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    
+            'Folate (mcg)': 'FFQ calculation over last 6-12 months',
+
+            'Fruits, fruit juices (cups)': 'FFQ calculation over last 6-12 months',
+
+            'Good oils, in foods ("teaspoons")': 'FFQ calculation over last 6-12 months',
+    
+            'height': 'Participant height measurement in centimeters',
+    
+            'household': 'FFQ calculation over last 6-12 months',
+
+            'Iron (mg)': 'FFQ calculation over last 6-12 months',
+
+            'Magnesium (mg)': 'FFQ calculation over last 6-12 months',
+
+            'manic_depression_bipolar': 'Does participant have manic_depression_bipolar or not',
+
+            'Meat, eggs, or beans (1)': 'FFQ calculation over last 6-12 months',
+
+            'Milk, cheese, yogurt (cups)': 'FFQ calculation over last 6-12 months',
+            
+            'Monounsaturated fat (g)': 'FFQ calculation over last 6-12 monthss',
+
+            'ms_family': 'Participant number of family member(s) with MS',
+
+            'MSSS': 'The MSSS (Multiple Sclerosis Severity Score) is a tool used in multiple sclerosis (MS) to assess disease severity by combining disability (measured by the EDSS) with disease duration. It provides a score that ranges from 0 to 10.',
+
+            'Niacin (mg)': 'FFQ calculation over last 6-12 months',
+
+            'nsaids': 'Did participant use non-steroidal anti-inflammatory drugs',
+
+            'nsaids_specifics': 'Type of non-steroidal anti-inflammatory drugs used by participant',
+
+            'occupation': 'Participant occupation',
+
+            'ocd': 'Does participant have ocd or not',
+
+            'ocps_y_n': 'Did participant take oral contraceptive pills or not',
+
+            'otc_meds': 'Does participant take Over-the-counter medication',
+
+            'otc_number': 'Total count of different Over-the-counte medications used',
+
+            'pets': 'Does participant have pets or not',
+
+            'Polyunsaturated fat (g)': 'FFQ calculation over last 6-12 monthss',
+
+            'postpartum_depression': 'Did female participant experience postpartum_depression or not',
+
+            'Potassium (mg)': 'FFQ calculation over last 6-12 monthse',
+
+            'probiotics': 'Has patient taken probiotics',
+
+            'Protein (g)': 'FFQ calculation over last 6-12 monthss',
+
+            'Protein (g) as % of cals': 'FFQ calculation over last 6-12 months',
+
+            'recreational_drug': 'Does participant take recreational drugs',
+
+    
+
+            # 'relapse_number': 'Count of disease exacerbations or symptom flare-ups',
+
+            'roommates': 'Participant roommates number',
+
+            'rxmeds': 'Does participant take Prescription medication or not',
+
+            'rxmeds_number': 'Participant total count of different prescription medications taken',
+
+            'Saturated fat (g)': 'FFQ calculation over last 6-12 months',
+
+            'Saturated fat (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    
+            'sex': 'What is the participants sex',
+    
+
+            'site': '1152 participants were recruited from seven sites (recruiting centers) located in San Francisco, Boston, New York, Pittsburgh, Buenos Aires, Edinburgh and San Sebastián',
+
+            'smoke': 'Participant smoke history',
+
+            'Sodium (salt) (mg)': 'FFQ calculation over last 6-12 months',
+
+            'spms_year': 'Year of secondary progressive multiple sclerosis diagnosis',
+    
+            'Sweets % of cals (%)': 'FFQ calculation over last 6-12 months',
+            
+            'treatment_control': 'MS patient treatment status + their controls corresponding pair value. Patient can be treated or Untreated. If MS patient is treated, corresponding household member(control) would be treated_HHC.',
+    
+    # 'treatment_status': 'For DMTs(see the note on DMTs), treatment_status is treated, control or untreated',
+
+    # 'treatments': 'For DMTs(see the note on DMTs), Treatments included oral agents Fingolimod (n=71), and dimethyl fumarate (DMF, n=86);, injectables glatiramer acetate (GA, n=68) and interferon (IFN, n=87); and infusion agents anti-CD20 monoclonal antibodies (n=28), and natalizumab (n=27)',
+
+
+            'treatments_control': '(see the note on DMTs), MS patient treatment + their controls corresponding pair value. If patient was treated with Fingolimod, control value would be control_Fingolimod',
+
+            'type2diabetes': 'Does participant have type2diabetes or not',
+
+            'Vegetables group (cups)': 'FFQ calculation over last 6-12 months',
+
+            'Vitamdietpairsumin A (RAE)': 'FFQ calculation over last 6-12 months',
+
+            'Vitamin B6 (mg)': 'FFQ calculation over last 6-12 months',
+
+            'Vitamin C (mg)': 'FFQ calculation over last 6-12 months',
+
+            'vitamin D (IU)': 'FFQ calculation over last 6-12 months',
+
+            'Vitamin E (mg)': 'FFQ calculation over last 6-12 months',
+
+            'weight': 'What is the participants weight in kg',
+
+            # 'weight_change': 'Recent weight fluctuation patterns and magnitude',
+    
+            'which_ocp': 'Specific oral contraceptive pill(s) taken by participant',
+
+            'Whole grains (1)': 'FFQ calculation over last 6-12 months',
+
+            'without potatoes (cups)': 'FFQ calculation over last 6-12 months',
+
+            'year_of_onset': 'Year when participant was diagnosed with MS',
+
+            'Zinc (mg)': 'FFQ calculation over last 6-12 months'
+}
 
 # Sheet description
 SHEET_DESCRIPTIONS = {
@@ -554,7 +652,8 @@ S6_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S6.xlsx')
 sheet1_2 = pd.read_excel(S1_PATH, sheet_name='Dataset S1.2')
 sheet2 = pd.read_excel(S2_PATH, sheet_name='Dataset S2')
 sheet3 = pd.read_excel(S3_PATH, sheet_name='Dataset S3')
-sheet6_class = pd.read_excel(S6_PATH, sheet_name='order')
+dependentvar = 'order'
+sheet6_class = pd.read_excel(S6_PATH, sheet_name=dependentvar)
 
 # Merge the demographic data
 demographic_data = (sheet1_2
@@ -1511,13 +1610,12 @@ function createInfoOverlays() {{
     `;
     
     // Create overlay 3 - Sheet info
-    console.log("Creating overlay 3 for sheet: Dataset S1.2");
     const overlay3 = document.createElement('div');
     overlay3.id = 'overlay3';
     overlay3.className = 'info-overlay';
     overlay3.style.cssText = `
       position: fixed !important;
-      top: 660px !important;
+      top: 760px !important;
       right: 20px !important;
       width: 300px !important;
       background: rgba(255, 255, 255, 0.95) !important;
@@ -1529,13 +1627,93 @@ function createInfoOverlays() {{
       font-size: 14px !important;
     `;
     
-    const sheetDescription = sheetDescriptions['Dataset S1.2'] || 'Primary research dataset containing clinical and demographic information.';
+    const sheetDescription = 'Taxa level: this is the dependent variable';
     console.log("Sheet description found:", sheetDescription);
     
     overlay3.innerHTML = `
-      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Dataset Information</div>
-      <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">Dataset S1.2</div>
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Taxa</div>
+      <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(dependentvar)}</div>
       <div style="color: #555; margin-bottom: 15px;">${{sheetDescription}}</div>
+    `;
+
+
+    // Create overlay 4 - Study info
+    const overlay4 = document.createElement('div');
+    overlay4.id = 'overlay4';
+    overlay4.className = 'info-overlay';
+    overlay4.style.cssText = `
+      position: fixed !important;
+      top: 960px !important;
+      right: 20px !important;
+      width: 300px !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 2px solid #333 !important;
+      border-radius: 8px !important;
+      padding: 15px !important;
+      z-index: 99999 !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 14px !important;
+    `;
+    
+    const overlay4Description = 'This was a cross-sectional observational study conducted from September 2015 to January 2019 across 7 international sites (San Francisco, Boston, New York, Pittsburgh, Buenos Aires, Edinburgh, and San Sebastián). 576 MS patients paired with 576 genetically unrelated household healthy controls. Participants had to cohabitate for at least 6 months. MS patients on treatments had to be stable on therapy for ≥3 months. Single time point data collection per participant. Basically, no experiments were done during the study and all the data collected serves as a guide to give context to the microbial composition of people.';
+    console.log("Sheet description found:", overlay4Description);
+    
+    overlay4.innerHTML = `
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Study Information</div>
+      <div style="color: #555; margin-bottom: 15px;">${{overlay4Description}}</div>
+    `;
+
+
+    // Create overlay 5 - HEI2015 info
+    const overlay5 = document.createElement('div');
+    overlay5.id = 'overlay5';
+    overlay5.className = 'info-overlay';
+    overlay5.style.cssText = `
+      position: fixed !important;
+      top: 960px !important;
+      right: 420px !important;
+      width: 300px !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 2px solid #333 !important;
+      border-radius: 8px !important;
+      padding: 15px !important;
+      z-index: 99999 !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 14px !important;
+    `;
+    
+    const overlay5Description = 'The HEI2015 is the latest iteration of the Healthy Eating Index, a tool designed to measure diet quality—that is, how closely an eating pattern or mix of foods matches the Dietary Guidelines for Americans recommendations. HEI2015 is a total value of ADDSUG, FATTYACID, GREEN_AND_BEAN, TOTALDAIRY, TOTALFRUIT, TOTALVEG, TOTPROT, REFINEDGRAIN, WHOLEFRUIT, WHOLEGRAIN, SFA, SEAPLANT_PROT, SODIUM. https://www.nccor.org/wp-content/uploads/2023/05/HEI-2015-Factsheet.pdf';
+    console.log("Sheet description found:", overlay5Description);
+    
+    overlay5.innerHTML = `
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">HEI2015 Information</div>
+      <div style="color: #555; margin-bottom: 15px;">${{overlay5Description}}</div>
+    `;
+
+    // Create overlay 6 - FFQ info
+    const overlay6 = document.createElement('div');
+    overlay6.id = 'overlay6';
+    overlay6.className = 'info-overlay';
+    overlay6.style.cssText = `
+      position: fixed !important;
+      top: 360px !important;
+      right: 420px !important;
+      width: 300px !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 2px solid #333 !important;
+      border-radius: 8px !important;
+      padding: 15px !important;
+      z-index: 99999 !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 14px !important;
+    `;
+    
+    const overlay6Description = 'An FFQ, or Food Frequency Questionnaire, is a dietary assessment tool used to estimate an individuals usual food and beverage consumption patterns over a specific period, typically a few months to a year. It involves participants reporting how frequently they eat or drink various food items from a list provided on the questionnaire. https://biolincc.nhlbi.nih.gov/media/studies/framoffspring/Forms/Exam%203%20Food%20Frequency%20Questionnaire.pdf?link_time=2018-08-11_23:58:42.966309';
+    console.log("Sheet description found:", overlay6Description);
+    
+    overlay6.innerHTML = `
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">FFQ Information</div>
+      <div style="color: #555; margin-bottom: 15px;">${{overlay6Description}}</div>
     `;
     
     // Add overlays to document
@@ -1543,6 +1721,9 @@ function createInfoOverlays() {{
     document.body.appendChild(overlay1);
     document.body.appendChild(overlay2);
     document.body.appendChild(overlay3);
+    document.body.appendChild(overlay4);
+    document.body.appendChild(overlay5);
+    document.body.appendChild(overlay6);
     
     // Verify they were added
     const addedOverlays = document.querySelectorAll('.info-overlay');
