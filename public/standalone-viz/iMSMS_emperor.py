@@ -185,198 +185,103 @@ VARIABLE_DESCRIPTIONS = {
     'SODIUM': 'Sodium consumption over 6-12 months. SEE HEI2015 information.',
     
 
-            'administration': 'How the DMTs were administered to the participant with MS',
-
-            'age': 'What is the participants age',
-
-            'Alcohol % of cals (%)': 'FFQ calculation over last 6-12 months',
-
-            'allergies': 'Does participant have an allergy',
-
-            'allergy_specific': 'Participant allergy type',
-
-            'anxiety': 'Does participant have anxiety or not',
-
-            'asthma': 'Does participant have asthma or not',
-
-    
-            'Beta-carotene (mcg)': 'FFQ calculation over last 6-12 months',
-    
-            'birth_method': 'How was participant born',
-    
-            'bmi': 'Participant BMI calculated from height(cm) and weight(kg) measurements',
-
-            'Bread, pasta, rice (1)': 'FFQ calculation over last 6-12 months',
-
-            'breastfeeding': 'Did participant breastfeed as a child',
-
-            'Calcium (mg)': 'FFQ calculation over last 6-12 months',
-                    
-            'Calories (Kcal)': 'FFQ calculation over last 6-12 months',
-
-            'Carbohydrate (g)': 'FFQ calculation over last 6-12 months',
-
-            'Carbohydrate (g) as % of cals': 'FFQ calculation over last 6-12 months',
-
-            'children_number': 'participant children number',
-
-            'Cholestrol (mg)': 'FFQ calculation over last 6-12 months',
-
-            # 'csf_results': 'Cerebrospinal fluid analysis results for neurological markers',
-
-            'depression': 'Does participant have depression or not',
-    
-            'diet_no_special_needs': 'Whether participant has dietary restrictions or not',
-    
-            'diet_special_needs': 'Dietary restriction(s) for participant',
-    
-            'Dietary Fiber(g)': 'FFQ calculation over last 6-12 months',
-
-            'disease': 'Whether participant has MS or not',
-
+    'administration': 'How the DMTs were administered to the participant with MS',
+    'age': 'What is the participants age',
+    'allergies': 'Does participant have an allergy',
+    'allergy_specific': 'Participant allergy type',
+    'anxiety': 'Does participant have anxiety or not',
+    'asthma': 'Does participant have asthma or not',
+    'birth_method': 'How was participant born',
+    'bmi': 'Participant BMI calculated from height(cm) and weight(kg) measurements',
+    'breastfeeding': 'Did participant breastfeed as a child',
+    'children_number': 'participant children number',
+        # 'csf_results': 'Cerebrospinal fluid analysis results for neurological markers',
+    'depression': 'Does participant have depression or not',
+    'diet_no_special_needs': 'Whether participant has dietary restrictions or not',
+    'diet_special_needs': 'Dietary restriction(s) for participant',
+    'disease': 'Whether participant has MS or not',
     # 'disease_course': 'What type of MS the patient has: RRMS , SPMS or PPMS',
-
-            'disease_course_control': 'MS patient + their controls corresponding pair value. Patient can have RRMS or PMS(SPMS and PPMS lumped together) If MS patient has RRMS, corresponding household member(control) would be control_RRMS. ',
-            
-            'disease_duration': 'How long the patient has had MS',
-
-            'dmt': 'Among the 576 MS patients, 209 (36%) were untreated and 367 (63%) were treated with a disease modifying therapy (DMT). Note that this was done before the study. In page 17-18, we see that Participants were excluded if they received oral antibiotics within the past three months, corticosteroids within the past 30 days, or were on a disease modifying therapy for less than three months',
-    
-            'eating_disorder': 'Does participant have eating_disorder or not',
-
-            'eczema': 'Does participant have eczema or not',
-    
-            'edss': 'The Expanded Disability Status Scale (EDSS) is a tool used to measure disability in people with multiple sclerosis (MS). It ranges from 0 to 10, with 0 being normal and 10 representing death due to MS.',
-
-            'education': 'Highest level of formal education completed by participant',
-
-            'ethnicity': 'What is the participants ethincity',
-
-            'Fat (g)': 'FFQ calculation over last 6-12 months',
-
-            'Fat (g) as % of cals': 'FFQ calculation over last 6-12 months',
-    
-            'Folate (mcg)': 'FFQ calculation over last 6-12 months',
-
-            'Fruits, fruit juices (cups)': 'FFQ calculation over last 6-12 months',
-
-            'Good oils, in foods ("teaspoons")': 'FFQ calculation over last 6-12 months',
-    
-            'height': 'Participant height measurement in centimeters',
-    
-            'household': 'FFQ calculation over last 6-12 months',
-
-            'Iron (mg)': 'FFQ calculation over last 6-12 months',
-
-            'Magnesium (mg)': 'FFQ calculation over last 6-12 months',
-
-            'manic_depression_bipolar': 'Does participant have manic_depression_bipolar or not',
-
-            'Meat, eggs, or beans (1)': 'FFQ calculation over last 6-12 months',
-
-            'Milk, cheese, yogurt (cups)': 'FFQ calculation over last 6-12 months',
-            
-            'Monounsaturated fat (g)': 'FFQ calculation over last 6-12 monthss',
-
-            'ms_family': 'Participant number of family member(s) with MS',
-
-            'MSSS': 'The MSSS (Multiple Sclerosis Severity Score) is a tool used in multiple sclerosis (MS) to assess disease severity by combining disability (measured by the EDSS) with disease duration. It provides a score that ranges from 0 to 10.',
-
-            'Niacin (mg)': 'FFQ calculation over last 6-12 months',
-
-            'nsaids': 'Did participant use non-steroidal anti-inflammatory drugs',
-
-            'nsaids_specifics': 'Type of non-steroidal anti-inflammatory drugs used by participant',
-
-            'occupation': 'Participant occupation',
-
-            'ocd': 'Does participant have ocd or not',
-
-            'ocps_y_n': 'Did participant take oral contraceptive pills or not',
-
-            'otc_meds': 'Does participant take Over-the-counter medication',
-
-            'otc_number': 'Total count of different Over-the-counte medications used',
-
-            'pets': 'Does participant have pets or not',
-
-            'Polyunsaturated fat (g)': 'FFQ calculation over last 6-12 monthss',
-
-            'postpartum_depression': 'Did female participant experience postpartum_depression or not',
-
-            'Potassium (mg)': 'FFQ calculation over last 6-12 monthse',
-
-            'probiotics': 'Has patient taken probiotics',
-
-            'Protein (g)': 'FFQ calculation over last 6-12 monthss',
-
-            'Protein (g) as % of cals': 'FFQ calculation over last 6-12 months',
-
-            'recreational_drug': 'Does participant take recreational drugs',
-
-    
-
-            # 'relapse_number': 'Count of disease exacerbations or symptom flare-ups',
-
-            'roommates': 'Participant roommates number',
-
-            'rxmeds': 'Does participant take Prescription medication or not',
-
-            'rxmeds_number': 'Participant total count of different prescription medications taken',
-
-            'Saturated fat (g)': 'FFQ calculation over last 6-12 months',
-
-            'Saturated fat (g) as % of cals': 'FFQ calculation over last 6-12 months',
-    
-            'sex': 'What is the participants sex',
-    
-
-            'site': '1152 participants were recruited from seven sites (recruiting centers) located in San Francisco, Boston, New York, Pittsburgh, Buenos Aires, Edinburgh and San Sebastián',
-
-            'smoke': 'Participant smoke history',
-
-            'Sodium (salt) (mg)': 'FFQ calculation over last 6-12 months',
-
-            'spms_year': 'Year of secondary progressive multiple sclerosis diagnosis',
-    
-            'Sweets % of cals (%)': 'FFQ calculation over last 6-12 months',
-            
-            'treatment_control': 'MS patient treatment status + their controls corresponding pair value. Patient can be treated or Untreated. If MS patient is treated, corresponding household member(control) would be treated_HHC.',
-    
+    'disease_course_control': 'MS patient + their controls corresponding pair value. Patient can have RRMS or PMS(SPMS and PPMS lumped together) If MS patient has RRMS, corresponding household member(control) would be control_RRMS. ',
+    'disease_duration': 'How long the patient has had MS',
+    'dmt': 'Among the 576 MS patients, 209 (36%) were untreated and 367 (63%) were treated with a disease modifying therapy (DMT). Note that this was done before the study. In page 17-18, we see that Participants were excluded if they received oral antibiotics within the past three months, corticosteroids within the past 30 days, or were on a disease modifying therapy for less than three months',
+    'eating_disorder': 'Does participant have eating_disorder or not',
+    'eczema': 'Does participant have eczema or not',
+    'edss': 'The Expanded Disability Status Scale (EDSS) is a tool used to measure disability in people with multiple sclerosis (MS). It ranges from 0 to 10, with 0 being normal and 10 representing death due to MS.',
+    'education': 'Highest level of formal education completed by participant',
+    'ethnicity': 'What is the participants ethincity',
+    'height': 'Participant height measurement in centimeters',
+    'manic_depression_bipolar': 'Does participant have manic_depression_bipolar or not',
+    'ms_family': 'Participant number of family member(s) with MS',
+    'MSSS': 'The MSSS (Multiple Sclerosis Severity Score) is a tool used in multiple sclerosis (MS) to assess disease severity by combining disability (measured by the EDSS) with disease duration. It provides a score that ranges from 0 to 10.',
+    'nsaids': 'Did participant use non-steroidal anti-inflammatory drugs',
+    'nsaids_specifics': 'Type of non-steroidal anti-inflammatory drugs used by participant',
+    'occupation': 'Participant occupation',
+    'ocd': 'Does participant have ocd or not',
+    'ocps_y_n': 'Did participant take oral contraceptive pills or not',
+    'otc_meds': 'Does participant take Over-the-counter medication',
+    'otc_number': 'Total count of different Over-the-counte medications used',
+    'pets': 'Does participant have pets or not',
+    'postpartum_depression': 'Did female participant experience postpartum_depression or not',
+    'probiotics': 'Has patient taken probiotics',
+    'recreational_drug': 'Does participant take recreational drugs',
+        # 'relapse_number': 'Count of disease exacerbations or symptom flare-ups',
+    'roommates': 'Participant roommates number',
+    'rxmeds': 'Does participant take Prescription medication or not',
+    'rxmeds_number': 'Participant total count of different prescription medications taken',
+    'sex': 'What is the participants sex',
+    'site': '1152 participants were recruited from seven sites (recruiting centers) located in San Francisco, Boston, New York, Pittsburgh, Buenos Aires, Edinburgh and San Sebastián',
+    'smoke': 'Participant smoke history',
+    'spms_year': 'Year of secondary progressive multiple sclerosis diagnosis',
+    'treated': 'MS patient treatment status + their controls corresponding pair value. Patient can be treated or Untreated. If MS patient is treated, corresponding household member(control) would be treated_HHC.',
     # 'treatment_status': 'For DMTs(see the note on DMTs), treatment_status is treated, control or untreated',
-
     # 'treatments': 'For DMTs(see the note on DMTs), Treatments included oral agents Fingolimod (n=71), and dimethyl fumarate (DMF, n=86);, injectables glatiramer acetate (GA, n=68) and interferon (IFN, n=87); and infusion agents anti-CD20 monoclonal antibodies (n=28), and natalizumab (n=27)',
+    'treatments_control': '(see the note on DMTs), MS patient treatment + their controls corresponding pair value. If patient was treated with Fingolimod, control value would be control_Fingolimod',
+    'type2diabetes': 'Does participant have type2diabetes or not',
+    'weight': 'What is the participants weight in kg',
+        # 'weight_change': 'Recent weight fluctuation patterns and magnitude',
+    'which_ocp': 'Specific oral contraceptive pill(s) taken by participant',
+    'year_of_onset': 'Year when participant was diagnosed with MS',
 
 
-            'treatments_control': '(see the note on DMTs), MS patient treatment + their controls corresponding pair value. If patient was treated with Fingolimod, control value would be control_Fingolimod',
 
-            'type2diabetes': 'Does participant have type2diabetes or not',
-
-            'Vegetables group (cups)': 'FFQ calculation over last 6-12 months',
-
-            'Vitamdietpairsumin A (RAE)': 'FFQ calculation over last 6-12 months',
-
-            'Vitamin B6 (mg)': 'FFQ calculation over last 6-12 months',
-
-            'Vitamin C (mg)': 'FFQ calculation over last 6-12 months',
-
-            'vitamin D (IU)': 'FFQ calculation over last 6-12 months',
-
-            'Vitamin E (mg)': 'FFQ calculation over last 6-12 months',
-
-            'weight': 'What is the participants weight in kg',
-
-            # 'weight_change': 'Recent weight fluctuation patterns and magnitude',
-    
-            'which_ocp': 'Specific oral contraceptive pill(s) taken by participant',
-
-            'Whole grains (1)': 'FFQ calculation over last 6-12 months',
-
-            'without potatoes (cups)': 'FFQ calculation over last 6-12 months',
-
-            'year_of_onset': 'Year when participant was diagnosed with MS',
-
-            'Zinc (mg)': 'FFQ calculation over last 6-12 months'
+    'Alcohol % of cals (%)': 'FFQ calculation over last 6-12 months',
+    'Beta-carotene (mcg)': 'FFQ calculation over last 6-12 months',
+    'Bread, pasta, rice (1)': 'FFQ calculation over last 6-12 months',
+    'Calcium (mg)': 'FFQ calculation over last 6-12 months',    
+    'Calories (Kcal)': 'FFQ calculation over last 6-12 months',
+    'Carbohydrate (g)': 'FFQ calculation over last 6-12 months',
+    'Carbohydrate (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    'Cholestrol (mg)': 'FFQ calculation over last 6-12 months',
+    'Dietary Fiber(g)': 'FFQ calculation over last 6-12 months',      
+    'Fat (g)': 'FFQ calculation over last 6-12 months',
+    'Fat (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    'Folate (mcg)': 'FFQ calculation over last 6-12 months',
+    'Fruits, fruit juices (cups)': 'FFQ calculation over last 6-12 months',
+    'Good oils, in foods ("teaspoons")': 'FFQ calculation over last 6-12 months',
+    'household': 'FFQ calculation over last 6-12 months',
+    'Iron (mg)': 'FFQ calculation over last 6-12 months',
+    'Magnesium (mg)': 'FFQ calculation over last 6-12 months',
+    'Meat, eggs, or beans (1)': 'FFQ calculation over last 6-12 months',
+    'Milk, cheese, yogurt (cups)': 'FFQ calculation over last 6-12 months',
+    'Monounsaturated fat (g)': 'FFQ calculation over last 6-12 monthss',
+    'Niacin (mg)': 'FFQ calculation over last 6-12 months',
+    'Polyunsaturated fat (g)': 'FFQ calculation over last 6-12 monthss',
+    'Potassium (mg)': 'FFQ calculation over last 6-12 monthse',
+    'Protein (g)': 'FFQ calculation over last 6-12 monthss',
+    'Protein (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    'Saturated fat (g)': 'FFQ calculation over last 6-12 months',
+    'Saturated fat (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    'Sodium (salt) (mg)': 'FFQ calculation over last 6-12 months',
+    'Sweets % of cals (%)': 'FFQ calculation over last 6-12 months',
+    'Vegetables group (cups)': 'FFQ calculation over last 6-12 months',
+    'Vitamdietpairsumin A (RAE)': 'FFQ calculation over last 6-12 months',
+    'Vitamin B6 (mg)': 'FFQ calculation over last 6-12 months',
+    'Vitamin C (mg)': 'FFQ calculation over last 6-12 months',
+    'vitamin D (IU)': 'FFQ calculation over last 6-12 months',
+    'Vitamin E (mg)': 'FFQ calculation over last 6-12 months',
+    'Whole grains (1)': 'FFQ calculation over last 6-12 months',
+    'without potatoes (cups)': 'FFQ calculation over last 6-12 months',
+    'Zinc (mg)': 'FFQ calculation over last 6-12 months'
 }
 
 # Sheet description
@@ -384,6 +289,48 @@ SHEET_DESCRIPTIONS = {
     'Dataset S1.2': 'Primary demographic and clinical characteristics dataset containing patient baseline information, medical history, and socioeconomic factors collected at study enrollment'
 }
 
+# Special handling for age variable - use life stage categories instead of numeric ranges
+def convert_age_to_life_stages(df, column_name):
+    """Convert age values to life stage categories"""
+    if column_name != 'age' or column_name not in df.columns:
+        return df
+    
+    def categorize_age(age_value):
+        if pd.isna(age_value):
+            return np.nan
+        try:
+            age = float(age_value)
+            if age < 35:
+                return "a. Young adults"
+            elif age < 55:
+                return "b. Middle age adults"
+            else:
+                return "c. Older adults"
+        except (ValueError, TypeError):
+            return np.nan
+    
+    df[column_name] = df[column_name].apply(categorize_age)
+    return df
+
+# Function to sort age categories in proper order
+def sort_age_categories(ranges, variable_name):
+    """Sort age categories in proper life stage order"""
+    if variable_name == 'age':
+        # Define the proper order for age categories
+        age_order = ["a. Young adults", "b. Middle age adults", "c. Older adults"]
+        # Sort based on the predefined order, keeping any other values at the end
+        sorted_ranges = []
+        for category in age_order:
+            if category in ranges:
+                sorted_ranges.append(category)
+        # Add any unexpected categories at the end
+        for category in ranges:
+            if category not in sorted_ranges:
+                sorted_ranges.append(category)
+        return sorted_ranges
+    else:
+        return ranges
+    
 # Function to safely escape strings for JavaScript
 def escape_for_js(text):
     """
@@ -677,11 +624,17 @@ print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discret
 print(f"Original data type: {original_variable1_data.dtype if original_variable1_data is not None else 'Unknown'}")
 print(f"Unique values in original data: {len(original_variable1_data.dropna().unique()) if original_variable1_data is not None else 'Unknown'}")
 
-# Convert variable1 (coloring variable) to its specified number of bins
-demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
+# Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
+if variable1 == 'age':
+    demographic_data = convert_age_to_life_stages(demographic_data, variable1)
+else:
+    demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
 
-# Convert variable2 (shape variable) to its specified number of bins
-demographic_data = convert_column_to_ranges(demographic_data, variable2, num_bins=variable2_bins)
+# Convert variable2 (shape variable) to its specified number of bins OR life stages for age
+if variable2 == 'age':
+    demographic_data = convert_age_to_life_stages(demographic_data, variable2)
+else:
+    demographic_data = convert_column_to_ranges(demographic_data, variable2, num_bins=variable2_bins)
 
 # Convert other numeric columns, excluding our target variables
 demographic_data = convert_to_ranges(demographic_data, num_bins=5, exclude_columns=[variable1, variable2])
@@ -733,10 +686,15 @@ def sort_ranges_numerically(ranges):
 # Define colors for variable1 (coloring variable) - ADAPTIVE COLOR SCHEME
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
 
-if variable1_is_discrete:
-    variable1_ranges.sort()  # Simple alphabetical sort for discrete variables
+if variable1_is_discrete or variable1 == 'age':
+    if variable1 == 'age':
+        variable1_ranges = sort_age_categories(variable1_ranges, variable1)
+        # print(variable1_ranges)
+    else:
+        variable1_ranges.sort()  # Simple alphabetical sort for other discrete variables
 else:
     variable1_ranges = sort_ranges_numerically(variable1_ranges)  # Numeric sort for continuous
+
 
 # Generate appropriate color scheme based on the original data analysis
 if variable1_is_discrete:
@@ -745,6 +703,7 @@ if variable1_is_discrete:
 else:
     colors_list = generate_gradient_colors(len(variable1_ranges))
     color_scheme_type = "gradient (YlOrRd)"
+
 
 # Create custom color mapping
 custom_colors = {}
@@ -757,21 +716,33 @@ print(f"Color mapping: {custom_colors}")
 
 # Define shapes for variable2 (shape variable) - ROBUST HANDLING
 variable2_ranges = demographic_data[variable2].dropna().unique().tolist()
-if variable2_is_discrete:
-    variable2_ranges.sort()  # Simple alphabetical sort for discrete variables
+if variable2_is_discrete or variable2 == 'age':
+    if variable2 == 'age':
+        variable2_ranges = sort_age_categories(variable2_ranges, variable2)
+    else:
+        variable2_ranges.sort()  # Simple alphabetical sort for other discrete variables
 else:
     variable2_ranges = sort_ranges_numerically(variable2_ranges)  # Numeric sort for continuous
 
 # Define shapes (expand shape palette to handle more bins)
 available_shapes = [
+    # 'Star',
+    # 'Cylinder', 
+    # 'Sphere',
+    # 'Cone',
+    # 'Diamond',        # Additional shapes if needed
+    # 'Ring',
+    # 'Icosahedron',
+    # 'Square'
+
     'Star',
-    'Cylinder', 
-    'Sphere',
-    'Cone',
-    'Diamond',        # Additional shapes if needed
-    'Ring',
-    'Icosahedron',
-    'Square'
+    'Star', 
+    'Star',
+    'Star',
+    'Star',        # Additional shapes if needed
+    'Star',
+    'Star',
+    'Star'
 ]
 
 # Create custom shape mapping based on actual number of ranges
@@ -819,9 +790,6 @@ viz.set_axes([0, 1, 2])  # Set axes to display (using indices 0, 1, 2 for pc1, p
 scale_dict = {var1_range: 1.0 for var1_range in variable1_ranges}
 opacity_dict = {var1_range: 1.0 for var1_range in variable1_ranges}
 
-# Set scaling and opacity
-viz.scale_by(variable1, scale_dict)
-viz.opacity_by(variable1, opacity_dict)
 
 # Generate the base Emperor visualization HTML
 emperor_html = viz.make_emperor(standalone=True)
@@ -1063,120 +1031,66 @@ document.addEventListener('DOMContentLoaded', function() {{
 # Use safe escaping for custom_colors
 custom_colors_js = dict_to_js_object(custom_colors)
 
+# Then use this simplified JavaScript:
 custom_js = f"""
-// Set the metadata field to variable1 for coloring
 setTimeout(function() {{
-  // HANDLE COLORING BY VARIABLE1
+  console.log("Setting up color system compatibility...");
+  
+  // The key insight: Don't override Emperor's color system at all
+  // Just make sure the UI interactions work properly
+  
+  // Ensure variable1 is selected initially
   if (ec.controllers && ec.controllers.color) {{
     var colorController = ec.controllers.color;
-    
-    // First check if variable1 is available in the dropdown
     var colorSelect = colorController.$select[0];
-    var hasVariable1 = false;
     
     for (var i = 0; i < colorSelect.options.length; i++) {{
       if (colorSelect.options[i].value === {safe_variable1}) {{
-        hasVariable1 = true;
-        colorSelect.selectedIndex = i;
-        
-        // IMPORTANT: Don't trigger change event to preserve our custom color scheme
-        // The Python code has already set up the correct colors
-        console.log('Auto-selected variable1 for coloring (preserving custom color scheme)');
+        if (colorSelect.selectedIndex !== i) {{
+          colorSelect.selectedIndex = i;
+          console.log('Auto-selected variable1 for coloring');
+        }}
         break;
       }}
     }}
-    
-    if (!hasVariable1) {{
-      console.log('Variable1 category not found in available metadata');
-    }}
-    
-    // Preserve the custom color mapping that was set in Python
-    // Store our custom colors to prevent Emperor from overriding them
-    var customColorMapping = {custom_colors_js};
-    
-    // Override Emperor's color update function to preserve our colors
-    if (colorController.setPlottableAttributes) {{
-      var originalSetPlottableAttributes = colorController.setPlottableAttributes;
-      colorController.setPlottableAttributes = function(group) {{
-        // Call the original function
-        originalSetPlottableAttributes.call(this, group);
-        
-        // Then restore our custom colors
-        var decomp = ec.sceneViews[0].decomp;
-        if (decomp && decomp.plottable) {{
-          var metadata = decomp.plottable.metadata;
-          var metadataHeaders = decomp.plottable.metadata_headers;
-          
-          // Find variable1 index
-          var variable1Index = metadataHeaders.indexOf({safe_variable1});
-          if (variable1Index !== -1) {{
-            for (var i = 0; i < decomp.plottable.sample_ids.length; i++) {{
-              var sampleId = decomp.plottable.sample_ids[i];
-              var variable1Value = metadata[sampleId][variable1Index];
-              
-              if (customColorMapping[variable1Value]) {{
-                var color = customColorMapping[variable1Value];
-                // Convert hex to RGB
-                var r = parseInt(color.slice(1, 3), 16) / 255;
-                var g = parseInt(color.slice(3, 5), 16) / 255;
-                var b = parseInt(color.slice(5, 7), 16) / 255;
-                
-                decomp.plottable.colors[i] = [r, g, b];
-              }}
-            }}
-            
-            // Force update of the visualization
-            decomp.plottable.needsUpdate = true;
-            if (ec.sceneViews[0].needsUpdate !== undefined) {{
-              ec.sceneViews[0].needsUpdate = true;
-            }}
-          }}
-        }}
-      }};
-    }}
   }}
   
-  // RENAME AXIS LABELS
+  // That's it! No overrides, no interference
+  // Your custom colors from Python will show initially
+  // And Emperor's UI will work normally for user changes
+  
+  console.log('Color system ready - your custom colors should be visible');
+  console.log('Users can now change individual bin colors through the UI');
+  
+  // Axis renaming (unchanged)
   function renameAxisLabels() {{
-    // Method 1: Look for text elements in the SVG renderer
     var allText = document.querySelectorAll('text');
     for (var i = 0; i < allText.length; i++) {{
       var text = allText[i].textContent || allText[i].innerText;
-      if (text.match(/PC1/i) || text.match(/PC 1/i)) {{
-        allText[i].textContent = text.replace(/PC1/i, 'Axis 1').replace(/PC 1/i, 'Axis 1');
-      }}
-      if (text.match(/PC2/i) || text.match(/PC 2/i)) {{
-        allText[i].textContent = text.replace(/PC2/i, 'Axis 2').replace(/PC 2/i, 'Axis 2');
-      }}
-      if (text.match(/PC3/i) || text.match(/PC 3/i)) {{
-        allText[i].textContent = text.replace(/PC3/i, 'Axis 3').replace(/PC 3/i, 'Axis 3');
-      }}
+      if (text.match(/PC1/i)) allText[i].textContent = text.replace(/PC1/i, 'Axis 1');
+      if (text.match(/PC2/i)) allText[i].textContent = text.replace(/PC2/i, 'Axis 2');
+      if (text.match(/PC3/i)) allText[i].textContent = text.replace(/PC3/i, 'Axis 3');
     }}
   }}
   
-  // Run the axis renaming function repeatedly
   renameAxisLabels();
-  
   var renameInterval = setInterval(renameAxisLabels, 500);
+  setTimeout(function() {{ clearInterval(renameInterval); }}, 10000);
   
-  // Stop trying after 10 seconds
-  setTimeout(function() {{
-    clearInterval(renameInterval);
-  }}, 10000);
 }}, 1000);
 """
 
-# More precise hiding that preserves Color and Shape AND hides settings button
+# More precise hiding that preserves Color, Shape, and Visibility AND hides settings button
 precise_hide_js = """
-// Precise tab hiding that preserves Color and Shape + hides settings
+// Precise tab hiding that preserves Color, Shape, and Visibility + hides settings
 function preciseHideUnwantedTabs() {
-    console.log("Starting precise tab hiding (preserving Color and Shape, hiding settings)...");
+    console.log("Starting precise tab hiding (preserving Color, Shape, and Visibility, hiding settings)...");
     
-    // Exact text matches to hide (case-sensitive)
-    const exactTextsToHide = ['Visibility', 'Opacity', 'Scale', 'Axes', 'Animations'];
+    // Exact text matches to hide (case-sensitive) - REMOVED 'Visibility' from this list
+    const exactTextsToHide = ['Opacity', 'Scale', 'Axes', 'Animations'];
     
-    // Exact text matches to preserve (case-insensitive)
-    const exactTextsToKeep = ['color', 'shape'];
+    // Exact text matches to preserve (case-insensitive) - ADDED 'visibility' to preserve list
+    const exactTextsToKeep = ['color', 'shape', 'visibility'];
     
     let hiddenCount = 0;
     let keptCount = 0;
@@ -1228,10 +1142,10 @@ function preciseHideUnwantedTabs() {
         }
     });
     
-    // Method 2: Hide specific content panels by ID, but preserve color and shape
+    // Method 2: Hide specific content panels by ID, but preserve color, shape, and visibility - REMOVED visibility IDs
     const contentIdsToHide = [
-        '#visibility-tab', '#opacity-tab', '#scale-tab', '#axes-tab', '#animations-tab',
-        '#visibility', '#opacity', '#scale', '#axes', '#animations'
+        '#opacity-tab', '#scale-tab', '#axes-tab', '#animations-tab',
+        '#opacity', '#scale', '#axes', '#animations'
     ];
     
     contentIdsToHide.forEach(id => {
@@ -1243,12 +1157,12 @@ function preciseHideUnwantedTabs() {
         }
     });
     
-    // Method 3: Force show Color and Shape elements
+    // Method 3: Force show Color, Shape, and Visibility elements - ADDED visibility selectors
     const forceShowSelectors = [
-        'a[href*="color"]', 'a[href*="shape"]',
-        'button[data-target*="color"]', 'button[data-target*="shape"]',
-        '[id*="color"]', '[id*="shape"]',
-        '[aria-controls*="color"]', '[aria-controls*="shape"]'
+        'a[href*="color"]', 'a[href*="shape"]', 'a[href*="visibility"]',
+        'button[data-target*="color"]', 'button[data-target*="shape"]', 'button[data-target*="visibility"]',
+        '[id*="color"]', '[id*="shape"]', '[id*="visibility"]',
+        '[aria-controls*="color"]', '[aria-controls*="shape"]', '[aria-controls*="visibility"]'
     ];
     
     forceShowSelectors.forEach(selector => {
@@ -1274,9 +1188,9 @@ function preciseHideUnwantedTabs() {
     settingsSelectors.forEach(selector => {
         try {
             document.querySelectorAll(selector).forEach(element => {
-                // Don't hide if it's related to color or shape
+                // Don't hide if it's related to color, shape, or visibility
                 const elementText = element.textContent.toLowerCase();
-                if (!elementText.includes('color') && !elementText.includes('shape')) {
+                if (!elementText.includes('color') && !elementText.includes('shape') && !elementText.includes('visibility')) {
                     element.style.display = 'none';
                     console.log(`Hidden settings element by selector "${selector}":`, element);
                     hiddenCount++;
@@ -1295,8 +1209,8 @@ function preciseHideUnwantedTabs() {
         const ariaLabel = (button.getAttribute('aria-label') || '').toLowerCase();
         const textContent = button.textContent.toLowerCase();
         
-        // Don't hide if it's related to color or shape
-        if (textContent.includes('color') || textContent.includes('shape')) {
+        // Don't hide if it's related to color, shape, or visibility
+        if (textContent.includes('color') || textContent.includes('shape') || textContent.includes('visibility')) {
             return;
         }
         
@@ -1351,64 +1265,62 @@ if (typeof MutationObserver !== 'undefined') {
 # Precise CSS that doesn't use positional selectors + hides settings
 precise_hide_css = """
 <style>
-/* Hide specific tab links by href patterns - but preserve color and shape */
-a[href*="visibility"]:not([href*="color"]):not([href*="shape"]),
-a[href*="opacity"]:not([href*="color"]):not([href*="shape"]),
-a[href*="scale"]:not([href*="color"]):not([href*="shape"]),
-a[href*="axes"]:not([href*="color"]):not([href*="shape"]),
-a[href*="animation"]:not([href*="color"]):not([href*="shape"]) {
+/* Hide specific tab links by href patterns - but preserve color, shape, and visibility */
+a[href*="opacity"]:not([href*="color"]):not([href*="shape"]):not([href*="visibility"]),
+a[href*="scale"]:not([href*="color"]):not([href*="shape"]):not([href*="visibility"]),
+a[href*="axes"]:not([href*="color"]):not([href*="shape"]):not([href*="visibility"]),
+a[href*="animation"]:not([href*="color"]):not([href*="shape"]):not([href*="visibility"]) {
     display: none !important;
 }
 
-/* Hide specific content panels by ID - but preserve color and shape */
-[id="visibility-tab"], [id="opacity-tab"], [id="scale-tab"],
+/* Hide specific content panels by ID - but preserve color, shape, and visibility */
+[id="opacity-tab"], [id="scale-tab"],
 [id="axes-tab"], [id="animations-tab"],
-[id="visibility"], [id="opacity"], [id="scale"],
+[id="opacity"], [id="scale"],
 [id="axes"], [id="animations"] {
     display: none !important;
 }
 
-/* Hide by data-target attributes - but preserve color and shape */
-button[data-target*="visibility"]:not([data-target*="color"]):not([data-target*="shape"]),
-button[data-target*="opacity"]:not([data-target*="color"]):not([data-target*="shape"]),
-button[data-target*="scale"]:not([data-target*="color"]):not([data-target*="shape"]),
-button[data-target*="axes"]:not([data-target*="color"]):not([data-target*="shape"]),
-button[data-target*="animation"]:not([data-target*="color"]):not([data-target*="shape"]) {
+/* Hide by data-target attributes - but preserve color, shape, and visibility */
+button[data-target*="opacity"]:not([data-target*="color"]):not([data-target*="shape"]):not([data-target*="visibility"]),
+button[data-target*="scale"]:not([data-target*="color"]):not([data-target*="shape"]):not([data-target*="visibility"]),
+button[data-target*="axes"]:not([data-target*="color"]):not([data-target*="shape"]):not([data-target*="visibility"]),
+button[data-target*="animation"]:not([data-target*="color"]):not([data-target*="shape"]):not([data-target*="visibility"]) {
     display: none !important;
 }
 
 /* Hide settings button by common patterns */
 .settings-btn, .gear-icon, .fa-gear, .fa-cog, .fa-settings,
-button[title*="setting" i]:not([class*="color"]):not([class*="shape"]),
-button[aria-label*="setting" i]:not([class*="color"]):not([class*="shape"]),
-[data-toggle="modal"]:not([class*="color"]):not([class*="shape"]),
-.btn[data-target*="setting" i]:not([class*="color"]):not([class*="shape"]) {
+button[title*="setting" i]:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]),
+button[aria-label*="setting" i]:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]),
+[data-toggle="modal"]:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]),
+.btn[data-target*="setting" i]:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]) {
     display: none !important;
 }
 
 /* Hide toolbar buttons except essential ones */
-.btn-toolbar button:not([class*="color"]):not([class*="shape"]):not(.btn-primary) {
+.btn-toolbar button:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]):not(.btn-primary) {
     display: none !important;
 }
 
-/* Force show Color and Shape elements */
-a[href*="color"], a[href*="shape"],
-button[data-target*="color"], button[data-target*="shape"],
-[id*="color"], [id*="shape"],
-[aria-controls*="color"], [aria-controls*="shape"] {
+/* Force show Color, Shape, and Visibility elements */
+a[href*="color"], a[href*="shape"], a[href*="visibility"],
+button[data-target*="color"], button[data-target*="shape"], button[data-target*="visibility"],
+[id*="color"], [id*="shape"], [id*="visibility"],
+[aria-controls*="color"], [aria-controls*="shape"], [aria-controls*="visibility"] {
     display: block !important;
     visibility: visible !important;
 }
 
-/* Alternative: Hide by aria-controls but preserve color and shape */
-[aria-controls="visibility"], [aria-controls="opacity"],
+/* Alternative: Hide by aria-controls but preserve color, shape, and visibility */
+[aria-controls="opacity"],
 [aria-controls="scale"], [aria-controls="axes"],
 [aria-controls="animations"] {
     display: none !important;
 }
 
-/* Don't hide color and shape controls */
-[aria-controls*="color"], [aria-controls*="shape"] {
+/* Don't hide color, shape, and visibility controls */
+[aria-controls*="color"], [aria-controls*="shape"], [aria-controls*="visibility"] {
     display: block !important;
     visibility: visible !important;
 }
@@ -1576,9 +1488,14 @@ function createInfoOverlays() {{
     console.log("Variable1 description found:", var1Description);
     
     overlay1.innerHTML = `
-      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Color Variable</div>
-      <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(variable1)}</div>
-      <div style="color: #555; margin-bottom: 15px;">${{var1Description}}</div>
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
+        <span>Color Variable</span>
+        <button onclick="toggleOverlay('overlay1')" style="background: none; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; padding: 2px 6px; font-size: 12px; min-width: 20px;">−</button>
+      </div>
+      <div class="overlay-content">
+        <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(variable1)}</div>
+        <div style="color: #555; margin-bottom: 15px;">${{var1Description}}</div>
+      </div>
     `;
     
     // Create overlay 2 - Variable 2 info  
@@ -1604,9 +1521,14 @@ function createInfoOverlays() {{
     console.log("Variable2 description found:", var2Description);
     
     overlay2.innerHTML = `
-      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Shape Variable</div>
-      <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(variable2)}</div>
-      <div style="color: #555; margin-bottom: 15px;">${{var2Description}}</div>
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
+        <span>Shape Variable</span>
+        <button onclick="toggleOverlay('overlay2')" style="background: none; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; padding: 2px 6px; font-size: 12px; min-width: 20px;">−</button>
+      </div>
+      <div class="overlay-content">
+        <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(variable2)}</div>
+        <div style="color: #555; margin-bottom: 15px;">${{var2Description}}</div>
+      </div>
     `;
     
     // Create overlay 3 - Sheet info
@@ -1631,11 +1553,15 @@ function createInfoOverlays() {{
     console.log("Sheet description found:", sheetDescription);
     
     overlay3.innerHTML = `
-      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Taxa</div>
-      <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(dependentvar)}</div>
-      <div style="color: #555; margin-bottom: 15px;">${{sheetDescription}}</div>
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
+        <span>Taxa</span>
+        <button onclick="toggleOverlay('overlay3')" style="background: none; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; padding: 2px 6px; font-size: 12px; min-width: 20px;">−</button>
+      </div>
+      <div class="overlay-content">
+        <div style="font-weight: bold; color: #0066cc; margin-bottom: 5px;">{escape_for_js(dependentvar)}</div>
+        <div style="color: #555; margin-bottom: 15px;">${{sheetDescription}}</div>
+      </div>
     `;
-
 
     // Create overlay 4 - Study info
     const overlay4 = document.createElement('div');
@@ -1659,10 +1585,14 @@ function createInfoOverlays() {{
     console.log("Sheet description found:", overlay4Description);
     
     overlay4.innerHTML = `
-      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Study Information</div>
-      <div style="color: #555; margin-bottom: 15px;">${{overlay4Description}}</div>
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
+        <span>Study Information</span>
+        <button onclick="toggleOverlay('overlay4')" style="background: none; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; padding: 2px 6px; font-size: 12px; min-width: 20px;">−</button>
+      </div>
+      <div class="overlay-content">
+        <div style="color: #555; margin-bottom: 15px;">${{overlay4Description}}</div>
+      </div>
     `;
-
 
     // Create overlay 5 - HEI2015 info
     const overlay5 = document.createElement('div');
@@ -1686,8 +1616,13 @@ function createInfoOverlays() {{
     console.log("Sheet description found:", overlay5Description);
     
     overlay5.innerHTML = `
-      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">HEI2015 Information</div>
-      <div style="color: #555; margin-bottom: 15px;">${{overlay5Description}}</div>
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
+        <span>HEI2015 Information</span>
+        <button onclick="toggleOverlay('overlay5')" style="background: none; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; padding: 2px 6px; font-size: 12px; min-width: 20px;">−</button>
+      </div>
+      <div class="overlay-content">
+        <div style="color: #555; margin-bottom: 15px;">${{overlay5Description}}</div>
+      </div>
     `;
 
     // Create overlay 6 - FFQ info
@@ -1712,8 +1647,13 @@ function createInfoOverlays() {{
     console.log("Sheet description found:", overlay6Description);
     
     overlay6.innerHTML = `
-      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;">FFQ Information</div>
-      <div style="color: #555; margin-bottom: 15px;">${{overlay6Description}}</div>
+      <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
+        <span>FFQ Information</span>
+        <button onclick="toggleOverlay('overlay6')" style="background: none; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; padding: 2px 6px; font-size: 12px; min-width: 20px;">−</button>
+      </div>
+      <div class="overlay-content">
+        <div style="color: #555; margin-bottom: 15px;">${{overlay6Description}}</div>
+      </div>
     `;
     
     // Add overlays to document
@@ -1736,20 +1676,35 @@ function createInfoOverlays() {{
   }}
 }}
 
+// Add toggle functionality
+window.toggleOverlay = function(overlayId) {{
+  const overlay = document.getElementById(overlayId);
+  const content = overlay.querySelector('.overlay-content');
+  const button = overlay.querySelector('button');
+  
+  if (content.style.display === 'none') {{
+    content.style.display = 'block';
+    button.textContent = '−';
+  }} else {{
+    content.style.display = 'none';
+    button.textContent = '+';
+  }}
+}};
+
 // Create overlays when page loads
 setTimeout(createInfoOverlays, 2000);
 
 // Recreate overlays if they get removed by dynamic content
 setInterval(function() {{
-  if (document.querySelectorAll('.info-overlay').length < 3) {{
+  if (document.querySelectorAll('.info-overlay').length < 6) {{
     createInfoOverlays();
   }}
 }}, 5000);
 """
 
-
 # Combine the precise solution
 complete_precise_solution = precise_hide_js + "\n\n" + debug_preservation_js
+
 
 # Update your script with the precise solution
 final_precise_custom_js = custom_js + "\n\n" + complete_precise_solution + "\n\n" + overlay_js
