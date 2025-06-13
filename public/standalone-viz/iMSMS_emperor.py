@@ -25,6 +25,9 @@ from support_files.threeJSGenerator import generate_direct_shape_js
 from support_files.customColorGenerator import generate_custom_color_js
 from support_files.uiHiderGenerator import generate_precise_hide_js, generate_precise_hide_css
 from support_files.overlayGenerator import generate_overlay_js
+from support_files.fivePointHEIRangeFinder import convert_five_point_HEI_to_grades, sort_five_point_HEI_categories
+from support_files.tenPointHEIRangeFinder import convert_ten_point_HEI_to_grades, sort_ten_point_HEI_categories
+from support_files.HEIRangeFinder import convert_HEI_score_to_grades, sort_HEI_categories
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -67,12 +70,24 @@ print(f"Unique values in original data: {len(original_variable1_data.dropna().un
 # Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
 if variable1 == 'age':
     demographic_data = convert_age_to_life_stages(demographic_data, variable1)
+elif variable1 == 'TOTALVEG' or variable1 == 'GREEN_AND_BEAN' or variable1 == 'TOTALFRUIT' or variable1 == 'WHOLEFRUIT' or variable1 == 'TOTPROT' or variable1 == 'SEAPLANT_PROT':
+    demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable1)
+elif variable1 == 'WHOLEGRAIN' or variable1 == 'TOTALDAIRY' or variable1 == 'FATTYACID' or variable1 == 'SODIUM' or variable1 == 'REFINEDGRAIN' or variable1 == 'ADDSUG' or variable1 == 'SFA':
+    demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable1)
+elif variable1 == 'HEI2015_TOTAL_SCORE':
+    demographic_data = convert_HEI_score_to_grades(demographic_data, variable1)
 else:
     demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
 
 # Convert variable2 (shape variable) to its specified number of bins OR life stages for age
 if variable2 == 'age':
     demographic_data = convert_age_to_life_stages(demographic_data, variable2)
+elif variable2 == 'TOTALVEG' or variable2 == 'GREEN_AND_BEAN' or variable2 == 'TOTALFRUIT' or variable2 == 'WHOLEFRUIT' or variable2 == 'TOTPROT' or variable2 == 'SEAPLANT_PROT':
+    demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable2)
+elif variable2 == 'WHOLEGRAIN' or variable2 == 'TOTALDAIRY' or variable2 == 'FATTYACID' or variable2 == 'SODIUM' or variable2 == 'REFINEDGRAIN' or variable2 == 'ADDSUG' or variable2 == 'SFA':
+    demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable2)
+elif variable2 == 'HEI2015_TOTAL_SCORE':
+    demographic_data = convert_HEI_score_to_grades(demographic_data, variable2)
 else:
     demographic_data = convert_column_to_ranges(demographic_data, variable2, num_bins=variable2_bins)
 
@@ -113,6 +128,12 @@ if variable1_is_discrete or variable1 == 'age':
     if variable1 == 'age':
         variable1_ranges = sort_age_categories(variable1_ranges, variable1)
         # print(variable1_ranges)
+    elif variable1 == 'TOTALVEG' or variable1 == 'GREEN_AND_BEAN' or variable1 == 'TOTALFRUIT' or variable1 == 'WHOLEFRUIT' or variable1 == 'TOTPROT' or variable1 == 'SEAPLANT_PROT':
+        variable1_ranges = sort_five_point_HEI_categories(variable1_ranges, variable1)
+    elif variable1 == 'WHOLEGRAIN' or variable1 == 'TOTALDAIRY' or variable1 == 'FATTYACID' or variable1 == 'SODIUM' or variable1 == 'REFINEDGRAIN' or variable1 == 'ADDSUG' or variable1 == 'SFA':
+        variable1_ranges = sort_ten_point_HEI_categories(variable1_ranges, variable1)
+    elif variable1 == 'HEI2015_TOTAL_SCORE':
+        variable1_ranges = sort_HEI_categories(variable1_ranges, variable1)
     else:
         variable1_ranges.sort()  # Simple alphabetical sort for other discrete variables
 else:
@@ -142,6 +163,12 @@ variable2_ranges = demographic_data[variable2].dropna().unique().tolist()
 if variable2_is_discrete or variable2 == 'age':
     if variable2 == 'age':
         variable2_ranges = sort_age_categories(variable2_ranges, variable2)
+    elif variable2 == 'TOTALVEG' or variable2 == 'GREEN_AND_BEAN' or variable2 == 'TOTALFRUIT' or variable2 == 'WHOLEFRUIT' or variable2 == 'TOTPROT' or variable2 == 'SEAPLANT_PROT':
+        variable2_ranges = sort_five_point_HEI_categories(variable2_ranges, variable2)
+    elif variable2 == 'WHOLEGRAIN' or variable2 == 'TOTALDAIRY' or variable2 == 'FATTYACID' or variable2 == 'SODIUM' or variable2 == 'REFINEDGRAIN' or variable2 == 'ADDSUG' or variable2 == 'SFA':
+        variable2_ranges = sort_ten_point_HEI_categories(variable2_ranges, variable2)
+    elif variable2 == 'HEI2015_TOTAL_SCORE':
+        variable2_ranges = sort_HEI_categories(variable2_ranges, variable2)
     else:
         variable2_ranges.sort()  # Simple alphabetical sort for other discrete variables
 else:
