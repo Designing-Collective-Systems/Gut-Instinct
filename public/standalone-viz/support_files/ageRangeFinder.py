@@ -3,7 +3,7 @@ import numpy as np
 
 def convert_age_to_life_stages(df, column_name):
     """Convert age values to life stage categories"""
-    if column_name != 'age' or column_name not in df.columns:
+    if column_name != 'Age' or column_name not in df.columns:
         return df
     
     def categorize_age(age_value):
@@ -25,7 +25,7 @@ def convert_age_to_life_stages(df, column_name):
 
 def sort_age_categories(ranges, variable_name):
     """Sort age categories in proper life stage order"""
-    if variable_name == 'age':
+    if variable_name == 'Age':
         # Define the proper order for age categories
         age_order = ["a. Young adults", "b. Middle age adults", "c. Older adults"]
         # Sort based on the predefined order, keeping any other values at the end

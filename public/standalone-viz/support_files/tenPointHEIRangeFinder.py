@@ -27,7 +27,7 @@ def convert_ten_point_HEI_to_grades(df, column_name):
 
 def sort_ten_point_HEI_categories(ranges, variable_name):
     """Sort 10 point categories in proper life stage order"""
-    if variable_name == 'WHOLEGRAIN' or variable_name == 'TOTALDAIRY' or variable_name == 'FATTYACID' or variable_name == 'SODIUM' or variable_name == 'REFINEDGRAIN' or variable_name == 'ADDSUG' or variable_name == 'SFA':
+    if variable_name == 'Whole Grains' or variable_name == 'Dairy' or variable_name == 'Fatty Acids' or variable_name == 'Sodium' or variable_name == 'Refined Grains' or variable_name == 'Added Sugars' or variable_name == 'Saturated Fats':
         # Define the proper order for 10 point categories
         ten_point_order = ["a. Major Dietary Deficiency of " + variable_name, 
                      "b. Poor Dietary Deficiency of " + variable_name, 

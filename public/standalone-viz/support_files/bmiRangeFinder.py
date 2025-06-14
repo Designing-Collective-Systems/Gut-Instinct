@@ -3,7 +3,7 @@ import numpy as np
 
 def classify_bmi(df, column_name):
     """Convert bmi values """
-    if column_name != 'bmi' or column_name not in df.columns:
+    if column_name != 'Body Mass Index' or column_name not in df.columns:
         return df
     
     def categorize_bmi(bmi_value):
@@ -27,7 +27,7 @@ def classify_bmi(df, column_name):
 
 def sort_bmi_categories(ranges, variable_name):
     """Sort bmi categories"""
-    if variable_name == 'bmi':
+    if variable_name == 'Body Mass Index':
         # Define the proper order for bmi categories
         bmi_order = ["a. Underweight", "b. Normal weight", "c. Overweight", "d. Obese"]
         # Sort based on the predefined order, keeping any other values at the end

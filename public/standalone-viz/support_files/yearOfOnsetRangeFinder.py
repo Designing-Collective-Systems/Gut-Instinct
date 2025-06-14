@@ -31,7 +31,7 @@ def classify_yearOfOnset(df, column_name):
 
 def sort_year_categories(ranges, variable_name):
     """Sort year categories"""
-    if variable_name == 'year_of_onset':
+    if variable_name == 'MS Onset Year':
         # Define the proper order for year of onset categories
         year_order = ["a. 1963 - 1974", "b. 1975 - 1985", "c. 1986 - 1996", "d. 1997 - 2007", "e. 2008 - 2018", "f. Unclear", "g. nan"]
         # Sort based on the predefined order, keeping any other values at the end

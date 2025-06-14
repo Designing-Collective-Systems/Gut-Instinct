@@ -30,6 +30,12 @@ from support_files.tenPointHEIRangeFinder import convert_ten_point_HEI_to_grades
 from support_files.HEIRangeFinder import convert_HEI_score_to_grades, sort_HEI_categories
 from support_files.bmiRangeFinder import classify_bmi, sort_bmi_categories
 from support_files.yearOfOnsetRangeFinder import classify_yearOfOnset, sort_year_categories
+from support_files.weightConverter import convert_weightKG_to_WeightLbs
+from support_files.heightConverter import convert_heightCM_to_HeightInches
+from support_files.durationOfMSRangeFinder import classify_durationOfMS
+from support_files.administrationRangeFinder import classify_administration
+from support_files.typeOfMSRangeFinder import classify_typeOfMS
+from support_files.treatmentStatusRangeFinder import classify_treatmentStatus
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -38,8 +44,8 @@ if len(sys.argv) >= 3:
     print(f"Received variables: {variable1}, {variable2}")
 else:
     # Default values if no arguments provided
-    variable1 = "age"  # Default coloring variable
-    variable2 = "height"  # Default shape variable
+    variable1 = "Age"  # Default coloring variable
+    variable2 = "Height"  # Default shape variable
     print("No variables provided, using defaults")
 
 # Change variable names sent by user to variable names from the dataset
@@ -57,6 +63,63 @@ print(f"Processing with Variable 2 (shapes): {variable2} ({variable2_bins} bins)
 # Load the iMSMS dataset
 demographic_data, sheet6_class, dependentvar = load_imsms_data()
 
+# Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
+if variable1 == 'Age':
+    demographic_data = convert_age_to_life_stages(demographic_data, variable1)
+elif variable1 == 'Weight':
+    demographic_data = convert_weightKG_to_WeightLbs(demographic_data, variable1)
+elif variable1 == 'Height':
+    demographic_data = convert_heightCM_to_HeightInches(demographic_data, variable1)
+elif variable1 == 'Body Mass Index':
+    demographic_data = classify_bmi(demographic_data, variable1)
+elif variable1 == 'MS Onset Year':
+    demographic_data = classify_yearOfOnset(demographic_data, variable1)
+elif variable1 == 'Duration of MS':
+    demographic_data = classify_durationOfMS(demographic_data, variable1)
+elif variable1 == 'Administration of Treatment':
+    demographic_data = classify_administration(demographic_data, variable1)
+elif variable1 == 'Type of MS':
+    demographic_data = classify_typeOfMS(demographic_data, variable1)
+elif variable1 == 'Treatment Status':
+    demographic_data = classify_treatmentStatus(demographic_data, variable1)
+elif variable1 == 'Total Vegetables' or variable1 == 'Greens and Beans' or variable1 == 'Total Fruit' or variable1 == 'Whole Fruit' or variable1 == 'Total Protein Foods' or variable1 == 'Seafood and Plant Proteins':
+    demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable1)
+elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty Acids' or variable1 == 'Sodium' or variable1 == 'Refined Grains' or variable1 == 'Added Sugars' or variable1 == 'Saturated Fats':
+    demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable1)
+elif variable1 == 'Healthy Eating Index Score':
+    demographic_data = convert_HEI_score_to_grades(demographic_data, variable1)
+else: # includes columns like Residence, Ethnicity, Sex, Disease
+    demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
+
+# Convert variable2 (shape variable) to its specified number of bins OR life stages for age
+if variable2 == 'Age':
+    demographic_data = convert_age_to_life_stages(demographic_data, variable2)
+elif variable2 == 'Weight':
+    demographic_data = convert_weightKG_to_WeightLbs(demographic_data, variable2)
+elif variable2 == 'Height':
+    demographic_data = convert_heightCM_to_HeightInches(demographic_data, variable2)
+elif variable2 == 'Body Mass Index':
+  demographic_data = classify_bmi(demographic_data, variable2)
+elif variable2 == 'MS Onset Year':
+    demographic_data = classify_yearOfOnset(demographic_data, variable2)
+elif variable2 == 'Duration of MS':
+    demographic_data = classify_durationOfMS(demographic_data, variable2)
+elif variable2 == 'Administration of Treatment':
+    demographic_data = classify_administration(demographic_data, variable2)
+elif variable2 == 'Type of MS':
+    demographic_data = classify_typeOfMS(demographic_data, variable2)
+elif variable2 == 'Treatment Status':
+    demographic_data = classify_treatmentStatus(demographic_data, variable2)
+elif variable2 == 'Total Vegetables' or variable2 == 'Greens and Beans' or variable2 == 'Total Fruit' or variable2 == 'Whole Fruit' or variable2 == 'Total Protein Foods' or variable2 == 'Seafood and Plant Proteins':
+    demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable2)
+elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty Acids' or variable2 == 'Sodium' or variable2 == 'Refined Grains' or variable2 == 'Added Sugars' or variable2 == 'Saturated Fats':
+    demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable2)
+elif variable2 == 'Healthy Eating Index Score':
+    demographic_data = convert_HEI_score_to_grades(demographic_data, variable2)
+else:
+    demographic_data = convert_column_to_ranges(demographic_data, variable2, num_bins=variable2_bins)
+
+
 # Store original data for discrete/continuous analysis before any processing
 original_variable1_data = demographic_data[variable1].copy() if variable1 in demographic_data.columns else None
 original_variable2_data = demographic_data[variable2].copy() if variable2 in demographic_data.columns else None
@@ -71,84 +134,25 @@ print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discret
 print(f"Original data type: {original_variable1_data.dtype if original_variable1_data is not None else 'Unknown'}")
 print(f"Unique values in original data: {len(original_variable1_data.dropna().unique()) if original_variable1_data is not None else 'Unknown'}")
 
-# Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
-if variable1 == 'age':
-    demographic_data = convert_age_to_life_stages(demographic_data, variable1)
-elif variable1 == 'TOTALVEG' or variable1 == 'GREEN_AND_BEAN' or variable1 == 'TOTALFRUIT' or variable1 == 'WHOLEFRUIT' or variable1 == 'TOTPROT' or variable1 == 'SEAPLANT_PROT':
-    demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable1)
-elif variable1 == 'WHOLEGRAIN' or variable1 == 'TOTALDAIRY' or variable1 == 'FATTYACID' or variable1 == 'SODIUM' or variable1 == 'REFINEDGRAIN' or variable1 == 'ADDSUG' or variable1 == 'SFA':
-    demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable1)
-elif variable1 == 'HEI2015_TOTAL_SCORE':
-    demographic_data = convert_HEI_score_to_grades(demographic_data, variable1)
-elif variable1 == 'bmi':
-    demographic_data = classify_bmi(demographic_data, variable1)
-elif variable1 == 'year_of_onset':
-    demographic_data = classify_yearOfOnset(demographic_data, variable1)
-else:
-    demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
-
-# Convert variable2 (shape variable) to its specified number of bins OR life stages for age
-if variable2 == 'age':
-    demographic_data = convert_age_to_life_stages(demographic_data, variable2)
-elif variable2 == 'TOTALVEG' or variable2 == 'GREEN_AND_BEAN' or variable2 == 'TOTALFRUIT' or variable2 == 'WHOLEFRUIT' or variable2 == 'TOTPROT' or variable2 == 'SEAPLANT_PROT':
-    demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable2)
-elif variable2 == 'WHOLEGRAIN' or variable2 == 'TOTALDAIRY' or variable2 == 'FATTYACID' or variable2 == 'SODIUM' or variable2 == 'REFINEDGRAIN' or variable2 == 'ADDSUG' or variable2 == 'SFA':
-    demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable2)
-elif variable2 == 'HEI2015_TOTAL_SCORE':
-    demographic_data = convert_HEI_score_to_grades(demographic_data, variable2)
-elif variable2 == 'bmi':
-    demographic_data = classify_bmi(demographic_data, variable2)
-elif variable2 == 'year_of_onset':
-    demographic_data = classify_yearOfOnset(demographic_data, variable2)
-else:
-    demographic_data = convert_column_to_ranges(demographic_data, variable2, num_bins=variable2_bins)
-
-# Convert other numeric columns, excluding our target variables
-# demographic_data = convert_to_ranges(demographic_data, num_bins=5, exclude_columns=[variable1, variable2])
-
-# print(demographic_data)
-
-sheet6_class = sheet6_class.merge(demographic_data[['iMSMS_ID']], on='iMSMS_ID', how='inner')
-demographic_data = demographic_data.set_index('iMSMS_ID')
-sheet6_class = sheet6_class.set_index('iMSMS_ID')
-
-# Beta Diversity
-bray_curtis = pdist(sheet6_class, metric='braycurtis')
-bray_curtis_matrix = squareform(bray_curtis)
-bray_curtis_df = pd.DataFrame(bray_curtis_matrix, index=sheet6_class.index, columns=sheet6_class.index)
-
-# Prepare distance matrix
-distance_matrix = bray_curtis_df.to_numpy()
-distance_matrix = (distance_matrix + distance_matrix.T) / 2
-np.fill_diagonal(distance_matrix, 0)
-
-# Perform PCoA
-pcoa_results = pcoa(distance_matrix)
-
-# Fix sample IDs if needed
-if isinstance(pcoa_results.samples, pd.DataFrame):
-    pcoa_results.samples.index = demographic_data.index
-else:
-    pcoa_results.samples = pd.DataFrame(
-        data=pcoa_results.samples,
-        index=demographic_data.index
-    )
+print(f"Variable2 ({variable2}) detected as: {'Discrete' if variable2_is_discrete else 'Continuous'}")
+print(f"Original data type: {original_variable2_data.dtype if original_variable2_data is not None else 'Unknown'}")
+print(f"Unique values in original data: {len(original_variable2_data.dropna().unique()) if original_variable2_data is not None else 'Unknown'}")
 
 # Define colors for variable1 (coloring variable) - ADAPTIVE COLOR SCHEME
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
-if variable1_is_discrete or variable1 == 'age':
-    if variable1 == 'age':
+if variable1_is_discrete or variable1 == 'Age':
+    if variable1 == 'Age':
         variable1_ranges = sort_age_categories(variable1_ranges, variable1)
         # print(variable1_ranges)
-    elif variable1 == 'TOTALVEG' or variable1 == 'GREEN_AND_BEAN' or variable1 == 'TOTALFRUIT' or variable1 == 'WHOLEFRUIT' or variable1 == 'TOTPROT' or variable1 == 'SEAPLANT_PROT':
+    elif variable1 == 'Total Vegetables' or variable1 == 'Greens and Beans' or variable1 == 'Total Fruit' or variable1 == 'Whole Fruit' or variable1 == 'Total Protein Foods' or variable1 == 'Seafood and Plant Proteins':
         variable1_ranges = sort_five_point_HEI_categories(variable1_ranges, variable1)
-    elif variable1 == 'WHOLEGRAIN' or variable1 == 'TOTALDAIRY' or variable1 == 'FATTYACID' or variable1 == 'SODIUM' or variable1 == 'REFINEDGRAIN' or variable1 == 'ADDSUG' or variable1 == 'SFA':
+    elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty Acids' or variable1 == 'Sodium' or variable1 == 'Refined Grains' or variable1 == 'Added Sugars' or variable1 == 'Saturated Fats':
         variable1_ranges = sort_ten_point_HEI_categories(variable1_ranges, variable1)
-    elif variable1 == 'HEI2015_TOTAL_SCORE':
+    elif variable1 == 'Healthy Eating Index Score':
         variable1_ranges = sort_HEI_categories(variable1_ranges, variable1)
-    elif variable1 == 'bmi':
+    elif variable1 == 'Body Mass Index':
         variable1_ranges = sort_bmi_categories(variable1_ranges, variable1)
-    elif variable1 == 'year_of_onset':
+    elif variable1 == 'MS Onset Year':
         variable1_ranges = sort_year_categories(variable1_ranges, variable1)
     else:
         variable1_ranges.sort()  # Simple alphabetical sort for other discrete variables
@@ -176,22 +180,31 @@ print(f"Color mapping: {custom_colors}")
 
 # Define shapes for variable2 (shape variable) - ROBUST HANDLING
 variable2_ranges = demographic_data[variable2].dropna().unique().tolist()
-if variable2_is_discrete or variable2 == 'age':
-    if variable2 == 'age':
+if variable2_is_discrete or variable2 == 'Age':
+    if variable2 == 'Age':
+        print('AAA')
         variable2_ranges = sort_age_categories(variable2_ranges, variable2)
-    elif variable2 == 'TOTALVEG' or variable2 == 'GREEN_AND_BEAN' or variable2 == 'TOTALFRUIT' or variable2 == 'WHOLEFRUIT' or variable2 == 'TOTPROT' or variable2 == 'SEAPLANT_PROT':
+        print(variable2_ranges)
+    elif variable2 == 'Total Vegetables' or variable2 == 'Greens and Beans' or variable2 == 'Total Fruit' or variable2 == 'Whole Fruit' or variable2 == 'Total Protein Foods' or variable2 == 'Seafood and Plant Proteins':
+        print('BBB')
         variable2_ranges = sort_five_point_HEI_categories(variable2_ranges, variable2)
-    elif variable2 == 'WHOLEGRAIN' or variable2 == 'TOTALDAIRY' or variable2 == 'FATTYACID' or variable2 == 'SODIUM' or variable2 == 'REFINEDGRAIN' or variable2 == 'ADDSUG' or variable2 == 'SFA':
+    elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty Acids' or variable2 == 'Sodium' or variable2 == 'Refined Grains' or variable2 == 'Added Sugars' or variable2 == 'Saturated Fats':
+        print('CCC')
         variable2_ranges = sort_ten_point_HEI_categories(variable2_ranges, variable2)
-    elif variable2 == 'HEI2015_TOTAL_SCORE':
+    elif variable2 == 'Healthy Eating Index Score':
+        print('DDD')
         variable2_ranges = sort_HEI_categories(variable2_ranges, variable2)
-    elif variable2 == 'bmi':
+    elif variable2 == 'Body Mass Index':
+        print('EEE')
         variable2_ranges = sort_bmi_categories(variable2_ranges, variable2)
-    elif variable2 == 'year_of_onset':
+    elif variable2 == 'MS Onset Year':
+        print('FFF')
         variable2_ranges = sort_year_categories(variable2_ranges, variable2)
     else:
+        print('GGG')
         variable2_ranges.sort()  # Simple alphabetical sort for other discrete variables
 else:
+    print('HHH')
     variable2_ranges = sort_ranges_numerically(variable2_ranges)  # Numeric sort for continuous
 
 # Define shapes (expand shape palette to handle more bins)
@@ -226,6 +239,35 @@ for i, range_val in enumerate(variable2_ranges):
 
 print(f"Variable2 ({variable2}) ranges found: {variable2_ranges}")
 print(f"Shape mapping: {custom_shapes}")
+
+
+# Emperor work starts here
+
+sheet6_class = sheet6_class.merge(demographic_data[['iMSMS_ID']], on='iMSMS_ID', how='inner')
+demographic_data = demographic_data.set_index('iMSMS_ID')
+sheet6_class = sheet6_class.set_index('iMSMS_ID')
+
+# Beta Diversity
+bray_curtis = pdist(sheet6_class, metric='braycurtis')
+bray_curtis_matrix = squareform(bray_curtis)
+bray_curtis_df = pd.DataFrame(bray_curtis_matrix, index=sheet6_class.index, columns=sheet6_class.index)
+
+# Prepare distance matrix
+distance_matrix = bray_curtis_df.to_numpy()
+distance_matrix = (distance_matrix + distance_matrix.T) / 2
+np.fill_diagonal(distance_matrix, 0)
+
+# Perform PCoA
+pcoa_results = pcoa(distance_matrix)
+
+# Fix sample IDs if needed
+if isinstance(pcoa_results.samples, pd.DataFrame):
+    pcoa_results.samples.index = demographic_data.index
+else:
+    pcoa_results.samples = pd.DataFrame(
+        data=pcoa_results.samples,
+        index=demographic_data.index
+    )
 
 # Add a more aggressive approach to rename the axis labels
 # First, attempt to rename in the decomposition data itself
