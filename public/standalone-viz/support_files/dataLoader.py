@@ -8,7 +8,7 @@ def load_imsms_data():
     
     Returns:
         tuple: (demographic_data, sheet6_class) where:
-            - demographic_data: merged demographic and clinical data
+            - demographic_data: merged demographic and clinical data (excluding specified columns)
             - sheet6_class: taxonomic data for the specified dependent variable
     """
     # Get the directory where this script is located
@@ -54,5 +54,18 @@ def load_imsms_data():
                        .merge(sheet3, on='iMSMS_ID', how='inner')
                        .merge(sheet2, on='iMSMS_ID', how='inner')
                        )
+    
+    # Columns to exclude from demographic data
+    columns_to_exclude = ['household', 'disease_course', 'treatment_status', 'treatments']
+    
+    # Remove specified columns if they exist in the dataframe
+    existing_columns_to_exclude = [col for col in columns_to_exclude if col in demographic_data.columns]
+    if existing_columns_to_exclude:
+        demographic_data = demographic_data.drop(columns=existing_columns_to_exclude)
+        print(f"Excluded columns: {existing_columns_to_exclude}")
+    else:
+        print("None of the specified columns to exclude were found in the demographic data")
+    
+    # print(demographic_data.columns)
     
     return demographic_data, sheet6_class, dependentvar

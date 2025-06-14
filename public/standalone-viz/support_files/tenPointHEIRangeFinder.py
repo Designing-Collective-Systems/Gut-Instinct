@@ -26,17 +26,17 @@ def convert_ten_point_HEI_to_grades(df, column_name):
     return df
 
 def sort_ten_point_HEI_categories(ranges, variable_name):
-    """Sort age categories in proper life stage order"""
+    """Sort 10 point categories in proper life stage order"""
     if variable_name == 'WHOLEGRAIN' or variable_name == 'TOTALDAIRY' or variable_name == 'FATTYACID' or variable_name == 'SODIUM' or variable_name == 'REFINEDGRAIN' or variable_name == 'ADDSUG' or variable_name == 'SFA':
-        # Define the proper order for age categories
-        age_order = ["a. Major Dietary Deficiency of " + variable_name, 
+        # Define the proper order for 10 point categories
+        ten_point_order = ["a. Major Dietary Deficiency of " + variable_name, 
                      "b. Poor Dietary Deficiency of " + variable_name, 
                      "c. Fair Dietary Intake of " + variable_name,
                      "d. Good Dietary Intake of " + variable_name,
                      "e. Excellent Dietary Intake of " + variable_name]
         # Sort based on the predefined order, keeping any other values at the end
         sorted_ranges = []
-        for category in age_order:
+        for category in ten_point_order:
             if category in ranges:
                 sorted_ranges.append(category)
         # Add any unexpected categories at the end

@@ -26,17 +26,17 @@ def convert_five_point_HEI_to_grades(df, column_name):
     return df
 
 def sort_five_point_HEI_categories(ranges, variable_name):
-    """Sort age categories in proper life stage order"""
+    """Sort five point categories in proper life stage order"""
     if variable_name == 'TOTALVEG' or variable_name == 'GREEN_AND_BEAN' or variable_name == 'TOTALFRUIT' or variable_name == 'WHOLEFRUIT' or variable_name == 'TOTPROT' or variable_name == 'SEAPLANT_PROT':
-        # Define the proper order for age categories
-        age_order = ["a. Major Dietary Deficiency of " + variable_name, 
+        # Define the proper order for five point categories
+        five_point_order = ["a. Major Dietary Deficiency of " + variable_name, 
                      "b. Poor Dietary Deficiency of " + variable_name, 
                      "c. Fair Dietary Intake of " + variable_name,
                      "d. Good Dietary Intake of " + variable_name,
                      "e. Excellent Dietary Intake of " + variable_name]
         # Sort based on the predefined order, keeping any other values at the end
         sorted_ranges = []
-        for category in age_order:
+        for category in five_point_order:
             if category in ranges:
                 sorted_ranges.append(category)
         # Add any unexpected categories at the end

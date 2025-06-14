@@ -28,6 +28,8 @@ from support_files.overlayGenerator import generate_overlay_js
 from support_files.fivePointHEIRangeFinder import convert_five_point_HEI_to_grades, sort_five_point_HEI_categories
 from support_files.tenPointHEIRangeFinder import convert_ten_point_HEI_to_grades, sort_ten_point_HEI_categories
 from support_files.HEIRangeFinder import convert_HEI_score_to_grades, sort_HEI_categories
+from support_files.bmiRangeFinder import classify_bmi, sort_bmi_categories
+from support_files.yearOfOnsetRangeFinder import classify_yearOfOnset, sort_year_categories
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -39,6 +41,8 @@ else:
     variable1 = "age"  # Default coloring variable
     variable2 = "height"  # Default shape variable
     print("No variables provided, using defaults")
+
+# Change variable names sent by user to variable names from the dataset
 
 
 # Get bin counts for our variables
@@ -76,6 +80,10 @@ elif variable1 == 'WHOLEGRAIN' or variable1 == 'TOTALDAIRY' or variable1 == 'FAT
     demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable1)
 elif variable1 == 'HEI2015_TOTAL_SCORE':
     demographic_data = convert_HEI_score_to_grades(demographic_data, variable1)
+elif variable1 == 'bmi':
+    demographic_data = classify_bmi(demographic_data, variable1)
+elif variable1 == 'year_of_onset':
+    demographic_data = classify_yearOfOnset(demographic_data, variable1)
 else:
     demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
 
@@ -88,6 +96,10 @@ elif variable2 == 'WHOLEGRAIN' or variable2 == 'TOTALDAIRY' or variable2 == 'FAT
     demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable2)
 elif variable2 == 'HEI2015_TOTAL_SCORE':
     demographic_data = convert_HEI_score_to_grades(demographic_data, variable2)
+elif variable2 == 'bmi':
+    demographic_data = classify_bmi(demographic_data, variable2)
+elif variable2 == 'year_of_onset':
+    demographic_data = classify_yearOfOnset(demographic_data, variable2)
 else:
     demographic_data = convert_column_to_ranges(demographic_data, variable2, num_bins=variable2_bins)
 
@@ -134,6 +146,10 @@ if variable1_is_discrete or variable1 == 'age':
         variable1_ranges = sort_ten_point_HEI_categories(variable1_ranges, variable1)
     elif variable1 == 'HEI2015_TOTAL_SCORE':
         variable1_ranges = sort_HEI_categories(variable1_ranges, variable1)
+    elif variable1 == 'bmi':
+        variable1_ranges = sort_bmi_categories(variable1_ranges, variable1)
+    elif variable1 == 'year_of_onset':
+        variable1_ranges = sort_year_categories(variable1_ranges, variable1)
     else:
         variable1_ranges.sort()  # Simple alphabetical sort for other discrete variables
 else:
@@ -169,6 +185,10 @@ if variable2_is_discrete or variable2 == 'age':
         variable2_ranges = sort_ten_point_HEI_categories(variable2_ranges, variable2)
     elif variable2 == 'HEI2015_TOTAL_SCORE':
         variable2_ranges = sort_HEI_categories(variable2_ranges, variable2)
+    elif variable2 == 'bmi':
+        variable2_ranges = sort_bmi_categories(variable2_ranges, variable2)
+    elif variable2 == 'year_of_onset':
+        variable2_ranges = sort_year_categories(variable2_ranges, variable2)
     else:
         variable2_ranges.sort()  # Simple alphabetical sort for other discrete variables
 else:

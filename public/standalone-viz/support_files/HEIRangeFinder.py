@@ -26,17 +26,17 @@ def convert_HEI_score_to_grades(df, column_name):
     return df
 
 def sort_HEI_categories(ranges, variable_name):
-    """Sort age categories in proper life stage order"""
+    """Sort HEI categories in proper life stage order"""
     if variable_name == 'HEI2015_TOTAL_SCORE':
-        # Define the proper order for age categories
-        age_order = ["a. Really Poor Diet Quality", 
+        # Define the proper order for HEI categories
+        hundered_point_order = ["a. Really Poor Diet Quality", 
                      "b. Poor Diet Quality", 
                      "c. Fair Diet Quality",
                      "d. Good Diet Quality",
                      "e. Excellent Diet Quality"]
         # Sort based on the predefined order, keeping any other values at the end
         sorted_ranges = []
-        for category in age_order:
+        for category in hundered_point_order:
             if category in ranges:
                 sorted_ranges.append(category)
         # Add any unexpected categories at the end
