@@ -58,6 +58,7 @@ from support_files.differentOTCrangeFinder import classify_otc_medications
 from support_files.smokingRangeFinder import classify_smoking_status
 from support_files.educationRangeFinder import classify_education_level
 from support_files.occupationRangeFinder import classify_occupation
+from support_files.vitaminDRangeFinder import classify_vitamin_d
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -148,6 +149,8 @@ elif variable1 == 'Education level':
     demographic_data = classify_education_level(demographic_data, variable1)
 elif variable1 == 'Occupation':
     demographic_data = classify_occupation(demographic_data, variable1)
+elif variable1 == 'Vitamin D':
+    demographic_data = classify_vitamin_d(demographic_data, variable1)
 elif variable1 == 'Total Vegetables' or variable1 == 'Greens and Beans' or variable1 == 'Total Fruit' or variable1 == 'Whole Fruit' or variable1 == 'Total Protein Foods' or variable1 == 'Seafood and Plant Proteins':
     demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable1)
 elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty Acids' or variable1 == 'Sodium' or variable1 == 'Refined Grains' or variable1 == 'Added Sugars' or variable1 == 'Saturated Fats':
@@ -220,6 +223,8 @@ elif variable2 == 'Education level':
     demographic_data = classify_education_level(demographic_data, variable2)
 elif variable2 == 'Occupation':
     demographic_data = classify_occupation(demographic_data, variable2)
+elif variable2 == 'Vitamin D':
+    demographic_data = classify_vitamin_d(demographic_data, variable2)
 elif variable2 == 'Total Vegetables' or variable2 == 'Greens and Beans' or variable2 == 'Total Fruit' or variable2 == 'Whole Fruit' or variable2 == 'Total Protein Foods' or variable2 == 'Seafood and Plant Proteins':
     demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable2)
 elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty Acids' or variable2 == 'Sodium' or variable2 == 'Refined Grains' or variable2 == 'Added Sugars' or variable2 == 'Saturated Fats':

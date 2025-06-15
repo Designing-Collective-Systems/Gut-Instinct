@@ -201,7 +201,6 @@ VARIABLE_DESCRIPTIONS = {
     'Probiotics': 'Has patient taken probiotics',
     'Recreational drug use': 'Does participant take recreational drugs',
     'Roommates': 'Participant roommates number',
-    
     'Sex': 'What is the participants sex',
     'Residence': '1152 participants were recruited from seven areas (recruiting centers) located in San Francisco, Boston, New York, Pittsburgh, Buenos Aires, Edinburgh and San Sebastián',
     'Smoking Status': 'Participant smoke history',
