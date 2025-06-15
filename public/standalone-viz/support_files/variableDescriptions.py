@@ -201,8 +201,7 @@ VARIABLE_DESCRIPTIONS = {
     'Probiotics': 'Has patient taken probiotics',
     'Recreational drug use': 'Does participant take recreational drugs',
     'Roommates': 'Participant roommates number',
-    # 'Prescription medication': 'Does participant take Prescription medication or not',
-    # 'rxmeds_number': 'Participant total count of different prescription medications taken',
+    
     'Sex': 'What is the participants sex',
     'Residence': '1152 participants were recruited from seven areas (recruiting centers) located in San Francisco, Boston, New York, Pittsburgh, Buenos Aires, Edinburgh and San Sebastián',
     'Smoking Status': 'Participant smoke history',
@@ -255,6 +254,8 @@ VARIABLE_DESCRIPTIONS = {
 
     # Number of relapses
     # Cerebrospinal fluid (CSF) Analysis score aka csf_results
+    # 'Prescription medication': 'Does participant take Prescription medication or not',
+    # 'rxmeds_number': 'Participant total count of different prescription medications taken',
     # Weight change
 }
 

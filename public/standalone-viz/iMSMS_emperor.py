@@ -45,6 +45,19 @@ from support_files.residenceRangeFinder import classify_residence
 from support_files.ethnicityRangeFinder import classify_ethnicity
 from support_files.sexRangeFinder import classify_sex
 from support_files.diseaseRangeFinder import classify_disease
+from support_files.msssRangeFinder import classify_MSSS
+from support_files.trinarytoYesNoNullRangeFinder import classify_trinary
+from support_files.numberOfChildrenRangeFinder import classify_numberOfChildren
+from support_files.numberOfRoommatesRangeFinder import classify_roommates
+from support_files.methodOfBirthRangeFinder import classify_methodOfBirth
+from support_files.allergyRangeFinder import classify_allergy
+from support_files.specificOCPRangeFinder import classify_oral_contraceptive
+from support_files.nsaidsRangeFinder import classify_nsaid
+from support_files.trinaryToNoNullYesRangeFinder import classify_trinary_2
+from support_files.differentOTCrangeFinder import classify_otc_medications
+from support_files.smokingRangeFinder import classify_smoking_status
+from support_files.educationRangeFinder import classify_education_level
+from support_files.occupationRangeFinder import classify_occupation
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -109,6 +122,32 @@ elif variable1 == 'SPMS onset year':
     demographic_data = classify_yearOfSPMSOnset(demographic_data, variable1)
 elif variable1 == 'Expanded Disability Status Scale':
     demographic_data = classify_EDSS(demographic_data, variable1)
+elif variable1 == 'Multiple Sclerosis Severity Score':
+    demographic_data = classify_MSSS(demographic_data, variable1)
+elif variable1 == 'Disease modifying therapy' or variable1 == 'Breastfeeding at birth' or variable1 == 'Allergies' or variable1 == 'Asthma' or variable1 == 'Eating Disorder' or variable1 == 'Eczema' or variable1 == 'Anxiety' or variable1 == 'Manic depression(Bipolar disorder)' or variable1 == 'Obsessive Compulsory Disorder' or variable1 == 'Depression' or variable1 == 'Depression after giving birth' or variable1 == 'Type 2 Diabetes' or variable1 == 'Family Member with MS' or variable1 == 'Oral contraceptive pills' or variable1 == 'Non-steroidal anti-inflammatory drugs' or variable1 == 'Probiotics' or variable1 == 'Recreational drug use' or variable1 == 'Pets':
+    demographic_data = classify_trinary(demographic_data, variable1)
+elif variable1 == 'Number of Children':
+    demographic_data = classify_numberOfChildren(demographic_data, variable1)
+elif variable1 == 'Roommates':
+    demographic_data = classify_roommates(demographic_data, variable1)
+elif variable1 == 'Method of birth':
+    demographic_data = classify_methodOfBirth(demographic_data, variable1)
+elif variable1 == 'Specific Allergy':
+    demographic_data = classify_allergy(demographic_data, variable1)
+elif variable1 == 'Specific oral contraceptive pills':
+    demographic_data = classify_oral_contraceptive(demographic_data, variable1)
+elif variable1 == 'Specific non-steroidal anti-inflammatory drugs':
+    demographic_data = classify_nsaid(demographic_data, variable1)
+elif variable1 == 'Over the counter medication':
+    demographic_data = classify_trinary_2(demographic_data, variable1)
+elif variable1 == 'Different Over the Counter Medications':
+    demographic_data = classify_otc_medications(demographic_data, variable1)
+elif variable1 == 'Smoking Status':
+    demographic_data = classify_smoking_status(demographic_data, variable1)
+elif variable1 == 'Education level':
+    demographic_data = classify_education_level(demographic_data, variable1)
+elif variable1 == 'Occupation':
+    demographic_data = classify_occupation(demographic_data, variable1)
 elif variable1 == 'Total Vegetables' or variable1 == 'Greens and Beans' or variable1 == 'Total Fruit' or variable1 == 'Whole Fruit' or variable1 == 'Total Protein Foods' or variable1 == 'Seafood and Plant Proteins':
     demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable1)
 elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty Acids' or variable1 == 'Sodium' or variable1 == 'Refined Grains' or variable1 == 'Added Sugars' or variable1 == 'Saturated Fats':
@@ -155,6 +194,32 @@ elif variable2 == 'SPMS onset year':
     demographic_data = classify_yearOfSPMSOnset(demographic_data, variable2)
 elif variable2 == 'Expanded Disability Status Scale':
     demographic_data = classify_EDSS(demographic_data, variable2)
+elif variable2 == 'Multiple Sclerosis Severity Score':
+    demographic_data = classify_MSSS(demographic_data, variable2)
+elif variable2 == 'Disease modifying therapy' or variable2 == 'Breastfeeding at birth' or variable2 == 'Allergies' or variable2 == 'Asthma' or variable2 == 'Eating Disorder' or variable2 == 'Eczema' or variable2 == 'Anxiety' or variable2 == 'Manic depression(Bipolar disorder)' or variable2 == 'Obsessive Compulsory Disorder' or variable2 == 'Depression' or variable2 == 'Depression after giving birth' or variable2 == 'Type 2 Diabetes' or variable2 == 'Family Member with MS' or variable2 == 'Oral contraceptive pills' or variable2 == 'Non-steroidal anti-inflammatory drugs' or variable2 == 'Probiotics' or variable1 == 'Recreational drug use' or variable2 == "Pets":
+    demographic_data = classify_trinary(demographic_data, variable2)
+elif variable2 == 'Number of Children':
+    demographic_data = classify_numberOfChildren(demographic_data, variable2)
+elif variable2 == 'Roommates':
+    demographic_data = classify_roommates(demographic_data, variable2)
+elif variable2 == 'Method of birth':
+    demographic_data = classify_methodOfBirth(demographic_data, variable2)
+elif variable2 == 'Specific Allergy':
+    demographic_data = classify_allergy(demographic_data, variable2)
+elif variable2 == 'Specific oral contraceptive pills':
+    demographic_data = classify_oral_contraceptive(demographic_data, variable2)
+elif variable2 == 'Specific non-steroidal anti-inflammatory drugs':
+    demographic_data = classify_nsaid(demographic_data, variable2)
+elif variable2 == 'Over the counter medication':
+    demographic_data = classify_trinary_2(demographic_data, variable2)
+elif variable2 == 'Different Over the Counter Medications':
+    demographic_data = classify_otc_medications(demographic_data, variable2)
+elif variable2 == 'Smoking Status':
+    demographic_data = classify_smoking_status(demographic_data, variable2)
+elif variable2 == 'Education level':
+    demographic_data = classify_education_level(demographic_data, variable2)
+elif variable2 == 'Occupation':
+    demographic_data = classify_occupation(demographic_data, variable2)
 elif variable2 == 'Total Vegetables' or variable2 == 'Greens and Beans' or variable2 == 'Total Fruit' or variable2 == 'Whole Fruit' or variable2 == 'Total Protein Foods' or variable2 == 'Seafood and Plant Proteins':
     demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable2)
 elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty Acids' or variable2 == 'Sodium' or variable2 == 'Refined Grains' or variable2 == 'Added Sugars' or variable2 == 'Saturated Fats':
