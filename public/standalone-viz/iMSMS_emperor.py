@@ -39,6 +39,12 @@ from support_files.treatmentStatusRangeFinder import classify_treatmentStatus
 from support_files.treatmentsAppliedRangeFinder import classify_treatmentsApplied
 from support_files.binaryToYesNoRangeConverter import classify_binary
 from support_files.specificNeedInDietRangeConverter import classify_diet
+from support_files.SPMSyearOfOnsetRangeFinder import classify_yearOfSPMSOnset
+from support_files.edssRangeFinder import classify_EDSS
+from support_files.residenceRangeFinder import classify_residence
+from support_files.ethnicityRangeFinder import classify_ethnicity
+from support_files.sexRangeFinder import classify_sex
+from support_files.diseaseRangeFinder import classify_disease
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -67,7 +73,13 @@ print(f"Processing with Variable 2 (shapes): {variable2} ({variable2_bins} bins)
 demographic_data, sheet6_class, dependentvar = load_imsms_data()
 
 # Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
-if variable1 == 'Age':
+if variable1 == 'Residence':
+    demographic_data = classify_residence(demographic_data, variable1)
+elif variable1 == 'Ethnicity':
+    demographic_data = classify_ethnicity(demographic_data, variable1)
+elif variable1 == 'Sex':
+    demographic_data = classify_sex(demographic_data, variable1)
+elif variable1 == 'Age':
     demographic_data = convert_age_to_life_stages(demographic_data, variable1)
 elif variable1 == 'Weight':
     demographic_data = convert_weightKG_to_WeightLbs(demographic_data, variable1)
@@ -77,6 +89,8 @@ elif variable1 == 'Body Mass Index':
     demographic_data = classify_bmi(demographic_data, variable1)
 elif variable1 == 'MS Onset Year':
     demographic_data = classify_yearOfOnset(demographic_data, variable1)
+elif variable1 == 'Disease':
+    demographic_data = classify_disease(demographic_data, variable1)
 elif variable1 == 'Duration of MS':
     demographic_data = classify_durationOfMS(demographic_data, variable1)
 elif variable1 == 'Administration of Treatment':
@@ -91,17 +105,27 @@ elif variable1 == 'Special need with diet':
     demographic_data = classify_binary(demographic_data, variable1)
 elif variable1 == 'Specific need with diet':
     demographic_data = classify_diet(demographic_data, variable1)
+elif variable1 == 'SPMS onset year':
+    demographic_data = classify_yearOfSPMSOnset(demographic_data, variable1)
+elif variable1 == 'Expanded Disability Status Scale':
+    demographic_data = classify_EDSS(demographic_data, variable1)
 elif variable1 == 'Total Vegetables' or variable1 == 'Greens and Beans' or variable1 == 'Total Fruit' or variable1 == 'Whole Fruit' or variable1 == 'Total Protein Foods' or variable1 == 'Seafood and Plant Proteins':
     demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable1)
 elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty Acids' or variable1 == 'Sodium' or variable1 == 'Refined Grains' or variable1 == 'Added Sugars' or variable1 == 'Saturated Fats':
     demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable1)
 elif variable1 == 'Healthy Eating Index Score':
     demographic_data = convert_HEI_score_to_grades(demographic_data, variable1)
-else: # includes columns like Residence, Ethnicity, Sex, Disease
+else: 
     demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
 
 # Convert variable2 (shape variable) to its specified number of bins OR life stages for age
-if variable2 == 'Age':
+if variable2 == 'Residence':
+    demographic_data = classify_residence(demographic_data, variable2)
+elif variable2 == 'Ethnicity':
+    demographic_data = classify_ethnicity(demographic_data, variable2)
+elif variable2 == 'Sex':
+    demographic_data = classify_sex(demographic_data, variable2)
+elif variable2 == 'Age':
     demographic_data = convert_age_to_life_stages(demographic_data, variable2)
 elif variable2 == 'Weight':
     demographic_data = convert_weightKG_to_WeightLbs(demographic_data, variable2)
@@ -111,6 +135,8 @@ elif variable2 == 'Body Mass Index':
   demographic_data = classify_bmi(demographic_data, variable2)
 elif variable2 == 'MS Onset Year':
     demographic_data = classify_yearOfOnset(demographic_data, variable2)
+elif variable2 == 'Disease':
+    demographic_data = classify_disease(demographic_data, variable2)
 elif variable2 == 'Duration of MS':
     demographic_data = classify_durationOfMS(demographic_data, variable2)
 elif variable2 == 'Administration of Treatment':
@@ -125,6 +151,10 @@ elif variable2 == 'Special need with diet':
     demographic_data = classify_binary(demographic_data, variable2)
 elif variable2 == 'Specific need with diet':
     demographic_data = classify_diet(demographic_data, variable2)
+elif variable2 == 'SPMS onset year':
+    demographic_data = classify_yearOfSPMSOnset(demographic_data, variable2)
+elif variable2 == 'Expanded Disability Status Scale':
+    demographic_data = classify_EDSS(demographic_data, variable2)
 elif variable2 == 'Total Vegetables' or variable2 == 'Greens and Beans' or variable2 == 'Total Fruit' or variable2 == 'Whole Fruit' or variable2 == 'Total Protein Foods' or variable2 == 'Seafood and Plant Proteins':
     demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable2)
 elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty Acids' or variable2 == 'Sodium' or variable2 == 'Refined Grains' or variable2 == 'Added Sugars' or variable2 == 'Saturated Fats':
