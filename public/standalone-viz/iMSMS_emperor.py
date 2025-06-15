@@ -36,6 +36,9 @@ from support_files.durationOfMSRangeFinder import classify_durationOfMS
 from support_files.administrationRangeFinder import classify_administration
 from support_files.typeOfMSRangeFinder import classify_typeOfMS
 from support_files.treatmentStatusRangeFinder import classify_treatmentStatus
+from support_files.treatmentsAppliedRangeFinder import classify_treatmentsApplied
+from support_files.binaryToYesNoRangeConverter import classify_binary
+from support_files.specificNeedInDietRangeConverter import classify_diet
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -82,6 +85,12 @@ elif variable1 == 'Type of MS':
     demographic_data = classify_typeOfMS(demographic_data, variable1)
 elif variable1 == 'Treatment Status':
     demographic_data = classify_treatmentStatus(demographic_data, variable1)
+elif variable1 == 'Treatments Applied':
+    demographic_data = classify_treatmentsApplied(demographic_data, variable1)
+elif variable1 == 'Special need with diet':
+    demographic_data = classify_binary(demographic_data, variable1)
+elif variable1 == 'Specific need with diet':
+    demographic_data = classify_diet(demographic_data, variable1)
 elif variable1 == 'Total Vegetables' or variable1 == 'Greens and Beans' or variable1 == 'Total Fruit' or variable1 == 'Whole Fruit' or variable1 == 'Total Protein Foods' or variable1 == 'Seafood and Plant Proteins':
     demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable1)
 elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty Acids' or variable1 == 'Sodium' or variable1 == 'Refined Grains' or variable1 == 'Added Sugars' or variable1 == 'Saturated Fats':
@@ -110,6 +119,12 @@ elif variable2 == 'Type of MS':
     demographic_data = classify_typeOfMS(demographic_data, variable2)
 elif variable2 == 'Treatment Status':
     demographic_data = classify_treatmentStatus(demographic_data, variable2)
+elif variable2 == 'Treatments Applied':
+    demographic_data = classify_treatmentsApplied(demographic_data, variable2)
+elif variable2 == 'Special need with diet':
+    demographic_data = classify_binary(demographic_data, variable2)
+elif variable2 == 'Specific need with diet':
+    demographic_data = classify_diet(demographic_data, variable2)
 elif variable2 == 'Total Vegetables' or variable2 == 'Greens and Beans' or variable2 == 'Total Fruit' or variable2 == 'Whole Fruit' or variable2 == 'Total Protein Foods' or variable2 == 'Seafood and Plant Proteins':
     demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable2)
 elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty Acids' or variable2 == 'Sodium' or variable2 == 'Refined Grains' or variable2 == 'Added Sugars' or variable2 == 'Saturated Fats':
