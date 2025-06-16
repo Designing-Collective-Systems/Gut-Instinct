@@ -214,23 +214,13 @@ else:
     exit
 
 
-# Store original data for discrete/continuous analysis before any processing
-original_variable1_data = demographic_data[variable1].copy() if variable1 in demographic_data.columns else None
-original_variable2_data = demographic_data[variable2].copy() if variable2 in demographic_data.columns else None
-
-
 # Determine if variable1 should use discrete or continuous color scheme BEFORE binning
-variable1_is_discrete = is_discrete_variable(variable1, original_variable1_data) if original_variable1_data is not None else True
-variable2_is_discrete = is_discrete_variable(variable2, original_variable2_data) if original_variable2_data is not None else True
+variable1_is_discrete = is_discrete_variable(variable1)
+variable2_is_discrete = is_discrete_variable(variable2)
 
 
 print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
-print(f"Original data type: {original_variable1_data.dtype if original_variable1_data is not None else 'Unknown'}")
-print(f"Unique values in original data: {len(original_variable1_data.dropna().unique()) if original_variable1_data is not None else 'Unknown'}")
-
 print(f"Variable2 ({variable2}) detected as: {'Discrete' if variable2_is_discrete else 'Continuous'}")
-print(f"Original data type: {original_variable2_data.dtype if original_variable2_data is not None else 'Unknown'}")
-print(f"Unique values in original data: {len(original_variable2_data.dropna().unique()) if original_variable2_data is not None else 'Unknown'}")
 
 # Define colors for variable1 (coloring variable) - ADAPTIVE COLOR SCHEME
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
