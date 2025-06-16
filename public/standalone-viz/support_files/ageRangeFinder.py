@@ -22,21 +22,3 @@ def convert_age_to_life_stages(df, column_name):
     
     df[column_name] = df[column_name].apply(categorize_age)
     return df
-
-def sort_age_categories(ranges, variable_name):
-    """Sort age categories in proper life stage order"""
-    if variable_name == 'Age':
-        # Define the proper order for age categories
-        age_order = ["a. Young adults", "b. Middle age adults", "c. Older adults"]
-        # Sort based on the predefined order, keeping any other values at the end
-        sorted_ranges = []
-        for category in age_order:
-            if category in ranges:
-                sorted_ranges.append(category)
-        # Add any unexpected categories at the end
-        for category in ranges:
-            if category not in sorted_ranges:
-                sorted_ranges.append(category)
-        return sorted_ranges
-    else:
-        return ranges

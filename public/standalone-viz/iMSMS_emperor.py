@@ -4,20 +4,10 @@ from emperor import Emperor
 from emperor.util import get_emperor_support_files_dir
 from skbio.stats.ordination import pcoa
 from scipy.spatial.distance import pdist, squareform
-import os
-import re
 import sys
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
-import json
 
-# Import variable definitions from external file
-from support_files.variableDescriptions import (
-    VARIABLE_BIN_COUNTS
-)
 from support_files.discreteChecker import is_discrete_variable
-from support_files.rangeFinder import convert_column_to_ranges, sort_ranges_numerically
-from support_files.ageRangeFinder import convert_age_to_life_stages, sort_age_categories
+from support_files.ageRangeFinder import convert_age_to_life_stages
 from support_files.dataLoader import load_imsms_data
 from support_files.colorGenerator import generate_discrete_colors, generate_gradient_colors
 from support_files.jsUtils import escape_for_js, dict_to_js_object
@@ -25,11 +15,11 @@ from support_files.threeJSGenerator import generate_direct_shape_js
 from support_files.customColorGenerator import generate_custom_color_js
 from support_files.uiHiderGenerator import generate_precise_hide_js, generate_precise_hide_css
 from support_files.overlayGenerator import generate_overlay_js
-from support_files.fivePointHEIRangeFinder import convert_five_point_HEI_to_grades, sort_five_point_HEI_categories
-from support_files.tenPointHEIRangeFinder import convert_ten_point_HEI_to_grades, sort_ten_point_HEI_categories
-from support_files.HEIRangeFinder import convert_HEI_score_to_grades, sort_HEI_categories
-from support_files.bmiRangeFinder import classify_bmi, sort_bmi_categories
-from support_files.yearOfOnsetRangeFinder import classify_yearOfOnset, sort_year_categories
+from support_files.fivePointHEIRangeFinder import convert_five_point_HEI_to_grades
+from support_files.tenPointHEIRangeFinder import convert_ten_point_HEI_to_grades
+from support_files.HEIRangeFinder import convert_HEI_score_to_grades
+from support_files.bmiRangeFinder import classify_bmi
+from support_files.yearOfOnsetRangeFinder import classify_yearOfOnset
 from support_files.weightConverter import convert_weightKG_to_WeightLbs
 from support_files.heightConverter import convert_heightCM_to_HeightInches
 from support_files.durationOfMSRangeFinder import classify_durationOfMS
@@ -70,17 +60,6 @@ else:
     variable1 = "Age"  # Default coloring variable
     variable2 = "Height"  # Default shape variable
     print("No variables provided, using defaults")
-
-# Change variable names sent by user to variable names from the dataset
-
-
-# Get bin counts for our variables
-variable1_bins = VARIABLE_BIN_COUNTS.get(variable1, 5)  # Default to 5 if not specified
-variable2_bins = VARIABLE_BIN_COUNTS.get(variable2, 4)  # Default to 4 if not specified
-
-# Example usage:
-print(f"Processing with Variable 1 (coloring): {variable1} ({variable1_bins} bins)")
-print(f"Processing with Variable 2 (shapes): {variable2} ({variable2_bins} bins)")
 
 
 # Load the iMSMS dataset
@@ -158,7 +137,7 @@ elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty 
 elif variable1 == 'Healthy Eating Index Score':
     demographic_data = convert_HEI_score_to_grades(demographic_data, variable1)
 else: 
-    demographic_data = convert_column_to_ranges(demographic_data, variable1, num_bins=variable1_bins)
+    exit
 
 # Convert variable2 (shape variable) to its specified number of bins OR life stages for age
 if variable2 == 'Residence':
@@ -232,7 +211,7 @@ elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty 
 elif variable2 == 'Healthy Eating Index Score':
     demographic_data = convert_HEI_score_to_grades(demographic_data, variable2)
 else:
-    demographic_data = convert_column_to_ranges(demographic_data, variable2, num_bins=variable2_bins)
+    exit
 
 
 # Store original data for discrete/continuous analysis before any processing
@@ -255,26 +234,6 @@ print(f"Unique values in original data: {len(original_variable2_data.dropna().un
 
 # Define colors for variable1 (coloring variable) - ADAPTIVE COLOR SCHEME
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
-if variable1_is_discrete or variable1 == 'Age':
-    if variable1 == 'Age':
-        variable1_ranges = sort_age_categories(variable1_ranges, variable1)
-        # print(variable1_ranges)
-    elif variable1 == 'Total Vegetables' or variable1 == 'Greens and Beans' or variable1 == 'Total Fruit' or variable1 == 'Whole Fruit' or variable1 == 'Total Protein Foods' or variable1 == 'Seafood and Plant Proteins':
-        variable1_ranges = sort_five_point_HEI_categories(variable1_ranges, variable1)
-    elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty Acids' or variable1 == 'Sodium' or variable1 == 'Refined Grains' or variable1 == 'Added Sugars' or variable1 == 'Saturated Fats':
-        variable1_ranges = sort_ten_point_HEI_categories(variable1_ranges, variable1)
-    elif variable1 == 'Healthy Eating Index Score':
-        variable1_ranges = sort_HEI_categories(variable1_ranges, variable1)
-    elif variable1 == 'Body Mass Index':
-        variable1_ranges = sort_bmi_categories(variable1_ranges, variable1)
-    elif variable1 == 'MS Onset Year':
-        variable1_ranges = sort_year_categories(variable1_ranges, variable1)
-    else:
-        variable1_ranges.sort()  # Simple alphabetical sort for other discrete variables
-else:
-    variable1_ranges = sort_ranges_numerically(variable1_ranges)  # Numeric sort for continuous
-
-
 # Generate appropriate color scheme based on the original data analysis
 if variable1_is_discrete:
     colors_list = generate_discrete_colors(len(variable1_ranges))
@@ -295,33 +254,6 @@ print(f"Color mapping: {custom_colors}")
 
 # Define shapes for variable2 (shape variable) - ROBUST HANDLING
 variable2_ranges = demographic_data[variable2].dropna().unique().tolist()
-if variable2_is_discrete or variable2 == 'Age':
-    if variable2 == 'Age':
-        print('AAA')
-        variable2_ranges = sort_age_categories(variable2_ranges, variable2)
-        print(variable2_ranges)
-    elif variable2 == 'Total Vegetables' or variable2 == 'Greens and Beans' or variable2 == 'Total Fruit' or variable2 == 'Whole Fruit' or variable2 == 'Total Protein Foods' or variable2 == 'Seafood and Plant Proteins':
-        print('BBB')
-        variable2_ranges = sort_five_point_HEI_categories(variable2_ranges, variable2)
-    elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty Acids' or variable2 == 'Sodium' or variable2 == 'Refined Grains' or variable2 == 'Added Sugars' or variable2 == 'Saturated Fats':
-        print('CCC')
-        variable2_ranges = sort_ten_point_HEI_categories(variable2_ranges, variable2)
-    elif variable2 == 'Healthy Eating Index Score':
-        print('DDD')
-        variable2_ranges = sort_HEI_categories(variable2_ranges, variable2)
-    elif variable2 == 'Body Mass Index':
-        print('EEE')
-        variable2_ranges = sort_bmi_categories(variable2_ranges, variable2)
-    elif variable2 == 'MS Onset Year':
-        print('FFF')
-        variable2_ranges = sort_year_categories(variable2_ranges, variable2)
-    else:
-        print('GGG')
-        variable2_ranges.sort()  # Simple alphabetical sort for other discrete variables
-else:
-    print('HHH')
-    variable2_ranges = sort_ranges_numerically(variable2_ranges)  # Numeric sort for continuous
-
 # Define shapes (expand shape palette to handle more bins)
 available_shapes = [
     # 'Star',
