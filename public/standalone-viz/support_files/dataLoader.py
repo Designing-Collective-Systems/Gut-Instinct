@@ -46,7 +46,7 @@ def load_imsms_data():
     sheet2 = pd.read_excel(S2_PATH, sheet_name='Dataset S2')
     sheet3 = pd.read_excel(S3_PATH, sheet_name='Dataset S3')
     
-    dependentvar = 'order'
+    dependentvar = 'species'
     sheet6_class = pd.read_excel(S6_PATH, sheet_name=dependentvar)
     
     # Merge the demographic data

@@ -213,6 +213,7 @@ elif variable2 == 'Healthy Eating Index Score':
 else:
     exit
 
+print(demographic_data)
 
 # Determine if variable1 should use discrete or continuous color scheme BEFORE binning
 variable1_is_discrete = is_discrete_variable(variable1)
@@ -224,6 +225,7 @@ print(f"Variable2 ({variable2}) detected as: {'Discrete' if variable2_is_discret
 
 # Define colors for variable1 (coloring variable) - ADAPTIVE COLOR SCHEME
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
+variable1_ranges.sort()
 # Generate appropriate color scheme based on the original data analysis
 if variable1_is_discrete:
     colors_list = generate_discrete_colors(len(variable1_ranges))
@@ -244,6 +246,7 @@ print(f"Color mapping: {custom_colors}")
 
 # Define shapes for variable2 (shape variable) - ROBUST HANDLING
 variable2_ranges = demographic_data[variable2].dropna().unique().tolist()
+variable2_ranges.sort()
 # Define shapes (expand shape palette to handle more bins)
 available_shapes = [
     # 'Star',
@@ -256,8 +259,8 @@ available_shapes = [
     # 'Square'
 
     'Star',
-    'Star', 
-    'Star',
+    'Cylinder', 
+    'Sphere',
     'Star',
     'Star',        # Additional shapes if needed
     'Star',
