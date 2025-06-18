@@ -31,7 +31,7 @@ from support_files.binaryToYesNoRangeConverter import classify_binary
 from support_files.specificNeedInDietRangeConverter import classify_diet
 from support_files.SPMSyearOfOnsetRangeFinder import classify_yearOfSPMSOnset
 from support_files.edssRangeFinder import classify_EDSS
-from support_files.residenceRangeFinder import classify_residence
+from support_files.residenceRangeFinder import classify_residence, classify_residence_and_disease
 from support_files.ethnicityRangeFinder import classify_ethnicity
 from support_files.sexRangeFinder import classify_sex
 from support_files.diseaseRangeFinder import classify_disease
@@ -67,7 +67,8 @@ demographic_data, sheet6_class, dependentvar = load_imsms_data()
 
 # Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
 if variable1 == 'Residence':
-    demographic_data = classify_residence(demographic_data, variable1)
+    # demographic_data = classify_residence(demographic_data, variable1)
+    demographic_data = classify_residence_and_disease(demographic_data, variable1, 'Disease')
 elif variable1 == 'Ethnicity':
     demographic_data = classify_ethnicity(demographic_data, variable1)
 elif variable1 == 'Sex':
@@ -141,7 +142,8 @@ else:
 
 # Convert variable2 (shape variable) to its specified number of bins OR life stages for age
 if variable2 == 'Residence':
-    demographic_data = classify_residence(demographic_data, variable2)
+    # demographic_data = classify_residence(demographic_data, variable2)
+    demographic_data = classify_residence_and_disease(demographic_data, variable2, 'Disease')
 elif variable2 == 'Ethnicity':
     demographic_data = classify_ethnicity(demographic_data, variable2)
 elif variable2 == 'Sex':
@@ -213,7 +215,14 @@ elif variable2 == 'Healthy Eating Index Score':
 else:
     exit
 
-print(demographic_data)
+
+
+pd.set_option('display.max_rows', None)  # Show all rows
+pd.set_option('display.max_columns', None)  # Show all columns
+pd.set_option('display.width', None)  # Don't wrap columns
+pd.set_option('display.max_colwidth', None)  # Show full column content
+
+print(demographic_data[['iMSMS_ID', 'Gut Bacteria Richness']])
 
 # Determine if variable1 should use discrete or continuous color scheme BEFORE binning
 variable1_is_discrete = is_discrete_variable(variable1)
@@ -259,8 +268,8 @@ available_shapes = [
     # 'Square'
 
     'Star',
-    'Cylinder', 
-    'Sphere',
+    'Star', 
+    'Star',
     'Star',
     'Star',        # Additional shapes if needed
     'Star',

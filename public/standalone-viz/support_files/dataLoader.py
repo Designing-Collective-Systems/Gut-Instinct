@@ -39,20 +39,23 @@ def load_imsms_data():
     S1_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S1.xlsx')
     S2_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S2.xlsx')
     S3_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S3.xlsx')
+    S5_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S5.xlsx')
     S6_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S6.xlsx')
     
     # Load the Excel files
     sheet1_2 = pd.read_excel(S1_PATH, sheet_name='Dataset S1.2')
     sheet2 = pd.read_excel(S2_PATH, sheet_name='Dataset S2')
     sheet3 = pd.read_excel(S3_PATH, sheet_name='Dataset S3')
+    sheet5_1 = pd.read_excel(S5_PATH, sheet_name='Dataset S5.1')
     
     dependentvar = 'species'
     sheet6_class = pd.read_excel(S6_PATH, sheet_name=dependentvar)
     
     # Merge the demographic data
     demographic_data = (sheet1_2
-                       .merge(sheet3, on='iMSMS_ID', how='inner')
-                       .merge(sheet2, on='iMSMS_ID', how='inner')
+                       .merge(sheet3, on='iMSMS_ID', how='left')
+                    #    .merge(sheet2, on='iMSMS_ID', how='left')
+                       .merge(sheet5_1, on='iMSMS_ID', how='left')
                        )
     
     # Columns to exclude from demographic data
