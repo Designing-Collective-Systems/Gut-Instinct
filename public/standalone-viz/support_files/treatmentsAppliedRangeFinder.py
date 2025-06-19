@@ -2,45 +2,53 @@ import pandas as pd
 import numpy as np
 
 def classify_treatmentsApplied(df, column_name):
-    """Classify treatments applied into specified categories"""
+    """Classify treatments applied into 7 consolidated categories"""
     def categorize_treatmentsApplied(treatment_value):
         # print(treatment_value)
         if pd.isna(treatment_value):
-            return "o. nan"
+            return "a. nan"
         try:
             treatment_str = str(treatment_value).strip()
-            if treatment_str == 'Control_Untreated':
-                return "a. Control_Untreated"
-            elif treatment_str == 'Control_Dimethyl fumarate':
-                return "b. Control_Dimethyl fumarate"
-            elif treatment_str == 'Control_Fingolimod':
-                return "c. Control_Fingolimod"
-            elif treatment_str == 'Control_Glatiramer acetate':
-                return "d. Control_Glatiramer acetate"
-            elif treatment_str == 'Control_Interferon':
-                return "e. Control_Interferon"
-            elif treatment_str == 'Control_Natalizumab':
-                return "f. Control_Natalizumab"
-            elif treatment_str == 'Control_ocrevus(rituxan)':
-                return "g. Control_ocrevus(rituxan)"
+            
+            # All controls grouped together
+            if treatment_str in ['Control_Untreated', 'Control_Dimethyl fumarate', 'Control_Fingolimod', 
+                               'Control_Glatiramer acetate', 'Control_Interferon', 'Control_Natalizumab', 
+                               'Control_ocrevus(rituxan)']:
+                return "b. Controls"
+            
+            # Untreated
             elif treatment_str == 'Untreated':
-                return "h. Untreated"
-            elif treatment_str == 'Dimethyl fumarate':
-                return "i. Dimethyl fumarate"
-            elif treatment_str == 'Fingolimod':
-                return "j. Fingolimod"
-            elif treatment_str == 'Glatiramer acetate':
-                return "k. Glatiramer acetate"
-            elif treatment_str == 'Interferon':
-                return "l. Interferon"
-            elif treatment_str == 'Natalizumab':
-                return "m. Natalizumab"
-            elif treatment_str == 'ocrevus(rituxan)':
-                return "n. Ocrevus(rituxan)"
+                return "c. Untreated"
+            
+            # Oral medications (pills/tablets)
+            elif treatment_str in ['Dimethyl fumarate', 'Fingolimod']:
+                return f"d. Oral: {treatment_str}"
+            
+            # Injectable medications (self-administered)
+            elif treatment_str in ['Glatiramer acetate', 'Interferon']:
+                return f"e. Injectable: {treatment_str}"
+            
+            # Infusion therapies (IV administered)
+            elif treatment_str in ['Natalizumab', 'ocrevus(rituxan)']:
+                return f"f. Infusion: {treatment_str}"
+            
+            # Other/Unknown
             else:
-                return "o. nan"
+                return "g. Other/Unknown"
+                
         except (ValueError, TypeError):
-            return "o. nan"
+            return "a. nan"
     
     df[column_name] = df[column_name].apply(categorize_treatmentsApplied)
+    # Get value counts
+    counts = df[column_name].value_counts().sort_index()
+        
+    # Create a mapping of category to "category - count values"
+    count_mapping = {}
+    for category, count in counts.items():
+        count_mapping[category] = f"{category} - {count} values"
+    
+    # Apply the count summary to each cell
+    df[column_name] = df[column_name].map(count_mapping)
+
     return df

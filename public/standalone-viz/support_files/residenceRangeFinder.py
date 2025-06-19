@@ -82,4 +82,15 @@ def classify_residence_and_disease(df, residence_column, disease_column):
             return "g. nan"
     
     df[residence_column] = df.apply(lambda row: categorize_residence(row[residence_column], row[disease_column]), axis=1)
+    # Get value counts
+    counts = df[residence_column].value_counts().sort_index()
+        
+    # Create a mapping of category to "category - count values"
+    count_mapping = {}
+    for category, count in counts.items():
+        count_mapping[category] = f"{category} - {count} values"
+    
+    # Apply the count summary to each cell
+    df[residence_column] = df[residence_column].map(count_mapping)
+
     return df

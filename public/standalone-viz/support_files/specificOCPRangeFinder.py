@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 def classify_oral_contraceptive(df, column_name):
-    """Classify oral contraceptive pills into 11 broad categories"""
+    """Classify oral contraceptive pills into 7 consolidated categories"""
     def categorize_ocp(ocp_value):
         if pd.isna(ocp_value):
             return "a. nan"
@@ -12,103 +12,114 @@ def classify_oral_contraceptive(df, column_name):
             
             # Exact matches for each of the 47 unique values
             if ocp_str == " nomegestrol acetate + estradiol ":
-                return "f. Estradiol"
+                return "b. Combination pills"
             elif ocp_str == "apri 0.15mg":
-                return "d. Desogestrel"
+                return "b. Combination pills"
             elif ocp_str == "aviane":
-                return "h. Levonorgestrel"
+                return "b. Combination pills"
             elif ocp_str == "beyaz":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "celeste":
-                return "i. Norgestimate"
+                return "b. Combination pills"
             elif ocp_str == "cerazette":
-                return "d. Desogestrel"
+                return "c. Progestin-only pills"
             elif ocp_str == "cerezette":
-                return "d. Desogestrel"
+                return "c. Progestin-only pills"
             elif ocp_str == "crysell":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "desogen":
-                return "d. Desogestrel"
+                return "b. Combination pills"
             elif ocp_str == "desogestrel":
-                return "d. Desogestrel"
+                return "c. Progestin-only pills"
             elif ocp_str == "dienopil":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "diva total":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "divina (ethynilestradiol, drospirenone)":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "divina drospirenone/ethynilestradiol":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "estradiol":
-                return "f. Estradiol"
+                return "d. Estrogen-only"
             elif ocp_str == "implant (progesterone)":
-                return "g. Implants/Long-acting"
+                return "e. Long-acting methods"
             elif ocp_str == "isis":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "isis mini":
-                return "j. Progestin"
+                return "c. Progestin-only pills"
             elif ocp_str == "isis mini ":
-                return "j. Progestin"
+                return "c. Progestin-only pills"
             elif ocp_str == "kala (ethinilestradiol 30mcg, drospirenone 3mg)":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "maxima md":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "microgestin":
-                return "h. Levonorgestrel"
+                return "b. Combination pills"
             elif ocp_str == "myzilra":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "norgestimate":
-                return "i. Norgestimate"
+                return "c. Progestin-only pills"
             elif ocp_str == "norithistone":
-                return "j. Progestin"
+                return "c. Progestin-only pills"
             elif ocp_str == "qlaira":
-                return "f. Estradiol"
+                return "b. Combination pills"
             elif ocp_str == "ridgebon":
-                return "h. Levonorgestrel"
+                return "b. Combination pills"
             elif ocp_str == "rigevidon":
-                return "h. Levonorgestrel"
+                return "b. Combination pills"
             elif ocp_str == "rubi":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "yasmin":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "yasminelle":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "yazmin":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "zinnia (ethinyl estradiol/ciproterone)":
-                return "c. Ciproterone"
+                return "b. Combination pills"
             elif ocp_str == "damsel (ethinyl estradiol 0.03mg, drospirenone 3mg)":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "diva total":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "divina":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "ethinilstradiol, drospirenone 3/20":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             elif ocp_str == "lomedia":
-                return "h. Levonorgestrel"
+                return "b. Combination pills"
             elif ocp_str == "lutera":
-                return "h. Levonorgestrel"
+                return "b. Combination pills"
             elif ocp_str == "microgestin ":
-                return "h. Levonorgestrel"
+                return "b. Combination pills"
             elif ocp_str == "norgestimate and ethinyl estradiol":
-                return "i. Norgestimate"
+                return "b. Combination pills"
             elif ocp_str == "ortho tri cycline lo":
-                return "i. Norgestimate"
+                return "b. Combination pills"
             elif ocp_str == "signiorina":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "signorina":
-                return "k. Other combination pills"
+                return "b. Combination pills"
             elif ocp_str == "unknown":
-                return "b. Unknown/Unspecified"
+                return "f. Unknown/Unspecified"
             elif ocp_str == "yasminelle":
-                return "e. Drospirenone"
+                return "b. Combination pills"
             else:
                 # Fallback for any missed cases
-                return "k. Other combination pills"
+                return "g. Other"
                 
         except (ValueError, TypeError):
             return "a. nan"
     
     df[column_name] = df[column_name].apply(categorize_ocp)
+    # Get value counts
+    counts = df[column_name].value_counts().sort_index()
+        
+    # Create a mapping of category to "category - count values"
+    count_mapping = {}
+    for category, count in counts.items():
+        count_mapping[category] = f"{category} - {count} values"
+    
+    # Apply the count summary to each cell
+    df[column_name] = df[column_name].map(count_mapping)
+
     return df
