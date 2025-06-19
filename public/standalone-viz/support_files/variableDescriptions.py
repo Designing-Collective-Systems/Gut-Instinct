@@ -30,7 +30,7 @@ FORCE_CONTINUOUS = {
     'Vegetables group (cups)', 'Vitamdietpairsumin A (RAE)', 'Dairy', 'Total Fruit','Total Vegetables', 
     'Total Protein Foods', 'Vitamin B6 (mg)', 'Vitamin C (mg)', 'Vitamin D', 'Vitamin E (mg)',  'Weight', 
     'Whole Fruit','Whole Grains', 'Whole grains (1)', 'without potatoes (cups)', 'MS Onset Year', 
-    'Zinc (mg)',       
+    'Zinc (mg)', 'Gut Bacteria Richness', 'Gut Bacteria Richness and Evenness' 
 }
 
 

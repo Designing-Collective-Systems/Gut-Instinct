@@ -49,6 +49,7 @@ from support_files.smokingRangeFinder import classify_smoking_status
 from support_files.educationRangeFinder import classify_education_level
 from support_files.occupationRangeFinder import classify_occupation
 from support_files.vitaminDRangeFinder import classify_vitamin_d
+from support_files.alphaDiversityRangeFinder import classify_richness, classify_richness_and_evenness
 
 # Get command line arguments
 if len(sys.argv) >= 3:
@@ -137,6 +138,10 @@ elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty 
     demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable1)
 elif variable1 == 'Healthy Eating Index Score':
     demographic_data = convert_HEI_score_to_grades(demographic_data, variable1)
+elif variable1 == 'Gut Bacteria Richness':
+    demographic_data = classify_richness(demographic_data, variable1)
+elif variable1 == 'Gut Bacteria Richness and Evenness':
+    demographic_data = classify_richness_and_evenness(demographic_data, variable1)
 else: 
     exit
 
@@ -212,6 +217,10 @@ elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty 
     demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable2)
 elif variable2 == 'Healthy Eating Index Score':
     demographic_data = convert_HEI_score_to_grades(demographic_data, variable2)
+elif variable2 == 'Gut Bacteria Richness':
+    demographic_data = classify_richness(demographic_data, variable2)
+elif variable2 == 'Gut Bacteria Richness and Evenness':
+    demographic_data = classify_richness_and_evenness(demographic_data, variable2)
 else:
     exit
 
@@ -222,7 +231,7 @@ pd.set_option('display.max_columns', None)  # Show all columns
 pd.set_option('display.width', None)  # Don't wrap columns
 pd.set_option('display.max_colwidth', None)  # Show full column content
 
-print(demographic_data[['iMSMS_ID', 'Gut Bacteria Richness']])
+# print(demographic_data[['iMSMS_ID', 'Gut Bacteria Richness']])
 
 # Determine if variable1 should use discrete or continuous color scheme BEFORE binning
 variable1_is_discrete = is_discrete_variable(variable1)

@@ -21,4 +21,15 @@ def convert_age_to_life_stages(df, column_name):
             return np.nan
     
     df[column_name] = df[column_name].apply(categorize_age)
+    # Get value counts
+    counts = df[column_name].value_counts().sort_index()
+        
+    # Create a mapping of category to "category - count values"
+    count_mapping = {}
+    for category, count in counts.items():
+        count_mapping[category] = f"{category} - {count} values"
+    
+    # Apply the count summary to each cell
+    df[column_name] = df[column_name].map(count_mapping)
+
     return df
