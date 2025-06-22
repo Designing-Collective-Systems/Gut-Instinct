@@ -1,31 +1,38 @@
-// Update the existing _.js file to include the new route for visualization
+// mainfile.js converted to Flow Router
+
 import { Template } from 'meteor/templating';
-import { Router } from 'meteor/iron:router';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
-// Configure Iron Router
-Router.configure({
-    noRoutesTemplate: null
+// No configuration is needed for this basic setup in Flow Router.
+
+// Define the root route
+FlowRouter.route('/', {
+    name: 'home', // It's good practice to name your routes
+    action() {
+        // Instead of this.render, Flow Router uses BlazeLayout
+        BlazeLayout.render('gaVisualization');
+    }
 });
 
-// Define routes
-Router.route('/', function() {
-    this.render('gaVisualization');
+// Define the new route for the visualization page
+FlowRouter.route('/galileo/visualization', {
+    name: 'visualization',
+    action() {
+        BlazeLayout.render('gaVisualization');
+    }
 });
 
-// Add new route for the visualization page
-Router.route('/galileo/visualization', function() {
-    this.render('gaVisualization');
-});
-
-// Events for gaQuestions template
+// Events for gaQuestions template (this part remains the same)
 Template.gaQuestions.onCreated(function() {
     // Initialize any necessary variables
 });
 
-// Template.gaQuestions.events({
-//     'click #seeViz': function(event) {
-//         event.preventDefault();
-//         // Instead of redirecting to external URL, use Router to navigate to our new route
-//         Router.go('/galileo/visualization');
-//     }
-// });
+// The event helper, updated for Flow Router
+Template.gaQuestions.events({
+    'click #seeViz': function(event) {
+        event.preventDefault();
+        // Use FlowRouter.go() to navigate. Using the route name is recommended.
+        FlowRouter.go('visualization');
+    }
+});

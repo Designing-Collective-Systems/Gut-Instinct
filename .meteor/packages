@@ -37,7 +37,6 @@ okgrow:analytics
 jparker:crypto-aes
 artjc:flexslider
 edgee:slingshot
-materialize:materialize@0.100.2
 pagebakers:ionicons
 accounts-ui@1.3.0
 accounts-google@1.3.1
@@ -58,7 +57,6 @@ nimble:restivus
 percolate:synced-cron
 pandawhisperer:accounts-reddit
 random@1.1.0
-iron:router
 fourseven:scss
 mizzao:timesync
 practicalmeteor:mocha
@@ -66,3 +64,5 @@ practicalmeteor:chai
 dispatch:mocha-phantomjs
 blaze
 accounts-base
+kadira:flow-router
+kadira:blaze-layout
