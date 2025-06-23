@@ -40,8 +40,6 @@ edgee:slingshot
 pagebakers:ionicons
 accounts-ui@1.3.0
 accounts-google@1.3.1
-accounts-facebook@1.3.1
-accounts-twitter@1.4.1
 facebook-config-ui@1.0.1
 service-configuration@1.0.11
 kljensen:coursera
@@ -54,8 +52,7 @@ session
 tushark:google-api
 dynamic-import@0.3.1
 nimble:restivus
-percolate:synced-cron
-pandawhisperer:accounts-reddit
+percolate:synced-cron   
 random@1.1.0
 fourseven:scss
 mizzao:timesync

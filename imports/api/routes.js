@@ -1,5 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
+import { Tracker } from 'meteor/tracker';
 
 // Import your collections (models.js)
 import {
@@ -8,39 +9,30 @@ import {
     UserTestResponse
 } from './models.js';
 
-// Assuming you still need this for GA tracking if it doesn't rely on Iron Router specific hooks
+// Assuming you still need this for GA tracking
 import './ga-routes.js';
 
-// Set the root element for BlazeLayout to render into
-BlazeLayout.setRoot('body');
-
 // --- Global Before Action (Authentication Guard) ---
-// This handles the logic that was in your Router.onBeforeAction
-
 const checkLoggedIn = function(context, redirect) {
-    // Show a loading wheel while checking login status
-    BlazeLayout.render('layout', { main: 'loading_wheel' });
-
-    // Use a reactive computation to re-run when Meteor.userAsync() changes
-    this.autorun(() => {
-        if (!Meteor.userAsync() && !Meteor.loggingIn()) {
-            // Your original Iron Router logic for unauthenticated users
-            // This part had commented out logic and a redirect to /galileo/home
-            redirect('/galileo/home'); // Consistent with your uncommented redirect
-
-            // Stop this autorun to prevent unnecessary re-runs
-            this.stop();
-        } else if (Meteor.userAsync()) {
-            // User is logged in, proceed to the next trigger/route action
-            this.next();
-            this.stop(); // Stop this autorun once user is logged in
+    // Don't render anything here - let individual routes handle their rendering
+    
+    // Use Tracker.autorun for reactive computation
+    Tracker.autorun((computation) => {
+        const user = Meteor.user();
+        const loggingIn = Meteor.loggingIn();
+        
+        if (!user && !loggingIn) {
+            computation.stop();
+            redirect('/galileo/home');
+        } else if (user) {
+            computation.stop();
+            // User is logged in, continue with route
         }
-        // If Meteor.loggingIn() is true, just keep showing loading_wheel and wait
+        // If loggingIn is true, keep waiting
     });
 };
 
-// Define routes that *do not* require authentication,
-// or handle authentication within their own specific `action` if they allow guest access.
+// Define routes that do not require authentication
 const publicRoutesExclusions = [
     'landing', 'login-process', 'login-error', 'login-admin', 'logout', 'intro',
     'login-admin1', 'signup', 'auth_openhumans', 'galileo.home', 'galileo.signup',
@@ -55,60 +47,56 @@ const publicRoutesExclusions = [
     "galileo.blog.why-exp-nerdnite", "galileo.blog.why-exp-probiotics"
 ];
 
-
-// Main application group, applies the authentication check
-const appRoutes = FlowRouter.group({
-    triggersEnter: [checkLoggedIn],
-    except: publicRoutesExclusions // Apply `checkLoggedIn` to all routes EXCEPT these
+// Create authenticated routes group
+const authenticatedRoutes = FlowRouter.group({
+    triggersEnter: [checkLoggedIn]
 });
 
+// Create public routes group (no authentication required)
+const publicRoutes = FlowRouter.group({});
 
 // --- Helper for Profile-based Redirects ---
-// This logic is repeated in many of your Iron Router routes.
-// We can make a helper function for clarity.
-const checkUserProfileAndRedirect = function(redirect) {
-    const user = Meteor.userAsync();
+const checkUserProfileAndRedirect = function() {
+    const user = Meteor.user();
     if (!user) {
-        // This case should ideally be handled by the global `checkLoggedIn` trigger
-        // but included for robustness if a route is somehow accessed directly without it.
-        redirect('/galileo/home');
-        return true; // Indicates a redirect happened
-    }
-    const profile = user.profile;
-
-    if (!profile.consent_agagreed) {
-        redirect('/consent');
+        FlowRouter.go('/galileo/home');
         return true;
     }
-    if (!profile.toured?.username_page) { // Using optional chaining for safety
-        redirect('/username');
+    
+    const profile = user.profile;
+    if (!profile) {
+        return false;
+    }
+
+    if (!profile.consent_agreed) {
+        FlowRouter.go('/consent');
+        return true;
+    }
+    if (!profile.toured?.username_page) {
+        FlowRouter.go('/username');
         return true;
     }
     if (!profile.took_pretest) {
-        redirect('/trial');
+        FlowRouter.go('/trial');
         return true;
     }
     if (!profile.intro_completed) {
         const docentProgress = localStorage.getItem("docentProgress");
         if (docentProgress && (docentProgress == 25 || docentProgress == 50)) {
-            redirect('/t/introduction');
-            // Materialize.toast calls are UI specific and best placed in template `onRendered` or `onCreated` if dependent on user state
+            FlowRouter.go('/t/introduction');
             return true;
         }
         if (docentProgress && docentProgress == 85) {
-            redirect('gutboard_slider_addq');
-            // Materialize.toast calls
+            FlowRouter.go('/gutboard_slider_addq');
             return true;
         }
-        redirect('/guide');
-        // Materialize.toast calls
+        FlowRouter.go('/guide');
         return true;
     }
-    return false; // No redirect needed, proceed
+    return false;
 };
 
-// Function for toast messages (Materialize Toast)
-// This should ideally be moved to a client-side utility file
+// Function for toast messages
 const showToast = (message, duration = 4000) => {
     if (typeof Materialize !== 'undefined' && Materialize.toast) {
         Materialize.toast(message, duration, 'toast');
@@ -119,302 +107,398 @@ const showToast = (message, duration = 4000) => {
 
 // --- ROUTES ---
 
-// Root Redirect (similar to your Iron Router '/' route)
+// Root Redirect
 FlowRouter.route('/', {
     name: 'root',
-    action: function() {
-        // This route is primarily for initial redirection
+    action() {
         FlowRouter.go('/galileo');
     }
 });
 
-// The actual /galileo route (assuming this is where the app effectively starts)
-// Adjust this if '/galileo' maps to a specific template
+// Main galileo route
 FlowRouter.route('/galileo', {
-    name: 'galileo.home_redirect', // Or whatever makes sense
-    action: function() {
-        // This mirrors your commented out Iron Router logic for '/'
-        if (Meteor.userAsync()) {
-            // Check specific profile conditions and redirect
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return; // Redirect happened, stop
+    name: 'galileo.home_redirect',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            const loggingIn = Meteor.loggingIn();
+            
+            if (loggingIn) {
+                BlazeLayout.render('layout', { main: 'loading_wheel' });
+                return;
             }
-            // If no redirects from profile check, then handle the main logic
-            if (Meteor.userAsync().profile.condition == 7) {
-                FlowRouter.go('/topics');
+            
+            computation.stop();
+            
+            if (user) {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
+                if (user.profile.condition == 7) {
+                    FlowRouter.go('/topics');
+                } else {
+                    FlowRouter.go('/gutboard');
+                }
             } else {
-                FlowRouter.go('gutboard'); // Or 'gutboard_slider' based on original code
-            }
-        } else {
-            console.log("Meteor-user0");
-            BlazeLayout.render('layout', { main: 'home' }); // Render 'home' for guests
-        }
-    }
-});
-
-
-appRoutes.route('/login-admin', {
-    name: 'login-admin',
-    action: function() {
-        if (!Meteor.userAsync()) {
-            BlazeLayout.render('layout', { main: 'login' });
-        } else {
-            FlowRouter.go('consent'); // Corrected from this.redirect
-        }
-    }
-});
-
-appRoutes.route('/signup', {
-    name: 'signup',
-    action: function() {
-        if (!Meteor.userAsync()) {
-            BlazeLayout.render('layout', { main: 'signup' });
-        } else {
-            BlazeLayout.render('layout', { main: 'loading_wheel' }); // Render loading wheel
-            FlowRouter.go('/galileo/consent');
-        }
-    }
-});
-
-appRoutes.route('/login-admin1', {
-    name: 'login-admin1',
-    action: function() {
-        if (!Meteor.userAsync()) {
-            BlazeLayout.render('layout', { main: 'new_login' });
-        } else {
-            FlowRouter.go('consent');
-        }
-    }
-});
-
-appRoutes.route('/consent', {
-    name: 'consent',
-    action: function() {
-        if (!Meteor.userAsync()?.profile?.consent_agreed) { // Optional chaining for safety
-            Meteor.call("galileo.profile.updateProfile");
-            BlazeLayout.render('layout', { main: 'consent' });
-        } else {
-            FlowRouter.go('/intro');
-        }
-    }
-});
-
-appRoutes.route('/tutorial', {
-    name: 'tutorial',
-    action: function() {
-        BlazeLayout.render('layout', { main: 'tutorial' });
-    }
-});
-
-appRoutes.route('/gutboard', {
-    name: 'gutboard',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            // if (Meteor.userAsync()?.profile?.questions?.length == 1 && Meteor.userAsync()?.profile?.intro_completed) {
-            //     FlowRouter.go('/addq');
-            //     showToast('You need to add one other question before accessing the entire Gut Instinct content', 4000);
-            //     return;
-            // }
-            if (Meteor.userAsync()?.profile?.condition != 7) {
-                BlazeLayout.render('layout', {
-                    main: 'gutboard_slider',
-                    data: { mendelcode: "AmericanGutProject" }
-                });
-            }
-        } catch (e) {
-            console.error("Error in /gutboard route:", e);
-        }
-    },
-    waitOn: function() { // Add subscriptions relevant to this route here
-        // Example: Meteor.subscribe('someGutboardData');
-        return [];
-    }
-});
-
-appRoutes.route('/gutboard/:mendelcode', {
-    name: 'gutboard_with_code',
-    action: function(params) {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            // if (Meteor.userAsync()?.profile?.questions?.length == 1 && Meteor.userAsync()?.profile?.intro_completed) {
-            //     FlowRouter.go('/addq');
-            //     showToast('You need to add one other question before accessing the entire Gut Instinct content', 4000);
-            //     return;
-            // }
-            if (Meteor.userAsync()?.profile?.condition != 7) {
-                BlazeLayout.render('layout', {
-                    main: 'gutboard_slider',
-                    data: { mendelcode: params.mendelcode }
-                });
-            }
-        } catch (e) {
-            console.error("Error in /gutboard/:mendelcode route:", e);
-        }
-    },
-    waitOn: function() {
-        // Example: Meteor.subscribe('someGutboardData', this.params.mendelcode);
-        return [];
-    }
-});
-
-appRoutes.route('/gutboard/:mendelcode/search', {
-    name: 'gutboard_search',
-    action: function(params, queryParams) {
-        BlazeLayout.render('layout', {
-            main: 'gutboard_search',
-            data: {
-                mendelcode: params.mendelcode,
-                searchQuery: queryParams.q
+                console.log("Meteor-user0");
+                BlazeLayout.render('layout', { main: 'home' });
             }
         });
     }
 });
 
-appRoutes.route('/addq', {
-    name: 'addq',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
+// Public routes
+publicRoutes.route('/login-admin', {
+    name: 'login-admin',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            const loggingIn = Meteor.loggingIn();
+            
+            if (loggingIn) {
+                BlazeLayout.render('layout', { main: 'loading_wheel' });
                 return;
             }
-
-            const userProfile = Meteor.userAsync()?.profile;
-            if (userProfile && userProfile.intro_completed && !userProfile.guide_completed &&
-                (userProfile.condition == 10 || userProfile.condition == 11)) {
-                FlowRouter.go('/guide');
-                showToast('Before asking more questions, just complete this quick guide about asking useful questions', 5000);
-                return;
-            }
-
-            if (userProfile && userProfile.condition != 7) {
-                BlazeLayout.render('layout', { main: 'gutboard_slider_addq' });
-            }
-        } catch (e) {
-            console.error("Error in /addq route:", e);
-        }
-    }
-});
-
-appRoutes.route('/gutboard_slider_addq', {
-    name: 'gutboard_slider_addq',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-
-            const userProfile = Meteor.userAsync()?.profile;
-            if (userProfile && userProfile.intro_completed && !userProfile.guide_completed) {
-                FlowRouter.go('/guide');
-                showToast('Before asking more questions, just complete this quick guide about asking useful questions', 5000);
-                return;
-            }
-
-            if (userProfile && userProfile.condition != 7) {
-                BlazeLayout.render('layout', { main: 'gutboard_slider_addq' });
-            }
-        } catch (e) {
-            console.error("Error in /gutboard_slider_addq route:", e);
-        }
-    }
-});
-
-appRoutes.route('/gutboard_old', {
-    name: 'gutboard_old',
-    action: function() {
-        const user = Meteor.userAsync();
-        const condition = user?.profile?.condition;
-
-        if (condition == 1) {
-            FlowRouter.go('problems');
-            return;
-        }
-        BlazeLayout.render('layout', { main: 'gutboard' });
-    }
-});
-
-appRoutes.route('/gutboard_slider', {
-    name: 'gutboard_slider',
-    action: function() {
-        const user = Meteor.userAsync();
-        if (!user) {
-            console.log("Meteor-userg");
-            FlowRouter.go('/galileo/home'); // Redirect if no user (should be caught by global trigger but good for robustness)
-            return;
-        }
-
-        if (checkUserProfileAndRedirect(FlowRouter.go)) {
-            return;
-        }
-
-        const condition = user.profile.condition;
-        if (condition == 1 || condition == 8) {
-            BlazeLayout.render('layout', { main: 'gutboard_slider' });
-        } else {
-            if (!user.profile.guide_completed) {
-                FlowRouter.go('/guide');
+            
+            computation.stop();
+            
+            if (!user) {
+                BlazeLayout.render('layout', { main: 'login' });
             } else {
-                BlazeLayout.render('layout', { main: 'gutboard_slider' });
+                FlowRouter.go('/consent');
             }
-        }
+        });
     }
 });
 
-appRoutes.route('/problems', {
+publicRoutes.route('/signup', {
+    name: 'signup',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            const loggingIn = Meteor.loggingIn();
+            
+            if (loggingIn) {
+                BlazeLayout.render('layout', { main: 'loading_wheel' });
+                return;
+            }
+            
+            computation.stop();
+            
+            if (!user) {
+                BlazeLayout.render('layout', { main: 'signup' });
+            } else {
+                BlazeLayout.render('layout', { main: 'loading_wheel' });
+                FlowRouter.go('/galileo/consent');
+            }
+        });
+    }
+});
+
+publicRoutes.route('/login-admin1', {
+    name: 'login-admin1',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            const loggingIn = Meteor.loggingIn();
+            
+            if (loggingIn) {
+                BlazeLayout.render('layout', { main: 'loading_wheel' });
+                return;
+            }
+            
+            computation.stop();
+            
+            if (!user) {
+                BlazeLayout.render('layout', { main: 'new_login' });
+            } else {
+                FlowRouter.go('/consent');
+            }
+        });
+    }
+});
+
+// Authenticated routes
+authenticatedRoutes.route('/consent', {
+    name: 'consent',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return; // Will be handled by triggersEnter
+            
+            computation.stop();
+            
+            if (!user.profile?.consent_agreed) {
+                Meteor.call("galileo.profile.updateProfile");
+                BlazeLayout.render('layout', { main: 'consent' });
+            } else {
+                FlowRouter.go('/intro');
+            }
+        });
+    }
+});
+
+authenticatedRoutes.route('/tutorial', {
+    name: 'tutorial',
+    action() {
+        BlazeLayout.render('layout', { main: 'tutorial' });
+    }
+});
+
+authenticatedRoutes.route('/gutboard', {
+    name: 'gutboard',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
+                if (user.profile?.condition != 7) {
+                    BlazeLayout.render('layout', {
+                        main: 'gutboard_slider'
+                    }, {
+                        mendelcode: "AmericanGutProject"
+                    });
+                }
+            } catch (e) {
+                console.error("Error in /gutboard route:", e);
+            }
+        });
+    }
+});
+
+authenticatedRoutes.route('/gutboard/:mendelcode', {
+    name: 'gutboard_with_code',
+    action(params) {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
+                if (user.profile?.condition != 7) {
+                    BlazeLayout.render('layout', {
+                        main: 'gutboard_slider'
+                    }, {
+                        mendelcode: params.mendelcode
+                    });
+                }
+            } catch (e) {
+                console.error("Error in /gutboard/:mendelcode route:", e);
+            }
+        });
+    }
+});
+
+authenticatedRoutes.route('/gutboard/:mendelcode/search', {
+    name: 'gutboard_search',
+    action(params, queryParams) {
+        BlazeLayout.render('layout', {
+            main: 'gutboard_search'
+        }, {
+            mendelcode: params.mendelcode,
+            searchQuery: queryParams.q
+        });
+    }
+});
+
+authenticatedRoutes.route('/addq', {
+    name: 'addq',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+
+                const userProfile = user.profile;
+                if (userProfile && userProfile.intro_completed && !userProfile.guide_completed &&
+                    (userProfile.condition == 10 || userProfile.condition == 11)) {
+                    FlowRouter.go('/guide');
+                    showToast('Before asking more questions, just complete this quick guide about asking useful questions', 5000);
+                    return;
+                }
+
+                if (userProfile && userProfile.condition != 7) {
+                    BlazeLayout.render('layout', { main: 'gutboard_slider_addq' });
+                }
+            } catch (e) {
+                console.error("Error in /addq route:", e);
+            }
+        });
+    }
+});
+
+authenticatedRoutes.route('/gutboard_slider_addq', {
+    name: 'gutboard_slider_addq',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+
+                const userProfile = user.profile;
+                if (userProfile && userProfile.intro_completed && !userProfile.guide_completed) {
+                    FlowRouter.go('/guide');
+                    showToast('Before asking more questions, just complete this quick guide about asking useful questions', 5000);
+                    return;
+                }
+
+                if (userProfile && userProfile.condition != 7) {
+                    BlazeLayout.render('layout', { main: 'gutboard_slider_addq' });
+                }
+            } catch (e) {
+                console.error("Error in /gutboard_slider_addq route:", e);
+            }
+        });
+    }
+});
+
+authenticatedRoutes.route('/gutboard_old', {
+    name: 'gutboard_old',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            const condition = user.profile?.condition;
+            if (condition == 1) {
+                FlowRouter.go('/problems');
+                return;
+            }
+            BlazeLayout.render('layout', { main: 'gutboard' });
+        });
+    }
+});
+
+authenticatedRoutes.route('/gutboard_slider', {
+    name: 'gutboard_slider',
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) {
+                computation.stop();
+                console.log("Meteor-userg");
+                FlowRouter.go('/galileo/home');
+                return;
+            }
+            
+            computation.stop();
+
+            if (checkUserProfileAndRedirect()) {
+                return;
+            }
+
+            const condition = user.profile.condition;
+            if (condition == 1 || condition == 8) {
+                BlazeLayout.render('layout', { main: 'gutboard_slider' });
+            } else {
+                if (!user.profile.guide_completed) {
+                    FlowRouter.go('/guide');
+                } else {
+                    BlazeLayout.render('layout', { main: 'gutboard_slider' });
+                }
+            }
+        });
+    }
+});
+
+authenticatedRoutes.route('/problems', {
     name: 'problems',
-    action: function() {
-        const condition = Meteor.userAsync()?.profile?.condition;
-        if (condition != 1) {
-            FlowRouter.go('gutboard');
-            return;
-        }
-        BlazeLayout.render('layout', { main: 'problems' });
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            const condition = user.profile?.condition;
+            if (condition != 1) {
+                FlowRouter.go('/gutboard');
+                return;
+            }
+            BlazeLayout.render('layout', { main: 'problems' });
+        });
     }
 });
 
-appRoutes.route('/articles', {
+authenticatedRoutes.route('/articles', {
     name: 'articles',
-    action: function() {
-        const condition = Meteor.userAsync()?.profile?.condition;
-        if (condition != 2) {
-            FlowRouter.go('gutboard');
-            return;
-        }
-        BlazeLayout.render('layout', { main: 'articles' });
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            const condition = user.profile?.condition;
+            if (condition != 2) {
+                FlowRouter.go('/gutboard');
+                return;
+            }
+            BlazeLayout.render('layout', { main: 'articles' });
+        });
     }
 });
 
-appRoutes.route('/bookmark', {
+authenticatedRoutes.route('/bookmark', {
     name: 'bookmark',
-    action: function() {
-        const condition = Meteor.userAsync()?.profile?.condition;
-        if (false && condition != 1) { // This condition is always false, mirroring original
-            FlowRouter.go('gutboard');
-            return;
-        }
-        BlazeLayout.render('layout', { main: 'bookmark' });
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            const condition = user.profile?.condition;
+            if (false && condition != 1) {
+                FlowRouter.go('/gutboard');
+                return;
+            }
+            BlazeLayout.render('layout', { main: 'bookmark' });
+        });
     }
 });
 
-appRoutes.route('/welcome', {
+authenticatedRoutes.route('/welcome', {
     name: 'welcome',
-    action: function() {
-        // Using setTimeout here to mimic original async behavior, though
-        // FlowRouter's `waitOn` and `action` are synchronous after subs ready.
-        // If this relies on `Meteor.userAsync` being ready, use `waitOn`.
-        this.autorun(() => {
-            const user = Meteor.userAsync();
+    action() {
+        BlazeLayout.render('layout', { main: 'loading_wheel' });
+        
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
             if (!user) {
                 console.log("Meteor-userw");
-                // The global checkLoggedIn trigger should handle this if user is not logged in.
                 return;
             }
 
+            computation.stop();
+            
             const username = user.username;
             const TestResult = UserTestResponse.findOne({ "username": username });
 
@@ -422,324 +506,378 @@ appRoutes.route('/welcome', {
                 FlowRouter.go('/username');
             } else {
                 FlowRouter.go('/gutboard');
-                // FlowRouter.go('/t/introduction'); // If this is the desired path
             }
-            this.stop(); // Stop autorun after the check
         });
-        BlazeLayout.render('layout', { main: 'loading_wheel' }); // Render loading while checking
     }
 });
 
-appRoutes.route('/welcome_uncheck', {
+authenticatedRoutes.route('/welcome_uncheck', {
     name: 'welcome_uncheck',
-    action: function() {
-        const currentUser = Meteor.userAsync();
-        if (!currentUser) {
-            FlowRouter.go('/galileo/home'); // Or login page
-            return;
-        }
-        const currentUsername = currentUser.username;
-        const fetchResult = UserEmail.findOne({ "username": currentUsername });
+    action() {
+        Tracker.autorun((computation) => {
+            const currentUser = Meteor.user();
+            if (!currentUser) {
+                computation.stop();
+                FlowRouter.go('/galileo/home');
+                return;
+            }
+            
+            computation.stop();
+            
+            const currentUsername = currentUser.username;
+            const fetchResult = UserEmail.findOne({ "username": currentUsername });
 
-        if (fetchResult == undefined) {
-            UserEmail.insert({
-                username: currentUsername,
-                agree: 0,
-                email: "",
-                agid: ""
-            });
-        }
-        BlazeLayout.render('layout', { main: 'welcome' });
+            if (fetchResult == undefined) {
+                UserEmail.insert({
+                    username: currentUsername,
+                    agree: 0,
+                    email: "",
+                    agid: ""
+                });
+            }
+            BlazeLayout.render('layout', { main: 'welcome' });
+        });
     }
 });
 
-appRoutes.route('/welcome_step1', {
+authenticatedRoutes.route('/welcome_step1', {
     name: 'welcome_step1',
-    action: function() {
-        FlowRouter.go('welcome_step2');
+    action() {
+        FlowRouter.go('/welcome_step2');
     }
 });
 
-appRoutes.route('/username', {
+authenticatedRoutes.route('/username', {
     name: 'username',
-    action: function() {
+    action() {
         BlazeLayout.render('layout', { main: 'username' });
     }
 });
 
-appRoutes.route('/telluswhatyouknownow', {
+authenticatedRoutes.route('/telluswhatyouknownow', {
     name: 'telluswhatyouknownow',
-    action: function() {
+    action() {
         BlazeLayout.render('layout', { main: 'telluswhatyouknownow' });
     }
 });
 
-appRoutes.route('/trial', {
+authenticatedRoutes.route('/trial', {
     name: 'trial',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            if (Meteor.userAsync()) {
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
                 BlazeLayout.render('layout', {
-                    main: 'trial',
-                    data: { type: "pre" }
+                    main: 'trial'
+                }, {
+                    type: "pre"
                 });
+            } catch (e) {
+                console.error("Error in /trial route:", e);
             }
-        } catch (e) {
-            console.error("Error in /trial route:", e);
-        }
+        });
     }
 });
 
-appRoutes.route('/survey', {
+authenticatedRoutes.route('/survey', {
     name: 'survey',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            if (Meteor.userAsync()) {
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
                 BlazeLayout.render('layout', {
-                    main: 'post_survey',
-                    data: { type: "post" }
+                    main: 'post_survey'
+                }, {
+                    type: "post"
                 });
+            } catch (e) {
+                console.error("Error in /survey route:", e);
             }
-        } catch (e) {
-            console.error("Error in /survey route:", e);
-        }
+        });
     }
 });
 
-appRoutes.route('/check', {
+authenticatedRoutes.route('/check', {
     name: 'check',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            if (Meteor.userAsync()) {
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
                 BlazeLayout.render('layout', {
-                    main: 'trial',
-                    data: { type: "post" }
+                    main: 'trial'
+                }, {
+                    type: "post"
                 });
+            } catch (e) {
+                console.error("Error in /check route:", e);
             }
-        } catch (e) {
-            console.error("Error in /check route:", e);
-        }
+        });
     }
 });
 
-appRoutes.route('/posttest', {
+authenticatedRoutes.route('/posttest', {
     name: 'posttest',
-    action: function() {
+    action() {
         BlazeLayout.render('layout', { main: 'posttest' });
     }
 });
 
-appRoutes.route('/welcome_step2', {
+authenticatedRoutes.route('/welcome_step2', {
     name: 'welcome_step2',
-    action: function() {
+    action() {
         BlazeLayout.render('layout', { main: 'welcome_step2' });
     }
 });
 
-appRoutes.route('/t/:name', {
-    name: 'tag', // Using 'tag' as the route name based on your render
-    action: function(params) {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            // if (Meteor.userAsync()?.profile?.questions?.length == 1 && Meteor.userAsync()?.profile?.intro_completed) {
-            //     FlowRouter.go('/addq');
-            //     showToast('You need to add one other question before accessing the entire Gut Instinct content', 4000);
-            //     return;
-            // }
-            if (Meteor.userAsync()) {
+authenticatedRoutes.route('/t/:name', {
+    name: 'tag',
+    action(params) {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
                 BlazeLayout.render('layout', {
-                    main: 'tag',
-                    data: {
-                        name: params.name,
-                        user: Meteor.userAsync().username
-                    }
+                    main: 'tag'
+                }, {
+                    name: params.name,
+                    user: user.username
                 });
+            } catch (e) {
+                console.error("Error in /t/:name route:", e);
             }
-        } catch (e) {
-            console.error("Error in /t/:name route:", e);
-        }
+        });
     }
 });
 
-appRoutes.route('/personal_question/:name', {
+authenticatedRoutes.route('/personal_question/:name', {
     name: 'personal_question',
-    action: function(params) {
+    action(params) {
         BlazeLayout.render('layout', {
-            main: 'personal_tag_question',
-            data: {
-                name: params.name
-            }
+            main: 'personal_tag_question'
+        }, {
+            name: params.name
         });
     }
 });
 
-appRoutes.route('/personal/:name', {
-    name: 'personal_page', // Using a different name to distinguish from personal_question/:name
-    action: function(params) {
+authenticatedRoutes.route('/personal/:name', {
+    name: 'personal_page',
+    action(params) {
         BlazeLayout.render('layout', {
-            main: 'personal_tag_question',
-            data: {
-                name: params.name
-            }
+            main: 'personal_tag_question'
+        }, {
+            name: params.name
         });
     }
 });
 
-appRoutes.route('/guide_question', {
+authenticatedRoutes.route('/guide_question', {
     name: 'guide_question',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            if (Meteor.userAsync()) {
-                const userProfile = Meteor.userAsync().profile;
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
+                const userProfile = user.profile;
                 const condition = userProfile.condition;
                 if ([3, 4, 5, 6, 0, 10, 11].includes(condition)) {
                     BlazeLayout.render('layout', {
-                        main: 'guide_question_info',
-                        data: { name: Meteor.userAsync().username }
+                        main: 'guide_question_info'
+                    }, {
+                        name: user.username
                     });
                 }
+            } catch (e) {
+                console.error("Error in /guide_question route:", e);
             }
-        } catch (e) {
-            console.error("Error in /guide_question route:", e);
-        }
+        });
     }
 });
 
-appRoutes.route('/guide', {
+authenticatedRoutes.route('/guide', {
     name: 'guide',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            if (Meteor.userAsync()) {
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
                 BlazeLayout.render('layout', {
-                    main: 'guide_question_welcome',
-                    data: { name: Meteor.userAsync().username }
+                    main: 'guide_question_welcome'
+                }, {
+                    name: user.username
                 });
+            } catch (e) {
+                console.error("Error in /guide route:", e);
             }
-        } catch (e) {
-            console.error("Error in /guide route:", e);
-        }
+        });
     }
 });
 
-appRoutes.route('/guide_bin', {
+authenticatedRoutes.route('/guide_bin', {
     name: 'guide_bin',
-    action: function() {
+    action() {
         BlazeLayout.render('layout', { main: 'guide_question_bin' });
     }
 });
 
-appRoutes.route('/guide_result', {
+authenticatedRoutes.route('/guide_result', {
     name: 'guide_result',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            if (Meteor.userAsync()) {
-                const condition = Meteor.userAsync().profile.condition;
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
+                const condition = user.profile.condition;
                 if ([3, 4, 5, 6, 0, 10, 11].includes(condition)) {
                     BlazeLayout.render('layout', { main: 'guide_question_result' });
                 }
+            } catch (e) {
+                console.error("Error in /guide_result route:", e);
             }
-        } catch (e) {
-            console.error("Error in /guide_result route:", e);
-        }
-    }
-});
-
-appRoutes.route('/personal_welcome', {
-    name: 'personal_welcome',
-    action: function() {
-        BlazeLayout.render('layout', { main: 'personal_question_bin' });
-    }
-});
-
-appRoutes.route('/q/:hashcode', {
-    name: 'question',
-    action: function(params) {
-        BlazeLayout.render('layout', {
-            main: 'question',
-            data: { hashcode: params.hashcode }
         });
     }
 });
 
-appRoutes.route('/p/:hashcode', {
-    name: 'learn_problem',
-    action: function(params) {
-        BlazeLayout.render('layout', {
-            main: 'learn_problem',
-            data: { hashcode: params.hashcode }
-        } );
+authenticatedRoutes.route('/personal_welcome', {
+    name: 'personal_welcome',
+    action() {
+        BlazeLayout.render('layout', { main: 'personal_question_bin' });
     }
 });
 
-FlowRouter.route('/logout', { // This route is outside appRoutes because it handles logout before triggers
+authenticatedRoutes.route('/q/:hashcode', {
+    name: 'question',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'question'
+        }, {
+            hashcode: params.hashcode
+        });
+    }
+});
+
+authenticatedRoutes.route('/p/:hashcode', {
+    name: 'learn_problem',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'learn_problem'
+        }, {
+            hashcode: params.hashcode
+        });
+    }
+});
+
+// Public logout route
+publicRoutes.route('/logout', {
     name: 'logout',
-    action: function() {
-        BlazeLayout.render('layout', { main: 'loading_wheel' }); // Show loading immediately
+    action() {
+        BlazeLayout.render('layout', { main: 'loading_wheel' });
+        
         Meteor.call('galileo.profile.setMendel', localStorage.getItem('mendelcode_ga'), function(error, result) {
             Meteor.logout(function(err) {
                 if (err || error) console.error('Error logging out:', err || error);
             });
             sessionStorage.clear();
             localStorage.clear();
-            FlowRouter.go('/galileo/home'); // Redirect after logout
+            FlowRouter.go('/galileo/home');
         });
     }
 });
 
-FlowRouter.route('/test', { // Assuming this is a utility/dev route, might not need full appRoutes triggers
+// Test route
+FlowRouter.route('/test', {
     name: 'test',
-    action: function() {
+    action() {
         BlazeLayout.render('layout', { main: 'test' });
     }
 });
 
-FlowRouter.route('/landing', { // This is an exclusion from appRoutes
+// Landing route
+publicRoutes.route('/landing', {
     name: 'landing',
-    action: function(params) {
+    action(params, queryParams) {
         let landingURL = "";
-        if (params.query.accessURL === '/login-bin/landing.html') {
+        if (queryParams.accessURL === '/login-bin/landing.html') {
             landingURL = '/login-bin';
         } else {
-            landingURL = '/login-bin/landing.html?redirectAccess=' + params.query.accessURL;
+            landingURL = '/login-bin/landing.html?redirectAccess=' + queryParams.accessURL;
         }
-        // localStorage.setItem("condition", params.query.condition); // Uncomment if needed
         FlowRouter.go(landingURL);
     }
 });
 
-appRoutes.route('/intro', {
+authenticatedRoutes.route('/intro', {
     name: 'intro',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            if (Meteor.userAsync()) {
-                const userProfile = Meteor.userAsync().profile;
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
+                const userProfile = user.profile;
                 if (userProfile.intro_completed) {
                     FlowRouter.go('/gutboard');
                     return;
                 }
+                
                 let redirectURL = "/intro-bin/intro.html";
                 if (userProfile.condition) {
                     const condition = userProfile.condition;
@@ -750,38 +888,34 @@ appRoutes.route('/intro', {
                     else if (condition == 7) redirectURL = "/intro-bin/introduction.html";
                 }
                 FlowRouter.go(redirectURL);
+            } catch (e) {
+                console.error("Error in /intro route:", e);
             }
-        } catch (e) {
-            console.error("Error in /intro route:", e);
-        }
+        });
     }
 });
 
-FlowRouter.route('/login-error', { // This is an exclusion from appRoutes
+// Login error route
+publicRoutes.route('/login-error', {
     name: 'login-error',
-    action: function() {
+    action() {
         FlowRouter.go('/login-bin/landing.html?status=101');
     }
 });
 
-FlowRouter.route('/login-process', { // This is an exclusion from appRoutes
+// Login process route
+publicRoutes.route('/login-process', {
     name: 'login-process',
-    action: function(params) {
+    action(params, queryParams) {
         BlazeLayout.render('layout', { main: 'loading_wheel' });
 
-        // Note: promiseWait and CryptoJS are not standard Meteor/FlowRouter patterns for routes.
-        // If CryptoJS is available globally, it might work.
-        // For the promiseWait, FlowRouter actions are synchronous. If you need a delay,
-        // it's usually done before setting the data or rendering, or by wrapping async calls.
-        // This direct use of `promiseWait` inside an action might not behave as expected.
-        // I'm keeping it as close to your original as possible, but be aware.
         function promiseWait(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        const username = CryptoJS.AES.decrypt(params.query.hWf5Ae4xvLMxSQYN, "82rSvyNZRpdvsEJw").toString(CryptoJS.enc.Utf8);
-        const password = CryptoJS.AES.decrypt(params.query.FsheDddeK7c6UbEe, "82rSvyNZRpdvsEJw").toString(CryptoJS.enc.Utf8);
-        const redirectRouting = params.query.redirectURL;
+        const username = CryptoJS.AES.decrypt(queryParams.hWf5Ae4xvLMxSQYN, "82rSvyNZRpdvsEJw").toString(CryptoJS.enc.Utf8);
+        const password = CryptoJS.AES.decrypt(queryParams.FsheDddeK7c6UbEe, "82rSvyNZRpdvsEJw").toString(CryptoJS.enc.Utf8);
+        const redirectRouting = queryParams.redirectURL;
         let userRedirect = redirectRouting !== 'coldbrew';
 
         promiseWait(2000).then(() => {
@@ -789,7 +923,7 @@ FlowRouter.route('/login-process', { // This is an exclusion from appRoutes
                 if (err) {
                     FlowRouter.go('/login-error');
                 } else {
-                    const userProfile = Meteor.userAsync()?.profile; // Get user profile AFTER login
+                    const userProfile = Meteor.user()?.profile;
                     if (!userProfile?.consent_agreed) {
                         FlowRouter.go('/consent');
                     } else {
@@ -803,103 +937,344 @@ FlowRouter.route('/login-process', { // This is an exclusion from appRoutes
             });
         }).catch(e => {
             console.error("Error in login-process promiseWait:", e);
-            FlowRouter.go('/login-error'); // Handle potential errors from promiseWait if it throws
+            FlowRouter.go('/login-error');
         });
     }
 });
 
-appRoutes.route('/entrance', {
+authenticatedRoutes.route('/entrance', {
     name: 'entrance',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
+                const condition = user.profile.condition;
+                if (condition == 7 && user.profile.guide_completed) {
+                    FlowRouter.go('/topics');
+                } else if (condition == 7 && !user.profile.guide_completed) {
+                    FlowRouter.go('/guide');
+                } else {
+                    BlazeLayout.render('layout', { main: 'entrance' });
+                }
+            } catch (e) {
+                console.error("Error in /entrance route:", e);
             }
-            if (Meteor.userAsync()) {
-                const condition = Meteor.userAsync().profile.condition;
-                if (condition == 7 && Meteor.userAsync().profile.guide_completed) FlowRouter.go('/topics');
-                else if (condition == 7 && !Meteor.userAsync().profile.guide_completed) FlowRouter.go('/guide');
-                else BlazeLayout.render('layout', { main: 'entrance' });
-            }
-        } catch (e) {
-            console.error("Error in /entrance route:", e);
-        }
+        });
     }
 });
 
-appRoutes.route('/profile', {
+authenticatedRoutes.route('/profile', {
     name: 'profile',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            // if (Meteor.userAsync()?.profile?.questions?.length == 1 && Meteor.userAsync()?.profile?.intro_completed) {
-            //     FlowRouter.go('/addq');
-            //     showToast('You need to add one other question before accessing the entire Gut Instinct content', 4000);
-            //     return;
-            // }
-            if (Meteor.userAsync()) {
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
                 BlazeLayout.render('layout', { main: 'profile' });
+            } catch (e) {
+                console.error("Error in /profile route:", e);
             }
-        } catch (e) {
-            console.error("Error in /profile route:", e);
-        }
+        });
     }
 });
 
-appRoutes.route('/topics', {
+authenticatedRoutes.route('/topics', {
     name: 'topics',
-    action: function() {
-        try {
-            if (checkUserProfileAndRedirect(FlowRouter.go)) {
-                return;
-            }
-            // if (Meteor.userAsync()?.profile?.questions?.length == 1 && Meteor.userAsync()?.profile?.intro_completed) {
-            //     FlowRouter.go('/addq');
-            //     showToast('You need to add one other question before accessing the entire Gut Instinct content', 4000);
-            //     return;
-            // }
-            if (Meteor.userAsync()) {
-                const condition = Meteor.userAsync().profile.condition;
+    action() {
+        Tracker.autorun((computation) => {
+            const user = Meteor.user();
+            if (!user) return;
+            
+            computation.stop();
+            
+            try {
+                if (checkUserProfileAndRedirect()) {
+                    return;
+                }
+                
+                const condition = user.profile.condition;
                 if ([2, 4, 6, 7, 0, 9, 11].includes(condition)) {
                     BlazeLayout.render('layout', { main: 'topics' });
                 }
+            } catch (e) {
+                console.error("Error in /topics route:", e);
             }
-        } catch (e) {
-            console.error("Error in /topics route:", e);
-        }
-    }
-});
-
-FlowRouter.route('/reset-password/:token', { // This is an exclusion from appRoutes
-    name: 'reset-password',
-    action: function(params) {
-        BlazeLayout.render('layout', {
-            main: 'reset_password',
-            data: { token: params.token }
         });
     }
 });
 
-appRoutes.route('/galileo/visualization', {
+// Reset password route
+publicRoutes.route('/reset-password/:token', {
+    name: 'reset-password',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'reset_password'
+        }, {
+            token: params.token
+        });
+    }
+});
+
+authenticatedRoutes.route('/galileo/visualization', {
     name: 'galileo.visualization',
-    action: function() {
+    action() {
         BlazeLayout.render('layout', { main: 'emperorVisualization' });
     }
 });
 
-
-// Define other excluded routes explicitly if they need specific actions
-// For example, if 'galileo.home' is a real route with a template
-FlowRouter.route('/galileo/home', {
+// Galileo home route
+publicRoutes.route('/galileo/home', {
     name: 'galileo.home',
-    action: function() {
-        BlazeLayout.render('layout', { main: 'home' }); // Or your specific Galileo home template
+    action() {
+        BlazeLayout.render('layout', { main: 'home' });
     }
 });
 
-// Add other routes from the `except` list if they are expected to render content
-// For example:
-// FlowRouter.route('/galileo/signup', { name: 'galileo.signup', action: function() { BlazeLayout.render('layout', { main: 'galileo_signup_template' }); } });
-// ... and so on for all your named routes in the 'except' list
+// Additional public routes that might need specific implementations
+publicRoutes.route('/galileo/signup', {
+    name: 'galileo.signup',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_signup' });
+    }
+});
+
+publicRoutes.route('/galileo/landing', {
+    name: 'galileo.landing',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_landing' });
+    }
+});
+
+publicRoutes.route('/galileo/browse', {
+    name: 'galileo.browse',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_browse' });
+    }
+});
+
+publicRoutes.route('/galileo/experiment/:id?', {
+    name: 'galileo.experiment',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'galileo_experiment'
+        }, {
+            experimentId: params.id
+        });
+    }
+});
+
+publicRoutes.route('/galileo/share/review/:id', {
+    name: 'galileo.share.review',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'galileo_share_review'
+        }, {
+            experimentId: params.id
+        });
+    }
+});
+
+publicRoutes.route('/galileo/share/review/guest/:id', {
+    name: 'galileo.share.review.guest',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'galileo_share_review_guest'
+        }, {
+            experimentId: params.id
+        });
+    }
+});
+
+publicRoutes.route('/galileo/experiment/feedback/:id', {
+    name: 'galileo.experiment.feedback',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'galileo_experiment_feedback'
+        }, {
+            experimentId: params.id
+        });
+    }
+});
+
+publicRoutes.route('/galileo/join/consent/:id', {
+    name: 'galileo.join.consent',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'galileo_join_consent'
+        }, {
+            experimentId: params.id
+        });
+    }
+});
+
+publicRoutes.route('/galileo/join', {
+    name: 'galileo.join',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_join' });
+    }
+});
+
+publicRoutes.route('/galileo/join/criteria/:id', {
+    name: 'galileo.join.criteria',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'galileo_join_criteria'
+        }, {
+            experimentId: params.id
+        });
+    }
+});
+
+publicRoutes.route('/galileo/share/join/:id', {
+    name: 'galileo.share.join',
+    action(params) {
+        BlazeLayout.render('layout', {
+            main: 'galileo_share_join'
+        }, {
+            experimentId: params.id
+        });
+    }
+});
+
+// Blog routes
+publicRoutes.route('/galileo/blog/why-exp', {
+    name: 'galileo.blog.why-exp',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-openhumans', {
+    name: 'galileo.blog.why-exp-openhumans',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_openhumans' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-lyme', {
+    name: 'galileo.blog.why-exp-lyme',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_lyme' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-kefir', {
+    name: 'galileo.blog.why-exp-kefir',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_kefir' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-T1D', {
+    name: 'galileo.blog.why-exp-T1D',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_t1d' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-kombucha', {
+    name: 'galileo.blog.why-exp-kombucha',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_kombucha' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/tutorial', {
+    name: 'galileo.blog.tutorial',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_tutorial' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-agp', {
+    name: 'galileo.blog.why-exp-agp',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_agp' });
+    }
+});
+
+publicRoutes.route('/galileo/me/datasheet', {
+    name: 'galileo.me.datasheet',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_me_datasheet' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-gut-check', {
+    name: 'galileo.blog.why-exp-gut-check',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_gut_check' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-soylent', {
+    name: 'galileo.blog.why-exp-soylent',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_soylent' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-diet', {
+    name: 'galileo.blog.why-exp-diet',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_diet' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-beer', {
+    name: 'galileo.blog.why-exp-beer',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_beer' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-spice', {
+    name: 'galileo.blog.why-exp-spice',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_spice' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-circadian', {
+    name: 'galileo.blog.why-exp-circadian',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_circadian' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-nerdnite', {
+    name: 'galileo.blog.why-exp-nerdnite',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_nerdnite' });
+    }
+});
+
+publicRoutes.route('/galileo/blog/why-exp-probiotics', {
+    name: 'galileo.blog.why-exp-probiotics',
+    action() {
+        BlazeLayout.render('layout', { main: 'galileo_blog_why_exp_probiotics' });
+    }
+});
+
+// Auth OpenHumans route
+publicRoutes.route('/auth_openhumans', {
+    name: 'auth_openhumans',
+    action() {
+        BlazeLayout.render('layout', { main: 'auth_openhumans' });
+    }
+});
