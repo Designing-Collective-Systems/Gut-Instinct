@@ -33,6 +33,7 @@ import './templates/entrance/_.js';
 import './templates/galileo/create/imageModal/_.js'
 import './templates/galileo/create/helpLayout/_.js'
 import './templates/galileo/pageFooter/_.js'
+import './templates/docent/loading_wheel/_.js'
 
 // Galileo assets templates
 import './templates/galileo/assets/editable/_.js';
@@ -159,3 +160,4 @@ import './templates/galileo/openHumans/openHumansDataSourceModal/_.js';
 
 // Docent templates
 import './templates/docent/master.js';
+import './templates/docent/loading_wheel/_.js'
