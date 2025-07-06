@@ -29,6 +29,11 @@ import './templates/landing/_.js';
 import './templates/consent/_.js';
 import './templates/entrance/_.js';
 
+// 
+import './templates/galileo/create/imageModal/_.js'
+import './templates/galileo/create/helpLayout/_.js'
+import './templates/galileo/pageFooter/_.js'
+
 // Galileo assets templates
 import './templates/galileo/assets/editable/_.js';
 import './templates/galileo/assets/fileUploadBtn/_.js';
