@@ -4,9 +4,9 @@ import fs from 'fs/promises'; // Use promises-based fs API
 import { Meteor } from 'meteor/meteor';
 
 // Import your collections
-import { SurveyQuestions } from '../imports/api/survey-questions.js';
-import { Boards } from '../imports/api/boards.js';
-import { Examples } from '../imports/api/examples.js';
+import { SurveyQuestions } from '../imports/api/server/surveyQuestions.js';
+import { Boards } from '../imports/api/ga-models/boards.js';
+import { Examples } from '../imports/api/ga-models/examples.js';
 
 function abs(p) {
   // always resolves to <projectRoot>/script/source/<file>

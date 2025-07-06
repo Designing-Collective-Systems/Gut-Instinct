@@ -1,6 +1,7 @@
 import './_.html';
 import { Template } from 'meteor/templating';
-
+import { Session } from 'meteor/session';
+import { Meteor } from 'meteor/meteor';
 
 Template.gaHome.onCreated(function() {
     Session.setDefault('isDemo', true);
@@ -27,15 +28,19 @@ Template.gaHome.events({
     'click #exampleExp': function() {
         $("#image-modal").modal('open');
     },
-    'click #designExp': function() {
-        if (Meteor.user()) {
+    // This event handler needs to be async
+    'click #designExp': async function() {
+        // Use the async version to get the user
+        if (await Meteor.userAsync()) {
             window.location.href = '/galileo/createdemo'
         } else {
             $('#sign-in-modal').modal('open');
         }
     },
-    'click #browseAll': function() {
-        if (Meteor.user()) {
+    // This event handler needs to be async
+    'click #browseAll': async function() {
+        // Use the async version to get the user
+        if (await Meteor.userAsync()) {
             window.location.href = '/galileo/browse'
         } else {
             // $('#sign-in-modal').modal('open');
