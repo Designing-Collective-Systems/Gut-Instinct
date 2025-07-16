@@ -34,7 +34,7 @@ import './templates/galileo/create/helpLayout/_.js'
 import './templates/galileo/pageFooter/_.js'
 import './templates/docent/loading_wheel/_.js'
 import './templates/galileo/question/_.js';
-import './templates/galileo/visualization/mainfile.js';
+import './templates/visualization.html';
 
 
 import './templates/galileo/assets/editable/_.js';
