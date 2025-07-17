@@ -2,13 +2,13 @@ import pandas as pd
 import os
 import sys
 
-def load_imsms_data():
+def load_imsms_data(variable2):
     """
     Load and merge iMSMS dataset files.
     
     Returns:
         tuple: (demographic_data, sheet6_class) where:
-            - demographic_data: merged demographic and clinical data (excluding specified columns)
+            - demographic_data: merged demographic and clinical data (including only specified columns)
             - sheet6_class: taxonomic data for the specified dependent variable
     """
     # Get the directory where this script is located
@@ -48,7 +48,7 @@ def load_imsms_data():
     sheet3 = pd.read_excel(S3_PATH, sheet_name='Dataset S3')
     sheet5_1 = pd.read_excel(S5_PATH, sheet_name='Dataset S5.1')
     
-    dependentvar = 'species'
+    dependentvar = variable2
     sheet6_class = pd.read_excel(S6_PATH, sheet_name=dependentvar)
     
     # Merge the demographic data
@@ -58,16 +58,16 @@ def load_imsms_data():
                        .merge(sheet5_1, on='iMSMS_ID', how='left')
                        )
     
-    # Columns to exclude from demographic data
-    columns_to_exclude = ['household', 'disease_course', 'treatment_status', 'treatments']
+    # Columns to include in demographic data (plus iMSMS_ID for merging)
+    columns_to_include = ['Age', 'Residence', 'Smoking Status', 'Sex', 'iMSMS_ID', 'Disease']
     
-    # Remove specified columns if they exist in the dataframe
-    existing_columns_to_exclude = [col for col in columns_to_exclude if col in demographic_data.columns]
-    if existing_columns_to_exclude:
-        demographic_data = demographic_data.drop(columns=existing_columns_to_exclude)
-        print(f"Excluded columns: {existing_columns_to_exclude}")
+    # Keep only specified columns if they exist in the dataframe
+    existing_columns_to_include = [col for col in columns_to_include if col in demographic_data.columns]
+    if existing_columns_to_include:
+        demographic_data = demographic_data[existing_columns_to_include]
+        print(f"Included columns: {existing_columns_to_include}")
     else:
-        print("None of the specified columns to exclude were found in the demographic data")
+        print("None of the specified columns to include were found in the demographic data")
     
     # print(demographic_data.columns)
     

@@ -56,7 +56,7 @@ def classify_residence(df, column_name):
 def classify_residence_and_disease(df, residence_column, disease_column):
     """Classify residence and disease into alphabetical categories"""
     def categorize_residence(residence_value, disease_value):
-        print(f"Residence: {residence_value}, Disease: {disease_value}")
+        # print(f"Residence: {residence_value}, Disease: {disease_value}")
         if pd.isna(residence_value) or pd.isna(disease_value):
             return "g. nan"
         try:

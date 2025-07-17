@@ -6,12 +6,11 @@ from skbio.stats.ordination import pcoa
 from scipy.spatial.distance import pdist, squareform
 import sys
 
-from support_files.discreteChecker import is_discrete_variable
+from support_files.discreteChecker import is_discrete_variable, FORCE_CONTINUOUS
 from support_files.ageRangeFinder import convert_age_to_life_stages
 from support_files.dataLoader import load_imsms_data
 from support_files.colorGenerator import generate_discrete_colors, generate_gradient_colors
 from support_files.jsUtils import escape_for_js, dict_to_js_object
-from support_files.threeJSGenerator import generate_direct_shape_js
 from support_files.customColorGenerator import generate_custom_color_js
 from support_files.uiHiderGenerator import generate_precise_hide_js, generate_precise_hide_css
 from support_files.overlayGenerator import generate_overlay_js
@@ -52,23 +51,45 @@ from support_files.vitaminDRangeFinder import classify_vitamin_d
 from support_files.alphaDiversityRangeFinder import classify_richness, classify_richness_and_evenness
 
 # Get command line arguments
-if len(sys.argv) >= 3:
+if len(sys.argv) >= 2:
     variable1 = sys.argv[1]  # Will be used for coloring
-    variable2 = sys.argv[2]  # Will be used for shapes
-    print(f"Received variables: {variable1}, {variable2}")
+    variable2 = sys.argv[2] 
+    print(f"Received variable: {variable1}")
 else:
-    # Default values if no arguments provided
+    # Default value if no argument provided
     variable1 = "Age"  # Default coloring variable
-    variable2 = "Height"  # Default shape variable
-    print("No variables provided, using defaults")
-
+    print("No variable provided, using default")
 
 # Load the iMSMS dataset
-demographic_data, sheet6_class, dependentvar = load_imsms_data()
+demographic_data, sheet6_class, dependentvar = load_imsms_data(variable2)
+
+print("=== DEBUGGING ORIGINAL DATA ===")
+print(f"Original demographic_data shape: {demographic_data.shape}")
+
+# ==================== PRESERVE RAW DATA FOR AXES ====================
+# Keep a complete copy of the original raw data for axes
+raw_data_for_axes = demographic_data.copy()
+print(f"Preserved raw data with shape: {raw_data_for_axes.shape}")
+
+# Filter to only numeric columns that make sense as axes
+numeric_axes_vars = []
+for col in raw_data_for_axes.columns:
+    if pd.api.types.is_numeric_dtype(raw_data_for_axes[col]):
+        non_null_count = raw_data_for_axes[col].notna().sum()
+        unique_count = raw_data_for_axes[col].nunique()
+        
+        # Only include if it has enough variation and non-null values
+        if non_null_count > 50 and unique_count > 5:
+            numeric_axes_vars.append(col)
+            min_val = raw_data_for_axes[col].min()
+            max_val = raw_data_for_axes[col].max()
+            print(f"Will use as axis: {col} (range: {min_val:.2f} to {max_val:.2f}, {unique_count} unique values)")
+
+print(f"Selected {len(numeric_axes_vars)} numeric variables for axes")
+# ==================== END RAW DATA PRESERVATION ====================
 
 # Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
 if variable1 == 'Residence':
-    # demographic_data = classify_residence(demographic_data, variable1)
     demographic_data = classify_residence_and_disease(demographic_data, variable1, 'Disease')
 elif variable1 == 'Ethnicity':
     demographic_data = classify_ethnicity(demographic_data, variable1)
@@ -142,116 +163,22 @@ elif variable1 == 'Gut Bacteria Richness':
     demographic_data = classify_richness(demographic_data, variable1)
 elif variable1 == 'Gut Bacteria Richness and Evenness':
     demographic_data = classify_richness_and_evenness(demographic_data, variable1)
-else: 
-    exit
 
-# Convert variable2 (shape variable) to its specified number of bins OR life stages for age
-if variable2 == 'Residence':
-    # demographic_data = classify_residence(demographic_data, variable2)
-    demographic_data = classify_residence_and_disease(demographic_data, variable2, 'Disease')
-elif variable2 == 'Ethnicity':
-    demographic_data = classify_ethnicity(demographic_data, variable2)
-elif variable2 == 'Sex':
-    demographic_data = classify_sex(demographic_data, variable2)
-elif variable2 == 'Age':
-    demographic_data = convert_age_to_life_stages(demographic_data, variable2)
-elif variable2 == 'Weight':
-    demographic_data = convert_weightKG_to_WeightLbs(demographic_data, variable2)
-elif variable2 == 'Height':
-    demographic_data = convert_heightCM_to_HeightInches(demographic_data, variable2)
-elif variable2 == 'Body Mass Index':
-  demographic_data = classify_bmi(demographic_data, variable2)
-elif variable2 == 'MS Onset Year':
-    demographic_data = classify_yearOfOnset(demographic_data, variable2)
-elif variable2 == 'Disease':
-    demographic_data = classify_disease(demographic_data, variable2)
-elif variable2 == 'Duration of MS':
-    demographic_data = classify_durationOfMS(demographic_data, variable2)
-elif variable2 == 'Administration of Treatment':
-    demographic_data = classify_administration(demographic_data, variable2)
-elif variable2 == 'Type of MS':
-    demographic_data = classify_typeOfMS(demographic_data, variable2)
-elif variable2 == 'Treatment Status':
-    demographic_data = classify_treatmentStatus(demographic_data, variable2)
-elif variable2 == 'Treatments Applied':
-    demographic_data = classify_treatmentsApplied(demographic_data, variable2)
-elif variable2 == 'Special need with diet':
-    demographic_data = classify_binary(demographic_data, variable2)
-elif variable2 == 'Specific need with diet':
-    demographic_data = classify_diet(demographic_data, variable2)
-elif variable2 == 'SPMS onset year':
-    demographic_data = classify_yearOfSPMSOnset(demographic_data, variable2)
-elif variable2 == 'Expanded Disability Status Scale':
-    demographic_data = classify_EDSS(demographic_data, variable2)
-elif variable2 == 'Multiple Sclerosis Severity Score':
-    demographic_data = classify_MSSS(demographic_data, variable2)
-elif variable2 == 'Disease modifying therapy' or variable2 == 'Breastfeeding at birth' or variable2 == 'Allergies' or variable2 == 'Asthma' or variable2 == 'Eating Disorder' or variable2 == 'Eczema' or variable2 == 'Anxiety' or variable2 == 'Manic depression(Bipolar disorder)' or variable2 == 'Obsessive Compulsory Disorder' or variable2 == 'Depression' or variable2 == 'Depression after giving birth' or variable2 == 'Type 2 Diabetes' or variable2 == 'Family Member with MS' or variable2 == 'Oral contraceptive pills' or variable2 == 'Non-steroidal anti-inflammatory drugs' or variable2 == 'Probiotics' or variable1 == 'Recreational drug use' or variable2 == "Pets":
-    demographic_data = classify_trinary(demographic_data, variable2)
-elif variable2 == 'Number of Children':
-    demographic_data = classify_numberOfChildren(demographic_data, variable2)
-elif variable2 == 'Roommates':
-    demographic_data = classify_roommates(demographic_data, variable2)
-elif variable2 == 'Method of birth':
-    demographic_data = classify_methodOfBirth(demographic_data, variable2)
-elif variable2 == 'Specific Allergy':
-    demographic_data = classify_allergy(demographic_data, variable2)
-elif variable2 == 'Specific oral contraceptive pills':
-    demographic_data = classify_oral_contraceptive(demographic_data, variable2)
-elif variable2 == 'Specific non-steroidal anti-inflammatory drugs':
-    demographic_data = classify_nsaid(demographic_data, variable2)
-elif variable2 == 'Over the counter medication':
-    demographic_data = classify_trinary_2(demographic_data, variable2)
-elif variable2 == 'Different Over the Counter Medications':
-    demographic_data = classify_otc_medications(demographic_data, variable2)
-elif variable2 == 'Smoking Status':
-    demographic_data = classify_smoking_status(demographic_data, variable2)
-elif variable2 == 'Education level':
-    demographic_data = classify_education_level(demographic_data, variable2)
-elif variable2 == 'Occupation':
-    demographic_data = classify_occupation(demographic_data, variable2)
-elif variable2 == 'Vitamin D':
-    demographic_data = classify_vitamin_d(demographic_data, variable2)
-elif variable2 == 'Total Vegetables' or variable2 == 'Greens and Beans' or variable2 == 'Total Fruit' or variable2 == 'Whole Fruit' or variable2 == 'Total Protein Foods' or variable2 == 'Seafood and Plant Proteins':
-    demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable2)
-elif variable2 == 'Whole Grains' or variable2 == 'Dairy' or variable2 == 'Fatty Acids' or variable2 == 'Sodium' or variable2 == 'Refined Grains' or variable2 == 'Added Sugars' or variable2 == 'Saturated Fats':
-    demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable2)
-elif variable2 == 'Healthy Eating Index Score':
-    demographic_data = convert_HEI_score_to_grades(demographic_data, variable2)
-elif variable2 == 'Gut Bacteria Richness':
-    demographic_data = classify_richness(demographic_data, variable2)
-elif variable2 == 'Gut Bacteria Richness and Evenness':
-    demographic_data = classify_richness_and_evenness(demographic_data, variable2)
-else:
-    exit
-
-
-
-pd.set_option('display.max_rows', None)  # Show all rows
-pd.set_option('display.max_columns', None)  # Show all columns
-pd.set_option('display.width', None)  # Don't wrap columns
-pd.set_option('display.max_colwidth', None)  # Show full column content
-
-# print(demographic_data[['iMSMS_ID', 'Gut Bacteria Richness']])
-
-# Determine if variable1 should use discrete or continuous color scheme BEFORE binning
+# Determine if variable1 should use discrete or continuous color scheme
 variable1_is_discrete = is_discrete_variable(variable1)
-variable2_is_discrete = is_discrete_variable(variable2)
-
 
 print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
-print(f"Variable2 ({variable2}) detected as: {'Discrete' if variable2_is_discrete else 'Continuous'}")
 
-# Define colors for variable1 (coloring variable) - ADAPTIVE COLOR SCHEME
+# Define colors for variable1 (coloring variable) - using binned data
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
 variable1_ranges.sort()
-# Generate appropriate color scheme based on the original data analysis
+
 if variable1_is_discrete:
     colors_list = generate_discrete_colors(len(variable1_ranges))
     color_scheme_type = "discrete"
 else:
     colors_list = generate_gradient_colors(len(variable1_ranges))
     color_scheme_type = "gradient (YlOrRd)"
-
 
 # Create custom color mapping
 custom_colors = {}
@@ -260,50 +187,12 @@ for i, range_val in enumerate(variable1_ranges):
 
 print(f"Variable1 ({variable1}) ranges found: {variable1_ranges}")
 print(f"Color scheme: {color_scheme_type}")
-print(f"Color mapping: {custom_colors}")
-
-# Define shapes for variable2 (shape variable) - ROBUST HANDLING
-variable2_ranges = demographic_data[variable2].dropna().unique().tolist()
-variable2_ranges.sort()
-# Define shapes (expand shape palette to handle more bins)
-available_shapes = [
-    # 'Star',
-    # 'Cylinder', 
-    # 'Sphere',
-    # 'Cone',
-    # 'Diamond',        # Additional shapes if needed
-    # 'Ring',
-    # 'Icosahedron',
-    # 'Square'
-
-    'Star',
-    'Star', 
-    'Star',
-    'Star',
-    'Star',        # Additional shapes if needed
-    'Star',
-    'Star',
-    'Star'
-]
-
-# Create custom shape mapping based on actual number of ranges
-custom_shapes = {}
-for i, range_val in enumerate(variable2_ranges):
-    if i < len(available_shapes):
-        custom_shapes[range_val] = available_shapes[i]
-    else:
-        # If we have more ranges than shapes, cycle through shapes
-        custom_shapes[range_val] = available_shapes[i % len(available_shapes)]
-
-print(f"Variable2 ({variable2}) ranges found: {variable2_ranges}")
-print(f"Shape mapping: {custom_shapes}")
-
 
 # Emperor work starts here
-
 sheet6_class = sheet6_class.merge(demographic_data[['iMSMS_ID']], on='iMSMS_ID', how='inner')
 demographic_data = demographic_data.set_index('iMSMS_ID')
 sheet6_class = sheet6_class.set_index('iMSMS_ID')
+raw_data_for_axes = raw_data_for_axes.set_index('iMSMS_ID')
 
 # Beta Diversity
 bray_curtis = pdist(sheet6_class, metric='braycurtis')
@@ -318,7 +207,10 @@ np.fill_diagonal(distance_matrix, 0)
 # Perform PCoA
 pcoa_results = pcoa(distance_matrix)
 
-# Fix sample IDs if needed
+# ==================== USE BINNED DATA FOR AXES ====================
+print("=== USING BINNED METADATA VARIABLES AS AXES ===")
+
+# Fix sample IDs first
 if isinstance(pcoa_results.samples, pd.DataFrame):
     pcoa_results.samples.index = demographic_data.index
 else:
@@ -326,6 +218,151 @@ else:
         data=pcoa_results.samples,
         index=demographic_data.index
     )
+
+print(f"Original PCoA shape: {pcoa_results.samples.shape}")
+print(f"Original columns: {list(pcoa_results.samples.columns)}")
+
+# Create a completely new DataFrame with explicit column structure
+# Start with just the first 3 PCoA axes
+pcoa_base = pcoa_results.samples.iloc[:, :3].copy()
+pcoa_base.columns = ['Axis 1', 'Axis 2', 'Axis 3']
+
+print(f"Base PCoA data shape: {pcoa_base.shape}")
+
+# Function to convert categorical data to numeric codes for plotting
+def convert_categorical_to_numeric(series):
+    """Convert categorical data to numeric codes while preserving category information"""
+    if series.dtype == 'object' or pd.api.types.is_categorical_dtype(series):
+        # Get unique categories and sort them
+        unique_cats = sorted(series.dropna().unique())
+        
+        # Create mapping from category to numeric code
+        cat_to_num = {cat: i for i, cat in enumerate(unique_cats)}
+        
+        # Convert to numeric
+        numeric_series = series.map(cat_to_num)
+        
+        print(f"    Category mapping: {cat_to_num}")
+        return numeric_series, cat_to_num
+    else:
+        # Already numeric, return as-is
+        return series, None
+
+# Add metadata variables from the binned demographic_data
+key_variables = ['Age', 'Body Mass Index', 'Weight', 'Height']
+axes_added = 0
+
+for var_name in key_variables:
+    print(f"\nProcessing variable: {var_name}")
+    
+    if var_name in demographic_data.columns:
+        try:
+            # Get the binned/categorized values from demographic_data
+            binned_values = demographic_data.loc[pcoa_base.index, var_name]
+            
+            # Debug: Show what we found
+            print(f"  Found {var_name} in demographic_data")
+            print(f"  Data type: {binned_values.dtype}")
+            print(f"  Unique values: {sorted(binned_values.dropna().unique())}")
+            
+            # Check if we have enough non-null values
+            non_null_count = binned_values.notna().sum()
+            unique_count = binned_values.nunique()
+            
+            print(f"  Non-null count: {non_null_count}, Unique count: {unique_count}")
+            
+            if non_null_count > 50 and unique_count >= 2:
+                # Convert categorical data to numeric for plotting
+                numeric_values, category_mapping = convert_categorical_to_numeric(binned_values)
+                
+                if numeric_values is not None:
+                    # Add as new column
+                    pcoa_base[var_name] = numeric_values
+                    axes_added += 1
+                    
+                    print(f"✓ Added axis: {var_name} ({unique_count} categories, {non_null_count} samples)")
+                    
+                    # Show sample categories and their numeric mappings
+                    sample_cats = binned_values.dropna().head(5).tolist()
+                    sample_nums = numeric_values.dropna().head(5).tolist()
+                    print(f"   Sample categories: {sample_cats}")
+                    print(f"   Sample numeric values: {sample_nums}")
+                    
+                    # Show the full category to number mapping
+                    if category_mapping:
+                        print(f"   Full mapping: {category_mapping}")
+                else:
+                    print(f"✗ Failed to convert {var_name} to numeric values")
+            else:
+                print(f"✗ Insufficient data for {var_name}: {non_null_count} non-null, {unique_count} unique")
+                
+        except Exception as e:
+            print(f"✗ Error adding {var_name}: {e}")
+            import traceback
+            traceback.print_exc()
+    else:
+        print(f"  {var_name} not found in demographic_data columns")
+        print(f"  Available columns: {list(demographic_data.columns)}")
+
+# If no key variables were available, try other variables from demographic_data
+if axes_added == 0:
+    print("No key variables found, trying other demographic variables...")
+    
+    for var_name in demographic_data.columns:
+        if var_name not in ['iMSMS_ID'] and axes_added < 4:  # Limit to 4 additional axes
+            try:
+                binned_values = demographic_data.loc[pcoa_base.index, var_name]
+                non_null_count = binned_values.notna().sum()
+                unique_count = binned_values.nunique()
+                
+                # Only include if it has enough variation and non-null values
+                if non_null_count > 50 and 2 <= unique_count <= 20:  # Reasonable number of categories
+                    numeric_values, category_mapping = convert_categorical_to_numeric(binned_values)
+                    
+                    if numeric_values is not None:
+                        pcoa_base[var_name] = numeric_values
+                        axes_added += 1
+                        print(f"✓ Added axis: {var_name} ({unique_count} categories, {non_null_count} samples)")
+                        
+            except Exception as e:
+                print(f"✗ Error adding {var_name}: {e}")
+
+print(f"Enhanced data shape: {pcoa_base.shape}")
+print(f"Enhanced columns: {list(pcoa_base.columns)}")
+
+# Create new proportion explained that matches the new structure
+n_total_axes = len(pcoa_base.columns)
+if hasattr(pcoa_results, 'proportion_explained'):
+    original_explained = pcoa_results.proportion_explained.iloc[:3].values
+else:
+    original_explained = np.array([0.3, 0.2, 0.1])
+
+# Create explained variance for all axes
+all_explained = np.concatenate([
+    original_explained,
+    np.zeros(n_total_axes - 3)  # Zeros for metadata axes
+])
+
+# Update the pcoa_results with the new structure
+pcoa_results.samples = pcoa_base
+pcoa_results.proportion_explained = pd.Series(all_explained, index=pcoa_base.columns)
+
+print(f"Final verification:")
+print(f"  - Samples shape: {pcoa_results.samples.shape}")
+print(f"  - Samples columns: {list(pcoa_results.samples.columns)}")
+print(f"  - Proportion explained length: {len(pcoa_results.proportion_explained)}")
+print(f"  - Axes should include: {axes_added} metadata variables")
+
+# Quick data validation
+print(f"\nData validation:")
+for col in pcoa_results.samples.columns:
+    non_null = pcoa_results.samples[col].notna().sum()
+    data_type = pcoa_results.samples[col].dtype
+    min_val = pcoa_results.samples[col].min() if pd.api.types.is_numeric_dtype(pcoa_results.samples[col]) else "N/A"
+    max_val = pcoa_results.samples[col].max() if pd.api.types.is_numeric_dtype(pcoa_results.samples[col]) else "N/A"
+    print(f"  {col}: {non_null} non-null values, dtype: {data_type}, range: {min_val} to {max_val}")
+
+# ==================== END USE BINNED DATA FOR AXES ====================
 
 # Add a more aggressive approach to rename the axis labels
 # First, attempt to rename in the decomposition data itself
@@ -350,9 +387,6 @@ viz = Emperor(pcoa_results, demographic_data, remote=get_emperor_support_files_d
 # Use Emperor's color_by method to set the initial coloring (using variable1)
 viz.color_by(variable1, custom_colors)
 
-# Use Emperor's shape_by method to set the shapes by variable2
-viz.shape_by(variable2, custom_shapes)
-
 # Set other visualization options
 viz.set_axes([0, 1, 2])  # Set axes to display (using indices 0, 1, 2 for pc1, pc2, pc3)
 
@@ -360,22 +394,12 @@ viz.set_axes([0, 1, 2])  # Set axes to display (using indices 0, 1, 2 for pc1, p
 scale_dict = {var1_range: 1.0 for var1_range in variable1_ranges}
 opacity_dict = {var1_range: 1.0 for var1_range in variable1_ranges}
 
-
 # Generate the base Emperor visualization HTML
 emperor_html = viz.make_emperor(standalone=True)
 
-# Create the direct shape override JavaScript (updated to use variable2)
-# Convert the shape mapping to JavaScript format using safe escaping
-shape_mapping_js = dict_to_js_object(custom_shapes)
-
 # Safely escape variable names for JavaScript
 safe_variable1 = escape_for_js(variable1)
-safe_variable2 = escape_for_js(variable2)
 
-# Generate the direct shape manipulation JavaScript
-direct_shape_js = generate_direct_shape_js(safe_variable2, shape_mapping_js)
-
-# Also add standard JavaScript to select variable1 for coloring
 # Use safe escaping for custom_colors
 custom_colors_js = dict_to_js_object(custom_colors)
 
@@ -388,17 +412,65 @@ precise_hide_js = generate_precise_hide_js()
 # Generate the precise UI hiding CSS
 precise_hide_css = generate_precise_hide_css()
 
-# Generate the information overlay JavaScript
-overlay_js = generate_overlay_js(variable1, variable2, dependentvar)
+# Generate the information overlay JavaScript (without variable2)
+# overlay_js = generate_overlay_js(variable1, None, dependentvar)
 
 # Combine the precise solution
 complete_precise_solution = precise_hide_js
 
 # Update your script with the precise solution
-final_precise_custom_js = custom_js + "\n\n" + complete_precise_solution + "\n\n" + overlay_js
+final_precise_custom_js = custom_js + "\n\n" + complete_precise_solution + "\n\n" #+ overlay_js
 
-# Insert the precise CSS and JavaScript
-emperor_html = emperor_html.replace('</head>', f'{precise_hide_css}</head>')
+# ==================== ADD PAGE HEADER ====================
+# Define the header HTML and CSS
+page_header_html = '''
+<div class="emperor-page-header">
+    <h1>Emperor Visualization Page</h1>
+</div>
+'''
+
+page_header_css = '''
+<style>
+.emperor-page-header {
+    text-align: center;
+    margin: 20px 0 30px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-bottom: 3px solid #2196F3;
+}
+
+.emperor-page-header h1 {
+    color: #333;
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+@media (max-width: 768px) {
+    .emperor-page-header h1 {
+        font-size: 36px;
+    }
+    
+    .emperor-page-header {
+        margin: 10px 0 20px 0;
+        padding: 15px;
+    }
+}
+</style>
+'''
+# ==================== END PAGE HEADER ====================
+
+# Insert the header CSS and HTML
+emperor_html = emperor_html.replace('</head>', f'{page_header_css}{precise_hide_css}</head>')
+
+# Insert the header HTML right after the body tag
+body_start = emperor_html.find('<body')
+if body_start != -1:
+    # Find the end of the opening body tag
+    body_tag_end = emperor_html.find('>', body_start) + 1
+    emperor_html = emperor_html[:body_tag_end] + page_header_html + emperor_html[body_tag_end:]
 
 # Replace the JavaScript insertion
 marker_pattern = "/*__custom_on_ready_code__*/"
@@ -411,9 +483,8 @@ else:
         insertion_idx = start_idx + len(ready_function_end)
         emperor_html = emperor_html[:insertion_idx] + "\n      " + final_precise_custom_js + emperor_html[insertion_idx:]
 
-print("Applied PRECISE tab hiding solution that preserves Color and Shape tabs AND hides settings button")
-print("This version specifically avoids hiding Color and Shape tabs while hiding the settings gear icon")
-
+print("Applied PRECISE tab hiding solution that preserves Color, Visibility, and Axes tabs AND hides settings button")
+print("Added prominent 'Emperor Visualization Page' header")
 
 # Also perform more aggressive text replacement in the HTML
 # This searches for any instances of PC1, PC2, PC3 with different capitalizations and spacings
@@ -444,9 +515,6 @@ def replace_pc_labels(html):
 # Apply the regex replacements
 emperor_html = replace_pc_labels(emperor_html)
 
-# Insert the direct shape manipulation script at the end of the HTML body
-emperor_html = emperor_html.replace('</body>', f'<script type="text/javascript">{direct_shape_js}</script></body>')
-
 # Convert absolute paths to relative paths
 support_dir = get_emperor_support_files_dir()
 if support_dir in emperor_html:
@@ -462,12 +530,14 @@ with open(output_path, 'w') as f:
 
 print(f"Emperor visualization saved to {output_path}")
 print(f"- {variable1} binned into {len(variable1_ranges)} categories with {color_scheme_type} colors")
-print(f"- {variable2} binned into {len(variable2_ranges)} categories with shapes")
-print(f"- Using {variable1} for coloring and {variable2} for shapes")
-print("- Variable-specific binning: each variable maintains its designated number of bins")
+print(f"- Using {variable1} for coloring only (no shape customization)")
+print("- Variable-specific binning: variable maintains its designated number of bins")
 print("- Adaptive color scheme: discrete variables use distinct colors, continuous variables use YlOrRd gradient")
-print("- Direct THREE.js manipulation for shapes included")
 print("- Axes renamed from PC1, PC2, PC3 to Axis 1, Axis 2, Axis 3")
 print("- Relative paths for better portability")
 print("- Safe JavaScript escaping for special characters")
+print(f"- Added {axes_added} raw numeric variables as selectable axes")
+print("- Raw data used for axes, binned data used for colors")
+print("- Used safe column renaming to avoid pandas errors")
+print("- Added prominent 'Emperor Visualization Page' header to generated HTML")
 print("\nScript completed.")

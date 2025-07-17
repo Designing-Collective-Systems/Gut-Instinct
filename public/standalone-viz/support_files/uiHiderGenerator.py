@@ -1,21 +1,21 @@
 def generate_precise_hide_js():
     """
     Generate JavaScript code to hide unwanted Emperor UI tabs while preserving 
-    Color, Shape, and Visibility tabs, and hiding the settings button.
+    Color and Visibility tabs, and hiding the settings button and axes control.
     
     Returns:
         str: JavaScript code for hiding UI elements
     """
     precise_hide_js = """
-// Precise tab hiding that preserves Color, Shape, and Visibility + hides settings
+// Precise tab hiding that preserves Color and Visibility only, hides Axes and settings
 function preciseHideUnwantedTabs() {
-    console.log("Starting precise tab hiding (preserving Color, Shape, and Visibility, hiding settings)...");
+    console.log("Starting precise tab hiding (preserving Color and Visibility only, hiding Axes and settings)...");
     
-    // Exact text matches to hide (case-sensitive) - REMOVED 'Visibility' from this list
-    const exactTextsToHide = ['Opacity', 'Scale', 'Axes', 'Animations'];
+    // Exact text matches to hide (case-sensitive) - ADDED 'Axes' to this list
+    const exactTextsToHide = ['Opacity', 'Scale', 'Animations', 'Axes'];
     
-    // Exact text matches to preserve (case-insensitive) - ADDED 'visibility' to preserve list
-    const exactTextsToKeep = ['color', 'shape', 'visibility'];
+    // Exact text matches to preserve (case-insensitive) - REMOVED 'axes' from preserve list
+    const exactTextsToKeep = ['color', 'visibility'];
     
     let hiddenCount = 0;
     let keptCount = 0;
@@ -67,10 +67,10 @@ function preciseHideUnwantedTabs() {
         }
     });
     
-    // Method 2: Hide specific content panels by ID, but preserve color, shape, and visibility - REMOVED visibility IDs
+    // Method 2: Hide specific content panels by ID, including axes
     const contentIdsToHide = [
-        '#opacity-tab', '#scale-tab', '#axes-tab', '#animations-tab',
-        '#opacity', '#scale', '#axes', '#animations'
+        '#opacity-tab', '#scale-tab', '#animations-tab', '#axes-tab', '#tab-axes',
+        '#opacity', '#scale', '#animations', '#axes'
     ];
     
     contentIdsToHide.forEach(id => {
@@ -82,23 +82,56 @@ function preciseHideUnwantedTabs() {
         }
     });
     
-    // Method 3: Force show Color, Shape, and Visibility elements - ADDED visibility selectors
+    // Method 3: Force show Color and Visibility elements only - REMOVED axes selectors
     const forceShowSelectors = [
-        'a[href*="color"]', 'a[href*="shape"]', 'a[href*="visibility"]',
-        'button[data-target*="color"]', 'button[data-target*="shape"]', 'button[data-target*="visibility"]',
-        '[id*="color"]', '[id*="shape"]', '[id*="visibility"]',
-        '[aria-controls*="color"]', '[aria-controls*="shape"]', '[aria-controls*="visibility"]'
+        'a[href*="color"]', 'a[href*="visibility"]',
+        'button[data-target*="color"]', 'button[data-target*="visibility"]',
+        '[id*="color"]:not([id*="axes"])', '[id*="visibility"]:not([id*="axes"])',
+        '[aria-controls*="color"]', '[aria-controls*="visibility"]'
     ];
     
     forceShowSelectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(element => {
-            element.style.display = '';
-            element.style.visibility = 'visible';
-            console.log(`Force showing element:`, element);
+            // Double check we're not showing axes-related elements
+            const elementText = element.textContent.toLowerCase();
+            const elementId = (element.id || '').toLowerCase();
+            const elementHref = (element.getAttribute('href') || '').toLowerCase();
+            
+            if (!elementText.includes('axes') && !elementId.includes('axes') && !elementHref.includes('axes')) {
+                element.style.display = '';
+                element.style.visibility = 'visible';
+                console.log(`Force showing element:`, element);
+            }
         });
     });
     
-    // Method 4: Hide the settings button (gear icon)
+    // Method 4: Specifically hide axes controls
+    console.log("Hiding axes controls...");
+    
+    const axesSelectors = [
+        'a[href*="axes"]', 'a[href="#tab-axes"]', 'a[href="#axes"]',
+        'button[data-target*="axes"]', '[id*="axes"]', '[class*="axes"]',
+        '[aria-controls*="axes"]', '.axes-tab', '#axes-tab', '#tab-axes'
+    ];
+    
+    axesSelectors.forEach(selector => {
+        try {
+            document.querySelectorAll(selector).forEach(element => {
+                element.style.display = 'none';
+                console.log(`Hidden axes element by selector "${selector}":`, element);
+                hiddenCount++;
+                
+                // Hide parent list item if it exists
+                if (element.parentElement && element.parentElement.tagName === 'LI') {
+                    element.parentElement.style.display = 'none';
+                }
+            });
+        } catch (e) {
+            // Some selectors might not work in all browsers, ignore errors
+        }
+    });
+    
+    // Method 5: Hide the settings button (gear icon)
     console.log("Hiding settings button...");
     
     // Common selectors for settings buttons
@@ -113,9 +146,9 @@ function preciseHideUnwantedTabs() {
     settingsSelectors.forEach(selector => {
         try {
             document.querySelectorAll(selector).forEach(element => {
-                // Don't hide if it's related to color, shape, or visibility
+                // Don't hide if it's related to color or visibility
                 const elementText = element.textContent.toLowerCase();
-                if (!elementText.includes('color') && !elementText.includes('shape') && !elementText.includes('visibility')) {
+                if (!elementText.includes('color') && !elementText.includes('visibility')) {
                     element.style.display = 'none';
                     console.log(`Hidden settings element by selector "${selector}":`, element);
                     hiddenCount++;
@@ -134,12 +167,13 @@ function preciseHideUnwantedTabs() {
         const ariaLabel = (button.getAttribute('aria-label') || '').toLowerCase();
         const textContent = button.textContent.toLowerCase();
         
-        // Don't hide if it's related to color, shape, or visibility
-        if (textContent.includes('color') || textContent.includes('shape') || textContent.includes('visibility')) {
+        // Don't hide if it's related to color or visibility (but DO hide if axes-related)
+        if ((textContent.includes('color') || textContent.includes('visibility')) && 
+            !textContent.includes('axes')) {
             return;
         }
         
-        // Check if it contains gear/settings related content
+        // Check if it contains gear/settings related content OR axes content
         const hasSettingsIndicators = [
             innerHTML.includes('fa-gear'),
             innerHTML.includes('fa-cog'),
@@ -150,11 +184,12 @@ function preciseHideUnwantedTabs() {
             ariaLabel.includes('setting'),
             innerHTML.includes('⚙'), // gear Unicode symbol
             innerHTML.includes('🔧'), // wrench Unicode symbol
+            textContent.includes('axes') // Also hide axes-related buttons
         ];
         
         if (hasSettingsIndicators.some(indicator => indicator)) {
             button.style.display = 'none';
-            console.log('Hidden settings button by content:', button);
+            console.log('Hidden settings/axes button by content:', button);
             hiddenCount++;
         }
     });
@@ -192,69 +227,86 @@ if (typeof MutationObserver !== 'undefined') {
 def generate_precise_hide_css():
     """
     Generate CSS code to hide unwanted Emperor UI elements while preserving 
-    Color, Shape, and Visibility controls.
+    Color and Visibility controls only (hiding Axes).
     
     Returns:
         str: CSS code for hiding UI elements
     """
     precise_hide_css = """
 <style>
-/* Hide specific tab links by href patterns - but preserve color, shape, and visibility */
-a[href*="opacity"]:not([href*="color"]):not([href*="shape"]):not([href*="visibility"]),
-a[href*="scale"]:not([href*="color"]):not([href*="shape"]):not([href*="visibility"]),
-a[href*="axes"]:not([href*="color"]):not([href*="shape"]):not([href*="visibility"]),
-a[href*="animation"]:not([href*="color"]):not([href*="shape"]):not([href*="visibility"]) {
+/* Hide specific tab links by href patterns - preserve color and visibility only */
+a[href*="opacity"]:not([href*="color"]):not([href*="visibility"]),
+a[href*="scale"]:not([href*="color"]):not([href*="visibility"]),
+a[href*="animation"]:not([href*="color"]):not([href*="visibility"]),
+a[href*="axes"]:not([href*="color"]):not([href*="visibility"]) {
     display: none !important;
 }
 
-/* Hide specific content panels by ID - but preserve color, shape, and visibility */
-[id="opacity-tab"], [id="scale-tab"],
-[id="axes-tab"], [id="animations-tab"],
-[id="opacity"], [id="scale"],
-[id="axes"], [id="animations"] {
+/* Hide specific content panels by ID - including axes */
+[id="opacity-tab"], [id="scale-tab"], [id="animations-tab"], [id="axes-tab"], [id="tab-axes"],
+[id="opacity"], [id="scale"], [id="animations"], [id="axes"] {
     display: none !important;
 }
 
-/* Hide by data-target attributes - but preserve color, shape, and visibility */
-button[data-target*="opacity"]:not([data-target*="color"]):not([data-target*="shape"]):not([data-target*="visibility"]),
-button[data-target*="scale"]:not([data-target*="color"]):not([data-target*="shape"]):not([data-target*="visibility"]),
-button[data-target*="axes"]:not([data-target*="color"]):not([data-target*="shape"]):not([data-target*="visibility"]),
-button[data-target*="animation"]:not([data-target*="color"]):not([data-target*="shape"]):not([data-target*="visibility"]) {
+/* Hide by data-target attributes - preserve color and visibility only */
+button[data-target*="opacity"]:not([data-target*="color"]):not([data-target*="visibility"]),
+button[data-target*="scale"]:not([data-target*="color"]):not([data-target*="visibility"]),
+button[data-target*="animation"]:not([data-target*="color"]):not([data-target*="visibility"]),
+button[data-target*="axes"]:not([data-target*="color"]):not([data-target*="visibility"]) {
+    display: none !important;
+}
+
+/* Specifically hide axes controls */
+a[href="#tab-axes"],
+a[href="#axes"],
+a[href*="axes"],
+button[data-target*="axes"],
+[id*="axes"]:not([id*="color"]):not([id*="visibility"]),
+[class*="axes"]:not([class*="color"]):not([class*="visibility"]),
+[aria-controls*="axes"],
+.axes-tab,
+#axes-tab,
+#tab-axes,
+.tab-pane#tab-axes {
+    display: none !important;
+}
+
+/* Hide parent list items of axes tabs */
+li:has(a[href*="axes"]),
+li:has(button[data-target*="axes"]) {
     display: none !important;
 }
 
 /* Hide settings button by common patterns */
 .settings-btn, .gear-icon, .fa-gear, .fa-cog, .fa-settings,
-button[title*="setting" i]:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]),
-button[aria-label*="setting" i]:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]),
-[data-toggle="modal"]:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]),
-.btn[data-target*="setting" i]:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]) {
+button[title*="setting" i]:not([class*="color"]):not([class*="visibility"]),
+button[aria-label*="setting" i]:not([class*="color"]):not([class*="visibility"]),
+[data-toggle="modal"]:not([class*="color"]):not([class*="visibility"]),
+.btn[data-target*="setting" i]:not([class*="color"]):not([class*="visibility"]) {
     display: none !important;
 }
 
 /* Hide toolbar buttons except essential ones */
-.btn-toolbar button:not([class*="color"]):not([class*="shape"]):not([class*="visibility"]):not(.btn-primary) {
+.btn-toolbar button:not([class*="color"]):not([class*="visibility"]):not(.btn-primary) {
     display: none !important;
 }
 
-/* Force show Color, Shape, and Visibility elements */
-a[href*="color"], a[href*="shape"], a[href*="visibility"],
-button[data-target*="color"], button[data-target*="shape"], button[data-target*="visibility"],
-[id*="color"], [id*="shape"], [id*="visibility"],
-[aria-controls*="color"], [aria-controls*="shape"], [aria-controls*="visibility"] {
+/* Force show Color and Visibility elements only */
+a[href*="color"]:not([href*="axes"]), a[href*="visibility"]:not([href*="axes"]),
+button[data-target*="color"]:not([data-target*="axes"]), button[data-target*="visibility"]:not([data-target*="axes"]),
+[id*="color"]:not([id*="axes"]), [id*="visibility"]:not([id*="axes"]),
+[aria-controls*="color"]:not([aria-controls*="axes"]), [aria-controls*="visibility"]:not([aria-controls*="axes"]) {
     display: block !important;
     visibility: visible !important;
 }
 
-/* Alternative: Hide by aria-controls but preserve color, shape, and visibility */
-[aria-controls="opacity"],
-[aria-controls="scale"], [aria-controls="axes"],
-[aria-controls="animations"] {
+/* Hide by aria-controls including axes */
+[aria-controls="opacity"], [aria-controls="scale"], [aria-controls="animations"], [aria-controls="axes"] {
     display: none !important;
 }
 
-/* Don't hide color, shape, and visibility controls */
-[aria-controls*="color"], [aria-controls*="shape"], [aria-controls*="visibility"] {
+/* Force show only color and visibility controls */
+[aria-controls*="color"]:not([aria-controls*="axes"]), [aria-controls*="visibility"]:not([aria-controls*="axes"]) {
     display: block !important;
     visibility: visible !important;
 }
