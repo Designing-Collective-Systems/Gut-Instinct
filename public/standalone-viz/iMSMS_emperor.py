@@ -424,11 +424,11 @@ final_precise_custom_js = custom_js + "\n\n" + complete_precise_solution + "\n\n
 # ==================== ADD YOUTUBE VIDEO SECTION ====================
 # Configuration for the 5 YouTube videos
 VIDEO_CONFIGS = [
-    {"id": "EpD_LqLw3ck", "title": "Clustering in Emperor"},
-    {"id": "zObm4E5TRq4", "title": "Variance and Clustering in Emperor"}, 
-    {"id": "N92V0k64GqQ", "title": "Choosing Taxa Level (for analysis)"},
-    {"id": "9GxwTPYhOhs", "title": "Using Color, Visibility, and Shape"},
-    {"id": "oqI2D8NwoMk", "title": "Beta Diversity within clusters in Emperor"}
+    {"id": "xCt66prkEbA", "title": "Clustering in Emperor"},
+    {"id": "PGwesst2jLk", "title": "Variance and Clustering in Emperor"}, 
+    {"id": "1p6IEirCBuw", "title": "Choosing Taxa Level (for analysis)"},
+    {"id": "XNDbmaHVPUU", "title": "Using Color, Visibility, and Shape"},
+    {"id": "4W0e7I4fDp4", "title": "Beta Diversity in Emperor"}
 ]
 
 # Generate HTML for all 5 videos
