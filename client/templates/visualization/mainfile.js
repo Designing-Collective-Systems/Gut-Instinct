@@ -1,8 +1,8 @@
-// mainfile.js converted to Flow Router
+// mainfile.js with Flow Router and Blaze 3.0.2
 
 import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
 // No configuration is needed for this basic setup in Flow Router.
 
@@ -10,8 +10,8 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 FlowRouter.route('/', {
     name: 'home', // It's good practice to name your routes
     action() {
-        // Instead of this.render, Flow Router uses BlazeLayout
-        BlazeLayout.render('gaVisualization');
+        // Use Blaze.render instead of BlazeLayout
+        Blaze.render(Template.gaVisualization, document.body);
     }
 });
 
@@ -19,7 +19,7 @@ FlowRouter.route('/', {
 FlowRouter.route('/galileo/visualization', {
     name: 'visualization',
     action() {
-        BlazeLayout.render('gaVisualization');
+        Blaze.render(Template.gaVisualization, document.body);
     }
 });
 

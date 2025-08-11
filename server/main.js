@@ -8,6 +8,10 @@ import { SurveyQuestions } from '../imports/api/server/surveyQuestions.js';
 import { Boards } from '../imports/api/ga-models/boards.js';
 import { Examples } from '../imports/api/ga-models/examples.js';
 
+import './runPythonVisualization.server.js';
+
+
+
 function abs(p) {
   // always resolves to <projectRoot>/script/source/<file>
   return path.resolve(process.cwd(), 'script', 'source', p);

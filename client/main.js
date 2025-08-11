@@ -35,6 +35,7 @@ import './templates/galileo/pageFooter/_.js'
 import './templates/docent/loading_wheel/_.js'
 import './templates/galileo/question/_.js';
 import './templates/visualization.html';
+import './templates/galileo/gaHome/_.js';
 
 
 import './templates/galileo/assets/editable/_.js';
@@ -48,8 +49,6 @@ import './templates/galileo/browse/board/_.js';
 import './templates/galileo/browse/copyExpModal/_.js';
 import './templates/galileo/browse/exploreModal/_.js';
 import './templates/galileo/browse/item/_.js';
-import './templates/galileo/gaHome/_.js';
-import './templates/visualization.js';
 import './templates/galileo/gaLanding/_.js';
 import './templates/galileo/gaEntrance/_.js';
 import './templates/galileo/console/_.js';
