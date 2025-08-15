@@ -1,0 +1,152 @@
+# Variable definitions and descriptions for iMSMS data visualization
+# This file contains variable classifications, bin counts, and descriptions
+
+# Define variables that should be treated as discrete
+DISCRETE_VARIABLES = {
+    'Administration of Treatment', 'Allergies', 'Specific Allergy', 'Anxiety', 'Asthma', 
+    'Method of birth', 'Breastfeeding at birth', 'Depression', 'Special need with diet', 
+    'Specific need with diet', 'Disease', 'disease_course', 'Type of MS', 
+    'Disease modifying therapy', 'Eating Disorder', 'Eczema', 'Education level', 'Ethnicity', 'Manic depression(Bipolar disorder)', 
+    'Family Member with MS', 'Non-steroidal anti-inflammatory drugs', 'Specific non-steroidal anti-inflammatory drugs', 'Occupation', 'Obsessive Compulsory Disorder', 'Oral contraceptive pills', 
+    'Over the counter medication', 'Pets', 'Depression after giving birth', 'Probiotics', 'Recreational drug use', 
+    'Sex', 'Residence', 'Smoking Status', 'Treatment Status', 'treatment_status', 
+    'treatments', 'Treatments Applied', 'Type 2 Diabetes', 'Weight change', 
+    'Specific oral contraceptive pills'
+}
+
+# Define variables that should always be treated as continuous (override other detection)
+FORCE_CONTINUOUS = {
+    'Added Sugars', 'Age', 'Alcohol % of cals (%)', 'B1, B2 (mg)', 'Beta-carotene (mcg)', 'Body Mass Index', 
+    'Bread, pasta, rice (1)', 'Calcium (mg)','Calories (Kcal)','Carbohydrate (g)', 
+    'Carbohydrate (g) as % of cals', 'Number of Children', 'Cholestrol (mg)', 'Cerebrospinal fluid (CSF) Analysis score', 
+    'Dietary Fiber(g)', 'Duration of MS', 'Expanded Disability Status Scale', 'Fatty Acids', 'Fat (g)', 
+    'Fat (g) as % of cals', 'Folate (mcg)', 'Fruits, fruit juices (cups)', 
+    'Good oils, in foods ("teaspoons")', 'Greens and Beans', 'Healthy Eating Index Score', 'Height', 
+    'Iron (mg)', 'Magnesium (mg)',  'Meat, eggs, or beans (1)', 'Milk, cheese, yogurt (cups)', 
+    'Monounsaturated fat (g)', 'Multiple Sclerosis Severity Score', 'Niacin (mg)', 'Different Over the Counter Medications', 'Polyunsaturated fat (g)', 
+    'Potassium (mg)', 'Protein (g)', 'Protein (g) as % of cals', 'Refined Grains', 'Number of relapses', 
+    'Roommates', 'Prescription medication', 'rxmeds_number', 'Saturated fat (g)','Saturated fat (g) as % of cals',
+    'Seafood and Plant Proteins', 'Saturated Fats', 'Sodium', 'Sodium (salt) (mg)', 'SPMS onset year', 'Sweets % of cals (%)', 
+    'Vegetables group (cups)', 'Vitamdietpairsumin A (RAE)', 'Dairy', 'Total Fruit','Total Vegetables', 
+    'Total Protein Foods', 'Vitamin B6 (mg)', 'Vitamin C (mg)', 'Vitamin D', 'Vitamin E (mg)',  'Weight', 
+    'Whole Fruit','Whole Grains', 'Whole grains (1)', 'without potatoes (cups)', 'MS Onset Year', 
+    'Zinc (mg)', 'Gut Bacteria Richness', 'Gut Bacteria Richness and Evenness' 
+}
+
+
+# Variable descriptions for each variabtle in the dataset
+VARIABLE_DESCRIPTIONS = {
+    'Added Sugars': 'Added sugar content in diet over 6-12 months. SEE HEI2015 information.',
+    'Fatty Acids': 'Fatty acid profile in diet over 6-12 months. SEE HEI2015 information.',
+    'Greens and Beans': 'Dark green vegetables and beans and peas in diet over 6-12 months. SEE HEI2015 information.',
+    'Dairy': 'Fat free dairy consumption over 6-12 months. SEE HEI2015 information.',
+    'Total Fruit': 'Fruit consumption(including fruit juice) over 6-12 months. SEE HEI2015 information.',
+    'Total Vegetables': 'Vegetable consumption over 6-12 months. SEE HEI2015 information.',
+    'Total Protein Foods': 'Protein consumption over 6-12 months. SEE HEI2015 information.',
+    'Healthy Eating Index Score': 'The HEI2015 is the latest iteration of the Healthy Eating Index, a tool designed to measure diet quality—that is, how closely an eating pattern or mix of foods matches the Dietary Guidelines for Americans recommendations. HEI2015 is a total value of Added Sugars, Fatty Acids, Greens and Beans, Dairy, Total Fruit, Total Vegetables, Total Protein Foods, Refined Grains, Whole Fruit, Whole Grains, Saturated Fats, Seafood and Plant Proteins, Sodium',
+    'Refined Grains': 'Refined grain consumption over 6-12 months. SEE HEI2015 information.',
+    'Whole Fruit': 'Fruit consumption(without fruit juice) over 6-12 months. SEE HEI2015 information.',
+    'Whole Grains': 'Whole grain consumption over 6-12 months. SEE HEI2015 information.',
+    'Saturated Fats': 'Saturated fat consumption over 6-12 months. SEE HEI2015 information.',
+    'Seafood and Plant Proteins': 'Protein consumption(seafood + plants) over 6-12 months.SEE HEI2015 information.',
+    'Sodium': 'Sodium consumption over 6-12 months. SEE HEI2015 information.',
+    
+    'Administration of Treatment': 'How the DMTs were administered to the participant with MS',
+    'Age': 'What is the participants age',
+    'Allergies': 'Does participant have an allergy',
+    'Specific Allergy': 'Participant allergy type',
+    'Anxiety': 'Does participant have anxiety or not',
+    'Asthma': 'Does participant have asthma or not',
+    'Method of birth': 'How was participant born',
+    'Body Mass Index': 'Participant BMI calculated from height(cm) and weight(kg) measurements',
+    'Breastfeeding at birth': 'Did participant breastfeed as a child',
+    'Number of Children': 'participant children number',
+    'Depression': 'Does participant have depression or not',
+    'Special need with diet': 'Whether participant has dietary restrictions or not',
+    'Specific need with diet': 'Dietary restriction(s) for participant',
+    'Disease': 'Whether participant has MS or not',
+    'Type of MS': 'MS patient + their controls corresponding pair value. Patient can have RRMS or PMS(SPMS and PPMS lumped together) If MS patient has RRMS, corresponding household member(control) would be control_RRMS. ',
+    'Duration of MS': 'How long the patient has had MS',
+    'Disease modifying therapy': 'Among the 576 MS patients, 209 (36%) were untreated and 367 (63%) were treated with a disease modifying therapy (DMT). Note that this was done before the study. In page 17-18, we see that Participants were excluded if they received oral antibiotics within the past three months, corticosteroids within the past 30 days, or were on a disease modifying therapy for less than three months',
+    'Eating Disorder': 'Does participant have eating_disorder or not',
+    'Eczema': 'Does participant have eczema or not',
+    'Expanded Disability Status Scale': 'The Expanded Disability Status Scale (EDSS) is a tool used to measure disability in people with multiple sclerosis (MS). It ranges from 0 to 10, with 0 being normal and 10 representing death due to MS.',
+    'Education level': 'Highest level of formal education completed by participant',
+    'Ethnicity': 'What is the participants ethincity',
+    'Height': 'Participant height measurement in centimeters',
+    'Manic depression(Bipolar disorder)': 'Does participant have manic_depression_bipolar or not',
+    'Family Member with MS': 'Participant number of family member(s) with MS',
+    'Multiple Sclerosis Severity Score': 'The MSSS (Multiple Sclerosis Severity Score) is a tool used in multiple sclerosis (MS) to assess disease severity by combining disability (measured by the EDSS) with disease duration. It provides a score that ranges from 0 to 10.',
+    'Non-steroidal anti-inflammatory drugs': 'Did participant use non-steroidal anti-inflammatory drugs',
+    'Specific non-steroidal anti-inflammatory drugs': 'Type of non-steroidal anti-inflammatory drugs used by participant',
+    'Occupation': 'Participant occupation',
+    'Obsessive Compulsory Disorder': 'Does participant have ocd or not',
+    'Oral contraceptive pills': 'Did participant take oral contraceptive pills or not',
+    'Over the counter medication': 'Does participant take Over-the-counter medication',
+    'Different Over the Counter Medications': 'Total count of different Over-the-counte medications used',
+    'Pets': 'Does participant have pets or not',
+    'Depression after giving birth': 'Did female participant experience postpartum_depression or not',
+    'Probiotics': 'Has patient taken probiotics',
+    'Recreational drug use': 'Does participant take recreational drugs',
+    'Roommates': 'Participant roommates number',
+    'Sex': 'What is the participants sex',
+    'Residence': '1152 participants were recruited from seven areas (recruiting centers) located in San Francisco, Boston, New York, Pittsburgh, Buenos Aires, Edinburgh and San Sebastián',
+    'Smoking Status': 'Participant smoke history',
+    'SPMS onset year': 'Year of secondary progressive multiple sclerosis diagnosis',
+    'Treatment Status': 'MS patient treatment status + their controls corresponding pair value. Patient can be treated or Untreated. If MS patient is treated, corresponding household member(control) would be treated_HHC.',
+    'Treatments Applied': '(see the note on DMTs), MS patient treatment + their controls corresponding pair value. If patient was treated with Fingolimod, control value would be control_Fingolimod',
+    'Type 2 Diabetes': 'Does participant have type2diabetes or not',
+    'Weight': 'What is the participants weight in kg',
+    'Specific oral contraceptive pills': 'Specific oral contraceptive pill(s) taken by participant',
+    'MS Onset Year': 'Year when participant was diagnosed with MS',
+
+    'Alcohol % of cals (%)': 'FFQ calculation over last 6-12 months',
+    'Beta-carotene (mcg)': 'FFQ calculation over last 6-12 months',
+    'Bread, pasta, rice (1)': 'FFQ calculation over last 6-12 months',
+    'Calcium (mg)': 'FFQ calculation over last 6-12 months',    
+    'Calories (Kcal)': 'FFQ calculation over last 6-12 months',
+    'Carbohydrate (g)': 'FFQ calculation over last 6-12 months',
+    'Carbohydrate (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    'Cholestrol (mg)': 'FFQ calculation over last 6-12 months',
+    'Dietary Fiber(g)': 'FFQ calculation over last 6-12 months',      
+    'Fat (g)': 'FFQ calculation over last 6-12 months',
+    'Fat (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    'Folate (mcg)': 'FFQ calculation over last 6-12 months',
+    'Fruits, fruit juices (cups)': 'FFQ calculation over last 6-12 months',
+    'Good oils, in foods ("teaspoons")': 'FFQ calculation over last 6-12 months',
+    'household': 'FFQ calculation over last 6-12 months',
+    'Iron (mg)': 'FFQ calculation over last 6-12 months',
+    'Magnesium (mg)': 'FFQ calculation over last 6-12 months',
+    'Meat, eggs, or beans (1)': 'FFQ calculation over last 6-12 months',
+    'Milk, cheese, yogurt (cups)': 'FFQ calculation over last 6-12 months',
+    'Monounsaturated fat (g)': 'FFQ calculation over last 6-12 monthss',
+    'Niacin (mg)': 'FFQ calculation over last 6-12 months',
+    'Polyunsaturated fat (g)': 'FFQ calculation over last 6-12 monthss',
+    'Potassium (mg)': 'FFQ calculation over last 6-12 monthse',
+    'Protein (g)': 'FFQ calculation over last 6-12 monthss',
+    'Protein (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    'Saturated fat (g)': 'FFQ calculation over last 6-12 months',
+    'Saturated fat (g) as % of cals': 'FFQ calculation over last 6-12 months',
+    'Sodium (salt) (mg)': 'FFQ calculation over last 6-12 months',
+    'Sweets % of cals (%)': 'FFQ calculation over last 6-12 months',
+    'Vegetables group (cups)': 'FFQ calculation over last 6-12 months',
+    'Vitamdietpairsumin A (RAE)': 'FFQ calculation over last 6-12 months',
+    'Vitamin B6 (mg)': 'FFQ calculation over last 6-12 months',
+    'Vitamin C (mg)': 'FFQ calculation over last 6-12 months',
+    'Vitamin D': 'FFQ calculation over last 6-12 months',
+    'Vitamin E (mg)': 'FFQ calculation over last 6-12 months',
+    'Whole grains (1)': 'FFQ calculation over last 6-12 months',
+    'without potatoes (cups)': 'FFQ calculation over last 6-12 months',
+    'Zinc (mg)': 'FFQ calculation over last 6-12 months'
+
+    # Number of relapses
+    # Cerebrospinal fluid (CSF) Analysis score aka csf_results
+    # 'Prescription medication': 'Does participant take Prescription medication or not',
+    # 'rxmeds_number': 'Participant total count of different prescription medications taken',
+    # Weight change
+}
+
+# Sheet description
+SHEET_DESCRIPTIONS = {
+    'Dataset S1.2': 'Primary demographic and clinical characteristics dataset containing patient baseline information, medical history, and socioeconomic factors collected at study enrollment'
+}
