@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: gut-instinct
+    env: node
+    buildCommand: |
+      curl https://install.meteor.com/ | sh
+      export PATH=$PATH:~/.meteor
+      meteor npm install
+      meteor build --directory ./build --server-only
+      cd build/bundle && npm install --production
+    startCommand: cd build/bundle && node main.js
+    envVars:
+      - key: NODE_VERSION
+        value: "18"
+      - key: ROOT_URL
+        value: https://gut-instinct.onrender.com
