@@ -421,252 +421,252 @@ complete_precise_solution = precise_hide_js
 # Update your script with the precise solution
 final_precise_custom_js = custom_js + "\n\n" + complete_precise_solution + "\n\n" #+ overlay_js
 
-# ==================== ADD YOUTUBE VIDEO SECTION ====================
-# Configuration for the 5 YouTube videos
-VIDEO_CONFIGS = [
-    {"id": "xCt66prkEbA", "title": "Clustering in Emperor"},
-    {"id": "PGwesst2jLk", "title": "Variance and Clustering in Emperor"}, 
-    {"id": "1p6IEirCBuw", "title": "Choosing Taxa Level (for analysis)"},
-    {"id": "XNDbmaHVPUU", "title": "Using Color, Visibility, and Shape"},
-    {"id": "4W0e7I4fDp4", "title": "Beta Diversity in Emperor"}
-]
+# ==================== COMMENTED OUT YOUTUBE VIDEO SECTION ====================
+# # Configuration for the 5 YouTube videos
+# VIDEO_CONFIGS = [
+#     {"id": "EpD_LqLw3ck", "title": "Clustering in Emperor"},
+#     {"id": "zObm4E5TRq4", "title": "Variance and Clustering in Emperor"}, 
+#     {"id": "N92V0k64GqQ", "title": "Choosing Taxa Level (for analysis)"},
+#     {"id": "9GxwTPYhOhs", "title": "Using Color, Visibility, and Shape"},
+#     {"id": "oqI2D8NwoMk", "title": "Beta Diversity within clusters in Emperor"}
+# ]
 
-# Generate HTML for all 5 videos
-videos_html = ""
-for i, config in enumerate(VIDEO_CONFIGS):
-    videos_html += f'''
-    <div class="individual-video" data-video-index="{i}">
-        <div class="video-header">
-            <h3>{config["title"]}</h3>
-        </div>
-        <div class="video-wrapper" id="video-wrapper-{i}">
-            <iframe 
-                id="youtube-player-{i}"
-                src="https://www.youtube.com/embed/{config["id"]}?enablejsapi=1&controls=1&modestbranding=1&rel=0"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
-    </div>
-    '''
+# # Generate HTML for all 5 videos
+# videos_html = ""
+# for i, config in enumerate(VIDEO_CONFIGS):
+#     videos_html += f'''
+#     <div class="individual-video" data-video-index="{i}">
+#         <div class="video-header">
+#             <h3>{config["title"]}</h3>
+#         </div>
+#         <div class="video-wrapper" id="video-wrapper-{i}">
+#             <iframe 
+#                 id="youtube-player-{i}"
+#                 src="https://www.youtube.com/embed/{config["id"]}?enablejsapi=1&controls=1&modestbranding=1&rel=0"
+#                 frameborder="0"
+#                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+#                 allowfullscreen>
+#             </iframe>
+#         </div>
+#     </div>
+#     '''
 
-# YouTube video container HTML
-youtube_video_html = f'''
-<div id="youtube-video-container" class="youtube-container">
-    <div class="main-header">
-        <h2>Educational Videos</h2>
-    </div>
-    <div class="videos-grid" id="videos-grid">
-        {videos_html}
-    </div>
-</div>
-'''
+# # YouTube video container HTML
+# youtube_video_html = f'''
+# <div id="youtube-video-container" class="youtube-container">
+#     <div class="main-header">
+#         <h2>Educational Videos</h2>
+#     </div>
+#     <div class="videos-grid" id="videos-grid">
+#         {videos_html}
+#     </div>
+# </div>
+# '''
 
-# YouTube video CSS
-youtube_video_css = '''
-<style>
-/* YouTube Video Container */
-.youtube-container {
-    position: fixed;
-    top: 450px; /* Position below color classification area */
-    right: 20px;
-    width: 500px;
-    max-height: calc(100vh - 320px);
-    background: #fff;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 1000;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    overflow-y: auto;
-}
+# # YouTube video CSS
+# youtube_video_css = '''
+# <style>
+# /* YouTube Video Container */
+# .youtube-container {
+#     position: fixed;
+#     top: 450px; /* Position below color classification area */
+#     right: 20px;
+#     width: 500px;
+#     max-height: calc(100vh - 320px);
+#     background: #fff;
+#     border: 2px solid #ddd;
+#     border-radius: 8px;
+#     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+#     z-index: 1000;
+#     font-family: 'Helvetica Neue', Arial, sans-serif;
+#     overflow-y: auto;
+# }
 
-.main-header {
-    background: #2196F3;
-    color: white;
-    padding: 12px 15px;
-    border-radius: 6px 6px 0 0;
-    text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
+# .main-header {
+#     background: #2196F3;
+#     color: white;
+#     padding: 12px 15px;
+#     border-radius: 6px 6px 0 0;
+#     text-align: center;
+#     position: sticky;
+#     top: 0;
+#     z-index: 10;
+# }
 
-.main-header h2 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-}
+# .main-header h2 {
+#     margin: 0;
+#     font-size: 16px;
+#     font-weight: 600;
+# }
 
-.videos-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 0;
-    padding: 0;
-}
+# .videos-grid {
+#     display: grid;
+#     grid-template-columns: repeat(2, 1fr);
+#     grid-gap: 0;
+#     padding: 0;
+# }
 
-.individual-video {
-    border: 1px solid #e9ecef;
-    background: #fff;
-}
+# .individual-video {
+#     border: 1px solid #e9ecef;
+#     background: #fff;
+# }
 
-.individual-video:nth-child(1),
-.individual-video:nth-child(2) {
-    /* Top row videos - no changes needed */
-}
+# .individual-video:nth-child(1),
+# .individual-video:nth-child(2) {
+#     /* Top row videos - no changes needed */
+# }
 
-.individual-video:nth-child(3),
-.individual-video:nth-child(4) {
-    /* Second row videos - no changes needed */
-}
+# .individual-video:nth-child(3),
+# .individual-video:nth-child(4) {
+#     /* Second row videos - no changes needed */
+# }
 
-.individual-video:nth-child(5) {
-    /* Bottom video spans only left column */
-    grid-column: 1;
-}
+# .individual-video:nth-child(5) {
+#     /* Bottom video spans only left column */
+#     grid-column: 1;
+# }
 
-.video-header {
-    background: #f8f9fa;
-    padding: 8px 12px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.2s ease;
-    border-bottom: 1px solid #e9ecef;
-}
+# .video-header {
+#     background: #f8f9fa;
+#     padding: 8px 12px;
+#     cursor: pointer;
+#     display: flex;
+#     justify-content: space-between;
+#     align-items: center;
+#     transition: background-color 0.2s ease;
+#     border-bottom: 1px solid #e9ecef;
+# }
 
-.video-header:hover {
-    background: #e9ecef;
-}
+# .video-header:hover {
+#     background: #e9ecef;
+# }
 
-.video-header h3 {
-    margin: 0;
-    font-size: 11px;
-    color: #333;
-    font-weight: 600;
-    flex: 1;
-}
+# .video-header h3 {
+#     margin: 0;
+#     font-size: 11px;
+#     color: #333;
+#     font-weight: 600;
+#     flex: 1;
+# }
 
-.minimize-indicator {
-    font-size: 14px;
-    font-weight: bold;
-    color: #666;
-    transition: transform 0.2s ease;
-    margin-left: 8px;
-}
+# .minimize-indicator {
+#     font-size: 14px;
+#     font-weight: bold;
+#     color: #666;
+#     transition: transform 0.2s ease;
+#     margin-left: 8px;
+# }
 
-.video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
-    height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
+# .video-wrapper {
+#     position: relative;
+#     padding-bottom: 56.25%; /* 16:9 aspect ratio */
+#     height: 0;
+#     overflow: hidden;
+#     transition: all 0.3s ease;
+# }
 
-.video-wrapper.minimized {
-    padding-bottom: 0;
-    height: 0;
-    opacity: 0;
-}
+# .video-wrapper.minimized {
+#     padding-bottom: 0;
+#     height: 0;
+#     opacity: 0;
+# }
 
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
+# .video-wrapper iframe {
+#     position: absolute;
+#     top: 0;
+#     left: 0;
+#     width: 100%;
+#     height: 100%;
+# }
 
-/* Minimized state indicators */
-.individual-video.minimized .minimize-indicator {
-    transform: rotate(90deg);
-}
+# /* Minimized state indicators */
+# .individual-video.minimized .minimize-indicator {
+#     transform: rotate(90deg);
+# }
 
-/* Responsive adjustments */
-@media (max-width: 1400px) {
-    .youtube-container {
-        width: 500px;
-    }
-}
+# /* Responsive adjustments */
+# @media (max-width: 1400px) {
+#     .youtube-container {
+#         width: 500px;
+#     }
+# }
 
-@media (max-width: 1200px) {
-    .youtube-container {
-        position: relative;
-        top: auto;
-        right: auto;
-        width: 100%;
-        max-width: 600px;
-        margin: 20px auto;
-        max-height: 70vh;
-    }
+# @media (max-width: 1200px) {
+#     .youtube-container {
+#         position: relative;
+#         top: auto;
+#         right: auto;
+#         width: 100%;
+#         max-width: 600px;
+#         margin: 20px auto;
+#         max-height: 70vh;
+#     }
     
-    .videos-grid {
-        grid-template-columns: 1fr;
-    }
+#     .videos-grid {
+#         grid-template-columns: 1fr;
+#     }
     
-    .individual-video:nth-child(5) {
-        grid-column: 1;
-    }
-}
+#     .individual-video:nth-child(5) {
+#         grid-column: 1;
+#     }
+# }
 
-@media (max-width: 768px) {
-    .youtube-container {
-        width: calc(100% - 20px);
-        margin: 10px;
-        top: auto;
-        right: auto;
-        position: relative;
-        max-height: 60vh;
-    }
+# @media (max-width: 768px) {
+#     .youtube-container {
+#         width: calc(100% - 20px);
+#         margin: 10px;
+#         top: auto;
+#         right: auto;
+#         position: relative;
+#         max-height: 60vh;
+#     }
     
-    .main-header h2 {
-        font-size: 14px;
-    }
+#     .main-header h2 {
+#         font-size: 14px;
+#     }
     
-    .video-header h3 {
-        font-size: 10px;
-    }
+#     .video-header h3 {
+#         font-size: 10px;
+#     }
     
-    .videos-grid {
-        grid-template-columns: 1fr;
-    }
+#     .videos-grid {
+#         grid-template-columns: 1fr;
+#     }
     
-    .individual-video:nth-child(5) {
-        grid-column: 1;
-    }
-}
+#     .individual-video:nth-child(5) {
+#         grid-column: 1;
+#     }
+# }
 
-/* Scrollbar styling */
-.youtube-container::-webkit-scrollbar {
-    width: 6px;
-}
+# /* Scrollbar styling */
+# .youtube-container::-webkit-scrollbar {
+#     width: 6px;
+# }
 
-.youtube-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
+# .youtube-container::-webkit-scrollbar-track {
+#     background: #f1f1f1;
+# }
 
-.youtube-container::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
-}
+# .youtube-container::-webkit-scrollbar-thumb {
+#     background: #c1c1c1;
+#     border-radius: 3px;
+# }
 
-.youtube-container::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-}
-</style>
-'''
+# .youtube-container::-webkit-scrollbar-thumb:hover {
+#     background: #a8a8a8;
+# }
+# </style>
+# '''
 
-# JavaScript for video controls
-youtube_video_js = '''
-// YouTube Video Controls - No minimize functionality needed
-$(document).ready(function() {
-    // Videos are always visible, no controls needed
-    console.log('Educational videos loaded successfully');
-});
-'''
-# ==================== END YOUTUBE VIDEO SECTION ====================
+# # JavaScript for video controls
+# youtube_video_js = '''
+# // YouTube Video Controls - No minimize functionality needed
+# $(document).ready(function() {
+#     // Videos are always visible, no controls needed
+#     console.log('Educational videos loaded successfully');
+# });
+# '''
+# ==================== END COMMENTED OUT YOUTUBE VIDEO SECTION ====================
 
 # ==================== ADD PAGE HEADER ====================
 # Define the header HTML and CSS
@@ -709,8 +709,8 @@ page_header_css = '''
 '''
 # ==================== END PAGE HEADER ====================
 
-# Insert the header CSS, precise hide CSS, and YouTube video CSS
-emperor_html = emperor_html.replace('</head>', f'{page_header_css}{precise_hide_css}{youtube_video_css}</head>')
+# Insert the header CSS and precise hide CSS (YouTube video CSS commented out)
+emperor_html = emperor_html.replace('</head>', f'{page_header_css}{precise_hide_css}</head>')
 
 # Insert the header HTML right after the body tag
 body_start = emperor_html.find('<body')
@@ -719,33 +719,35 @@ if body_start != -1:
     body_tag_end = emperor_html.find('>', body_start) + 1
     emperor_html = emperor_html[:body_tag_end] + page_header_html + emperor_html[body_tag_end:]
 
-# Insert the YouTube video HTML right after the page header
-header_end = emperor_html.find('</div>', emperor_html.find('emperor-page-header'))
-if header_end != -1:
-    header_end += 6  # Move past the </div>
-    emperor_html = emperor_html[:header_end] + youtube_video_html + emperor_html[header_end:]
+# ==================== COMMENTED OUT YOUTUBE VIDEO HTML INSERTION ====================
+# # Insert the YouTube video HTML right after the page header
+# header_end = emperor_html.find('</div>', emperor_html.find('emperor-page-header'))
+# if header_end != -1:
+#     header_end += 6  # Move past the </div>
+#     emperor_html = emperor_html[:header_end] + youtube_video_html + emperor_html[header_end:]
 
-# Update the final JavaScript to include YouTube controls
-final_precise_custom_js_with_youtube = final_precise_custom_js + "\n\n" + youtube_video_js
+# # Update the final JavaScript to include YouTube controls
+# final_precise_custom_js_with_youtube = final_precise_custom_js + "\n\n" + youtube_video_js
+# ==================== END COMMENTED OUT YOUTUBE VIDEO HTML INSERTION ====================
 
-# Replace the JavaScript insertion
+# Replace the JavaScript insertion (without YouTube JS)
 marker_pattern = "/*__custom_on_ready_code__*/"
 if marker_pattern in emperor_html:
-    emperor_html = emperor_html.replace(marker_pattern, marker_pattern + "\n      " + final_precise_custom_js_with_youtube)
+    emperor_html = emperor_html.replace(marker_pattern, marker_pattern + "\n      " + final_precise_custom_js)
 else:
     ready_function_end = "ec.ready = function () {"
     start_idx = emperor_html.find(ready_function_end)
     if start_idx != -1:
         insertion_idx = start_idx + len(ready_function_end)
-        emperor_html = emperor_html[:insertion_idx] + "\n      " + final_precise_custom_js_with_youtube + emperor_html[insertion_idx:]
+        emperor_html = emperor_html[:insertion_idx] + "\n      " + final_precise_custom_js + emperor_html[insertion_idx:]
 
 print("Applied PRECISE tab hiding solution that preserves Color, Visibility, and Axes tabs AND hides settings button")
 print("Added prominent 'Emperor Visualization Page' header")
-print(f"Added 5 YouTube videos in 2x2+1 grid layout (no minimize controls)")
-print("- Video overlay is fixed below color classification area (scroll-independent)")
-print("- Videos 1&2 side by side (top row), videos 3&4 side by side (middle row), video 5 bottom left")
-print("- Removed all minimize/maximize functionality")
-print("- Fixed responsive breakpoints with !important declarations")
+# print(f"Added 5 YouTube videos in 2x2+1 grid layout (no minimize controls)")
+# print("- Video overlay is fixed below color classification area (scroll-independent)")
+# print("- Videos 1&2 side by side (top row), videos 3&4 side by side (middle row), video 5 bottom left")
+# print("- Removed all minimize/maximize functionality")
+# print("- Fixed responsive breakpoints with !important declarations")
 
 # Also perform more aggressive text replacement in the HTML
 # This searches for any instances of PC1, PC2, PC3 with different capitalizations and spacings
@@ -801,9 +803,9 @@ print(f"- Added {axes_added} raw numeric variables as selectable axes")
 print("- Raw data used for axes, binned data used for colors")
 print("- Used safe column renaming to avoid pandas errors")
 print("- Added prominent 'Emperor Visualization Page' header to generated HTML")
-print("- Added 5 YouTube videos in 2x2+1 grid layout (always visible)")
-print("- Video overlay positioned below color classification (fixed, scroll-independent)")
-print("- Videos arranged: 1&2 top row, 3&4 middle row, 5 bottom left")
-print("- Removed all minimize/maximize functionality")
-print("- Fixed responsive breakpoints using !important declarations")
+# print("- Added 5 YouTube videos in 2x2+1 grid layout (always visible)")
+# print("- Video overlay positioned below color classification (fixed, scroll-independent)")
+# print("- Videos arranged: 1&2 top row, 3&4 middle row, 5 bottom left")
+# print("- Removed all minimize/maximize functionality")
+# print("- Fixed responsive breakpoints using !important declarations")
 print("\nScript completed.")
