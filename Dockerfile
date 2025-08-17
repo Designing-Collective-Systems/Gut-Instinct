@@ -1,36 +1,43 @@
 FROM node:20
 
-# Install Python
-RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
+# Install Python and required packages
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Meteor
 RUN curl https://install.meteor.com/ | sh
 ENV PATH=$PATH:/root/.meteor
+ENV METEOR_ALLOW_SUPERUSER=1
 
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY package*.json ./
-COPY .meteor ./.meteor/
+# Copy and install Python dependencies if requirements.txt exists
+COPY requirements.txt* ./
+RUN if [ -f requirements.txt ]; then pip3 install -r requirements.txt; else echo "No requirements.txt found, skipping Python packages"; fi
 
-# Copy source code
+# Copy all source code
 COPY . .
 
-# Install Meteor dependencies and build
+# Install Meteor dependencies and build with superuser flag
 RUN meteor npm install
-RUN meteor build --directory /tmp/build --server-only
+RUN meteor build --directory /tmp/build --server-only --allow-superuser
 
 # Move to built app and install production dependencies
 WORKDIR /tmp/build/bundle
 RUN cd programs/server && npm install
 
-# Copy your assets to the right location
-WORKDIR /app
-RUN cp -r public /tmp/build/bundle/ 2>/dev/null || echo "No public folder"
-RUN cp -r server /tmp/build/bundle/ 2>/dev/null || echo "No server folder"
+# Copy Python scripts and other assets to the correct location
+COPY public ./public/
+COPY server ./server/
 
-# Switch back to bundle directory
-WORKDIR /tmp/build/bundle
+# Make sure Python scripts are executable
+RUN find . -name "*.py" -exec chmod +x {} \;
+
+# Verify Python is available
+RUN python3 --version
 
 EXPOSE 3000
 CMD ["node", "main.js"]
