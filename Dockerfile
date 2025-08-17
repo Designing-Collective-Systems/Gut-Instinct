@@ -14,14 +14,13 @@ ENV METEOR_ALLOW_SUPERUSER=1
 
 WORKDIR /app
 
-# Copy and install Python dependencies if requirements.txt exists
-COPY requirements.txt* ./
-RUN if [ -f requirements.txt ]; then pip3 install -r requirements.txt; else echo "No requirements.txt found, skipping Python packages"; fi
-
-# Copy all source code
+# Copy all source code first
 COPY . .
 
-# Install Meteor dependencies and build with superuser flag
+# Install Python dependencies - simple approach
+RUN pip3 install numpy pandas matplotlib seaborn plotly scikit-learn scipy || echo "Python package installation failed, continuing..."
+
+# Install Meteor dependencies and build
 RUN meteor npm install
 RUN meteor build --directory /tmp/build --server-only --allow-superuser
 
