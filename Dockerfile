@@ -38,5 +38,8 @@ RUN find . -name "*.py" -exec chmod +x {} \;
 # Verify Python is available
 RUN python3 --version
 
+# Debug: List all files to see structure
+RUN find /tmp/build -name "*.js" | head -20
+
 EXPOSE 3000
-CMD ["node", "programs/server/main.js"]
+CMD ["find", "/tmp/build", "-name", "main.js", "-exec", "node", "{}", ";"]
