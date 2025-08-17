@@ -39,4 +39,4 @@ RUN find . -name "*.py" -exec chmod +x {} \;
 RUN python3 --version
 
 EXPOSE 3000
-CMD ["node", "main.js"]
+CMD ["node", "programs/server/main.js"]
