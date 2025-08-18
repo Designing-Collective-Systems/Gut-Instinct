@@ -1,9 +1,52 @@
-import pandas as pd
-import numpy as np
-from emperor import Emperor
-from emperor.util import get_emperor_support_files_dir
-from skbio.stats.ordination import pcoa
-from scipy.spatial.distance import pdist, squareform
+import subprocess
+import sys
+
+def install_package(package):
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--break-system-packages", package], 
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except:
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package], 
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except:
+            print(f"Failed to install {package}")
+
+# Install required packages if not available
+packages_to_install = [
+    "pandas", 
+    "numpy", 
+    "emperor", 
+    "scikit-bio",  # This is the correct package name for skbio
+    "scipy"
+]
+
+for package in packages_to_install:
+    try:
+        __import__(package.replace("-", "_"))  # Convert package name to import name
+    except ImportError:
+        print(f"Installing {package}...")
+        install_package(package)
+
+# Now import your actual dependencies
+try:
+    import pandas as pd
+    import numpy as np
+    from emperor import Emperor
+    from emperor.util import get_emperor_support_files_dir
+    from skbio.stats.ordination import pcoa
+    from scipy.spatial.distance import pdist, squareform
+    print("All packages imported successfully!")
+except ImportError as e:
+    print(f"Import error: {e}")
+    # Try alternative import for skbio if it fails
+    try:
+        import skbio
+        from skbio.stats.ordination import pcoa
+    except ImportError:
+        print("skbio still not available, continuing without it...")
+
+# ... rest of your script continues here
 import sys
 
 from support_files.discreteChecker import is_discrete_variable, FORCE_CONTINUOUS
@@ -49,6 +92,7 @@ from support_files.educationRangeFinder import classify_education_level
 from support_files.occupationRangeFinder import classify_occupation
 from support_files.vitaminDRangeFinder import classify_vitamin_d
 from support_files.alphaDiversityRangeFinder import classify_richness, classify_richness_and_evenness
+
 
 # Get command line arguments
 if len(sys.argv) >= 2:
