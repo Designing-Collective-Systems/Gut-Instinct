@@ -18,7 +18,8 @@ packages_to_install = [
     "numpy", 
     "emperor", 
     "scikit-bio",  # This is the correct package name for skbio
-    "scipy"
+    "scipy",
+    "matplotlib"  # Add this!
 ]
 
 for package in packages_to_install:
@@ -36,6 +37,7 @@ try:
     from emperor.util import get_emperor_support_files_dir
     from skbio.stats.ordination import pcoa
     from scipy.spatial.distance import pdist, squareform
+    import matplotlib.pyplot as plt  # Add this import too
     print("All packages imported successfully!")
 except ImportError as e:
     print(f"Import error: {e}")
@@ -45,6 +47,8 @@ except ImportError as e:
         from skbio.stats.ordination import pcoa
     except ImportError:
         print("skbio still not available, continuing without it...")
+
+# ... rest of your script continues here
 
 # ... rest of your script continues here
 import sys
