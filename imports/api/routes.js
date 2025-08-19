@@ -598,6 +598,13 @@ FlowRouter.route('/q/:hashcode', {
         renderTemplate('question', { hashcode: params.hashcode });
     }
 });
+FlowRouter.route('/q/:hashcode', {
+    name: 'questionn',
+    triggersEnter: [requireAuth],
+    action(params) {
+        renderTemplate('questionn', { hashcode: params.hashcode });
+    }
+});
 
 FlowRouter.route('/p/:hashcode', {
     name: 'learn_problem',

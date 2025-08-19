@@ -2,6 +2,50 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
+import subprocess
+import sys
+
+def install_package(package):
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--break-system-packages", package], 
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except:
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package], 
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except:
+            print(f"Failed to install {package}")
+
+# Install required packages if not available
+packages_to_install = [
+    "numpy"
+    "matplotlib"
+     # Add this!
+]
+
+for package in packages_to_install:
+    try:
+        __import__(package.replace("-", "_"))  # Convert package name to import name
+    except ImportError:
+        print(f"Installing {package}...")
+        install_package(package)
+
+# Now import your actual dependencies
+try:
+    import numpy as np
+    import matplotlib.pyplot as plt 
+    import matplotlib.colors as mcolors
+     # Add this import too
+    print("All packages imported successfully!")
+except ImportError as e:
+    print(f"Import error: {e}")
+    # Try alternative import for skbio if it fails
+    try:
+        import skbio
+        from skbio.stats.ordination import pcoa
+    except ImportError:
+        print("skbio still not available, continuing without it...")
+
 def generate_discrete_colors(num_categories):
     """Generate distinct colors for discrete categories"""
     # Extended color palette for discrete variables

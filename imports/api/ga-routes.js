@@ -385,7 +385,9 @@ FlowRouter.route('/galileo/logout', {
 FlowRouter.route('/galileo/console', { action() { renderTemplate('gaConsole'); } });
 FlowRouter.route('/galileo/home', { action() { renderTemplate('gaHome'); } });
 FlowRouter.route('/galileo/questions', { action() { renderTemplate('gaQuestions'); } });
+FlowRouter.route('/galileo/questionsn', { action() { renderTemplate('gaQuestionsn'); } });
 FlowRouter.route('/galileo/visualization', { action() { renderTemplate('emperorVisualization'); } });
+FlowRouter.route('/galileo/visualizationn', { action() { renderTemplate('emperorVisualizationn'); } });
 FlowRouter.route('/galileo/entrance', { action() { renderTemplate('gaEntrance'); } });
 FlowRouter.route('/galileo/landing', { action() { renderTemplate('gaLanding'); } });
 

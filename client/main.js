@@ -28,14 +28,17 @@ import './templates/username/_.js';
 import './templates/landing/_.js';
 import './templates/consent/_.js';
 import './templates/entrance/_.js'; 
-
 import './templates/galileo/create/imageModal/_.js'
 import './templates/galileo/create/helpLayout/_.js'
 import './templates/galileo/pageFooter/_.js'
 import './templates/docent/loading_wheel/_.js'
 import './templates/galileo/question/_.js';
+import './templates/galileo/questionn/_.js';
 import './templates/visualization.html';
+import './templates/visualizationn.html';
+
 import './templates/galileo/gaHome/_.js';
+
 
 
 import './templates/galileo/assets/editable/_.js';
