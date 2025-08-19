@@ -18,7 +18,7 @@ def install_package(package):
 
 # Install required packages if not available
 packages_to_install = [
-    "numpy"
+    "numpy",
     "matplotlib"
      # Add this!
 ]

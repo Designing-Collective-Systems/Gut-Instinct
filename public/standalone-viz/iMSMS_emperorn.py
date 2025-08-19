@@ -19,7 +19,7 @@ packages_to_install = [
     "emperor", 
     "scikit-bio",  # This is the correct package name for skbio
     "scipy",
-    "matplotlib"
+    "matplotlib",
     "openpyxl"  # Add this!
 ]
 
