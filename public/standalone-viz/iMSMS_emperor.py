@@ -110,7 +110,8 @@ else:
     print("No variable provided, using default")
 
 # Load the iMSMS dataset
-demographic_data, sheet6_class, dependentvar = load_imsms_data(variable2)
+demographic_data, sheet6_class, dependentvar, weighted_unifrac_df = load_imsms_data(variable2)
+
 
 print("=== DEBUGGING ORIGINAL DATA ===")
 print(f"Original demographic_data shape: {demographic_data.shape}")
@@ -243,18 +244,71 @@ demographic_data = demographic_data.set_index('iMSMS_ID')
 sheet6_class = sheet6_class.set_index('iMSMS_ID')
 raw_data_for_axes = raw_data_for_axes.set_index('iMSMS_ID')
 
-# Beta Diversity
-bray_curtis = pdist(sheet6_class, metric='braycurtis')
-bray_curtis_matrix = squareform(bray_curtis)
-bray_curtis_df = pd.DataFrame(bray_curtis_matrix, index=sheet6_class.index, columns=sheet6_class.index)
+# # Beta Diversity
+# bray_curtis = pdist(sheet6_class, metric='braycurtis')
+# bray_curtis_matrix = squareform(bray_curtis)
+# bray_curtis_df = pd.DataFrame(bray_curtis_matrix, index=sheet6_class.index, columns=sheet6_class.index)
 
-# Prepare distance matrix
-distance_matrix = bray_curtis_df.to_numpy()
+# # Prepare distance matrix
+# distance_matrix = bray_curtis_df.to_numpy()
+# distance_matrix = (distance_matrix + distance_matrix.T) / 2
+# np.fill_diagonal(distance_matrix, 0)
+
+# # Perform PCoA
+# pcoa_results = pcoa(distance_matrix)
+
+# ==================== WEIGHTED UNIFRAC DISTANCE PROCESSING ====================
+print("=== PROCESSING WEIGHTED UNIFRAC DISTANCES ===")
+
+print(f"Sample ID examples from distance matrix: {list(weighted_unifrac_df.index[:5])}")
+print(f"Sample ID examples from metadata: {list(demographic_data.index[:5])}")
+
+# Ensure the matrix has the same samples as your metadata
+common_samples = weighted_unifrac_df.index.intersection(demographic_data.index)
+print(f"Common samples between distance matrix and metadata: {len(common_samples)}")
+
+if len(common_samples) == 0:
+    print("ERROR: No common samples found between distance matrix and metadata!")
+    print("Distance matrix sample IDs:", list(weighted_unifrac_df.index[:10]))
+    print("Metadata sample IDs:", list(demographic_data.index[:10]))
+    sys.exit(1)
+
+# Filter all datasets to common samples
+weighted_unifrac_df = weighted_unifrac_df.loc[common_samples, common_samples]
+demographic_data = demographic_data.loc[common_samples]
+sheet6_class = sheet6_class.loc[common_samples]
+raw_data_for_axes = raw_data_for_axes.loc[common_samples]
+
+print(f"Filtered distance matrix shape: {weighted_unifrac_df.shape}")
+print(f"Filtered metadata shape: {demographic_data.shape}")
+
+# Convert to numpy array for PCoA
+distance_matrix = weighted_unifrac_df.to_numpy()
+
+# Validate the distance matrix
+print("Validating weighted UniFrac distance matrix...")
+is_symmetric = np.allclose(distance_matrix, distance_matrix.T, rtol=1e-10)
+diagonal_zero = np.allclose(np.diag(distance_matrix), 0, atol=1e-10)
+distance_range = f"{distance_matrix.min():.6f} to {distance_matrix.max():.6f}"
+
+print(f"Matrix is symmetric: {is_symmetric}")
+print(f"Diagonal is zero: {diagonal_zero}")
+print(f"Distance range: {distance_range}")
+
+# Ensure the matrix is symmetric and diagonal is zero (cleanup if needed)
 distance_matrix = (distance_matrix + distance_matrix.T) / 2
 np.fill_diagonal(distance_matrix, 0)
 
-# Perform PCoA
+# Perform PCoA on the weighted UniFrac distances
+print("Performing PCoA on weighted UniFrac distances...")
 pcoa_results = pcoa(distance_matrix)
+
+print("PCoA completed using weighted UniFrac distances")
+print(f"Explained variance by first 3 axes: {pcoa_results.proportion_explained.iloc[:3].values}")
+
+# ==================== END WEIGHTED UNIFRAC PROCESSING ====================
+
+
 
 # ==================== USE BINNED DATA FOR AXES ====================
 print("=== USING BINNED METADATA VARIABLES AS AXES ===")
@@ -517,10 +571,10 @@ youtube_video_css = '''
 <style>
 /* YouTube Video Container */
 .youtube-container {
-    position: fixed;
+    position: absolute;
     top: 450px; /* Position below color classification area */
-    right: 20px;
-    width: 500px;
+    right: 200px;
+    width: 200px;
     max-height: calc(100vh - 320px);
     background: #fff;
     border: 2px solid #ddd;
@@ -528,7 +582,6 @@ youtube_video_css = '''
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 1000;
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    overflow-y: auto;
 }
 
 .main-header {
@@ -631,60 +684,6 @@ youtube_video_css = '''
 /* Minimized state indicators */
 .individual-video.minimized .minimize-indicator {
     transform: rotate(90deg);
-}
-
-/* Responsive adjustments */
-@media (max-width: 1400px) {
-    .youtube-container {
-        width: 500px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .youtube-container {
-        position: relative;
-        top: auto;
-        right: auto;
-        width: 100%;
-        max-width: 600px;
-        margin: 20px auto;
-        max-height: 70vh;
-    }
-    
-    .videos-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .individual-video:nth-child(5) {
-        grid-column: 1;
-    }
-}
-
-@media (max-width: 768px) {
-    .youtube-container {
-        width: calc(100% - 20px);
-        margin: 10px;
-        top: auto;
-        right: auto;
-        position: relative;
-        max-height: 60vh;
-    }
-    
-    .main-header h2 {
-        font-size: 14px;
-    }
-    
-    .video-header h3 {
-        font-size: 10px;
-    }
-    
-    .videos-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .individual-video:nth-child(5) {
-        grid-column: 1;
-    }
 }
 
 /* Scrollbar styling */
