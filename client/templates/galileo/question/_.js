@@ -37,7 +37,7 @@ Template.gaQuestions.events({
         // Navigate after short delay
         setTimeout(() => {
           FlowRouter.go('/galileo/visualization');
-        }, 500);
+        }, 1000);
       }
     });
   }
