@@ -104,7 +104,7 @@ else:
     print("No variable provided, using default")
 
 # Load the iMSMS dataset
-demographic_data, sheet6_class, dependentvar = load_imsms_data(variable2)
+demographic_data, sheet6_class, dependentvar, weighted_unifrac_df = load_imsms_data(variable2)
 
 print("=== DEBUGGING ORIGINAL DATA ===")
 print(f"Original demographic_data shape: {demographic_data.shape}")

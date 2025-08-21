@@ -338,4 +338,11 @@ def load_imsms_data(variable2: Optional[str]):
     sheet6_class['iMSMS_ID']     = sheet6_class['iMSMS_ID'].astype(str).str.strip()
 
     print(f"[dataLoader] S6 shape after processing: {sheet6_class.shape} (rows=samples)")
-    return demographic_data, sheet6_class, dependentvar
+
+    # Load the weighted UniFrac distance matrix from Dataset S5.2
+    print("Loading weighted UniFrac distance matrix from Dataset S5.2...")
+    weighted_unifrac_df = pd.read_excel(S5_PATH, sheet_name='Dataset S5.2', index_col=0)
+    print(f"Loaded weighted UniFrac matrix with shape: {weighted_unifrac_df.shape}")
+
+
+    return demographic_data, sheet6_class, dependentvar, weighted_unifrac_df
