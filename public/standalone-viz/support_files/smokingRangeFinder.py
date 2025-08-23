@@ -4,7 +4,7 @@ import numpy as np
 def classify_smoking_status(df, column_name):
     """Classify smoking status into ordered categories"""
     def categorize_smoking_status(smoking_value):
-        print(smoking_value)
+        # print(smoking_value)
         if pd.isna(smoking_value):
             return "a. nan"
         try:

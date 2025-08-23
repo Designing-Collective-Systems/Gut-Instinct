@@ -27,7 +27,7 @@ for package in packages_to_install:
     try:
         __import__(package.replace("-", "_"))  # Convert package name to import name
     except ImportError:
-        print(f"Installing {package}...")
+        # print(f"Installing {package}...")
         install_package(package)
 
 # Now import your actual dependencies
@@ -39,7 +39,7 @@ try:
     from skbio.stats.ordination import pcoa
     from scipy.spatial.distance import pdist, squareform
     import matplotlib.pyplot as plt  # Add this import too
-    print("All packages imported successfully!")
+    # print("All packages imported successfully!")
 except ImportError as e:
     print(f"Import error: {e}")
     # Try alternative import for skbio if it fails
@@ -106,13 +106,13 @@ else:
 # Load the iMSMS dataset
 demographic_data, sheet6_class, dependentvar, weighted_unifrac_df = load_imsms_data(variable2)
 
-print("=== DEBUGGING ORIGINAL DATA ===")
-print(f"Original demographic_data shape: {demographic_data.shape}")
+# print("=== DEBUGGING ORIGINAL DATA ===")
+# print(f"Original demographic_data shape: {demographic_data.shape}")
 
 # ==================== PRESERVE RAW DATA FOR AXES ====================
 # Keep a complete copy of the original raw data for axes
 raw_data_for_axes = demographic_data.copy()
-print(f"Preserved raw data with shape: {raw_data_for_axes.shape}")
+# print(f"Preserved raw data with shape: {raw_data_for_axes.shape}")
 
 # Filter to only numeric columns that make sense as axes
 numeric_axes_vars = []
@@ -126,9 +126,9 @@ for col in raw_data_for_axes.columns:
             numeric_axes_vars.append(col)
             min_val = raw_data_for_axes[col].min()
             max_val = raw_data_for_axes[col].max()
-            print(f"Will use as axis: {col} (range: {min_val:.2f} to {max_val:.2f}, {unique_count} unique values)")
+            # print(f"Will use as axis: {col} (range: {min_val:.2f} to {max_val:.2f}, {unique_count} unique values)")
 
-print(f"Selected {len(numeric_axes_vars)} numeric variables for axes")
+# print(f"Selected {len(numeric_axes_vars)} numeric variables for axes")
 # ==================== END RAW DATA PRESERVATION ====================
 
 # Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
@@ -251,7 +251,7 @@ np.fill_diagonal(distance_matrix, 0)
 pcoa_results = pcoa(distance_matrix)
 
 # ==================== USE BINNED DATA FOR AXES ====================
-print("=== USING BINNED METADATA VARIABLES AS AXES ===")
+# print("=== USING BINNED METADATA VARIABLES AS AXES ===")
 
 # Fix sample IDs first
 if isinstance(pcoa_results.samples, pd.DataFrame):
@@ -262,15 +262,15 @@ else:
         index=demographic_data.index
     )
 
-print(f"Original PCoA shape: {pcoa_results.samples.shape}")
-print(f"Original columns: {list(pcoa_results.samples.columns)}")
+# print(f"Original PCoA shape: {pcoa_results.samples.shape}")
+# print(f"Original columns: {list(pcoa_results.samples.columns)}")
 
 # Create a completely new DataFrame with explicit column structure
 # Start with just the first 3 PCoA axes
 pcoa_base = pcoa_results.samples.iloc[:, :3].copy()
 pcoa_base.columns = ['Axis 1', 'Axis 2', 'Axis 3']
 
-print(f"Base PCoA data shape: {pcoa_base.shape}")
+# print(f"Base PCoA data shape: {pcoa_base.shape}")
 
 # Function to convert categorical data to numeric codes for plotting
 def convert_categorical_to_numeric(series):
@@ -285,7 +285,7 @@ def convert_categorical_to_numeric(series):
         # Convert to numeric
         numeric_series = series.map(cat_to_num)
         
-        print(f"    Category mapping: {cat_to_num}")
+        # print(f"    Category mapping: {cat_to_num}")
         return numeric_series, cat_to_num
     else:
         # Already numeric, return as-is
@@ -296,7 +296,7 @@ key_variables = ['Age', 'Body Mass Index', 'Weight', 'Height']
 axes_added = 0
 
 for var_name in key_variables:
-    print(f"\nProcessing variable: {var_name}")
+    # print(f"\nProcessing variable: {var_name}")
     
     if var_name in demographic_data.columns:
         try:
@@ -304,15 +304,15 @@ for var_name in key_variables:
             binned_values = demographic_data.loc[pcoa_base.index, var_name]
             
             # Debug: Show what we found
-            print(f"  Found {var_name} in demographic_data")
-            print(f"  Data type: {binned_values.dtype}")
-            print(f"  Unique values: {sorted(binned_values.dropna().unique())}")
+            # print(f"  Found {var_name} in demographic_data")
+            # print(f"  Data type: {binned_values.dtype}")
+            # print(f"  Unique values: {sorted(binned_values.dropna().unique())}")
             
             # Check if we have enough non-null values
             non_null_count = binned_values.notna().sum()
             unique_count = binned_values.nunique()
             
-            print(f"  Non-null count: {non_null_count}, Unique count: {unique_count}")
+            # print(f"  Non-null count: {non_null_count}, Unique count: {unique_count}")
             
             if non_null_count > 50 and unique_count >= 2:
                 # Convert categorical data to numeric for plotting
@@ -323,13 +323,13 @@ for var_name in key_variables:
                     pcoa_base[var_name] = numeric_values
                     axes_added += 1
                     
-                    print(f"✓ Added axis: {var_name} ({unique_count} categories, {non_null_count} samples)")
+                    # print(f"✓ Added axis: {var_name} ({unique_count} categories, {non_null_count} samples)")
                     
                     # Show sample categories and their numeric mappings
                     sample_cats = binned_values.dropna().head(5).tolist()
                     sample_nums = numeric_values.dropna().head(5).tolist()
-                    print(f"   Sample categories: {sample_cats}")
-                    print(f"   Sample numeric values: {sample_nums}")
+                    # print(f"   Sample categories: {sample_cats}")
+                    # print(f"   Sample numeric values: {sample_nums}")
                     
                     # Show the full category to number mapping
                     if category_mapping:
@@ -340,16 +340,16 @@ for var_name in key_variables:
                 print(f"✗ Insufficient data for {var_name}: {non_null_count} non-null, {unique_count} unique")
                 
         except Exception as e:
-            print(f"✗ Error adding {var_name}: {e}")
+            # print(f"✗ Error adding {var_name}: {e}")
             import traceback
             traceback.print_exc()
     else:
-        print(f"  {var_name} not found in demographic_data columns")
+        # print(f"  {var_name} not found in demographic_data columns")
         print(f"  Available columns: {list(demographic_data.columns)}")
 
 # If no key variables were available, try other variables from demographic_data
 if axes_added == 0:
-    print("No key variables found, trying other demographic variables...")
+    # print("No key variables found, trying other demographic variables...")
     
     for var_name in demographic_data.columns:
         if var_name not in ['iMSMS_ID'] and axes_added < 4:  # Limit to 4 additional axes
@@ -365,13 +365,13 @@ if axes_added == 0:
                     if numeric_values is not None:
                         pcoa_base[var_name] = numeric_values
                         axes_added += 1
-                        print(f"✓ Added axis: {var_name} ({unique_count} categories, {non_null_count} samples)")
+                        # print(f"✓ Added axis: {var_name} ({unique_count} categories, {non_null_count} samples)")
                         
             except Exception as e:
                 print(f"✗ Error adding {var_name}: {e}")
 
-print(f"Enhanced data shape: {pcoa_base.shape}")
-print(f"Enhanced columns: {list(pcoa_base.columns)}")
+# print(f"Enhanced data shape: {pcoa_base.shape}")
+# print(f"Enhanced columns: {list(pcoa_base.columns)}")
 
 # Create new proportion explained that matches the new structure
 n_total_axes = len(pcoa_base.columns)
@@ -390,20 +390,20 @@ all_explained = np.concatenate([
 pcoa_results.samples = pcoa_base
 pcoa_results.proportion_explained = pd.Series(all_explained, index=pcoa_base.columns)
 
-print(f"Final verification:")
-print(f"  - Samples shape: {pcoa_results.samples.shape}")
-print(f"  - Samples columns: {list(pcoa_results.samples.columns)}")
-print(f"  - Proportion explained length: {len(pcoa_results.proportion_explained)}")
-print(f"  - Axes should include: {axes_added} metadata variables")
+# print(f"Final verification:")
+# print(f"  - Samples shape: {pcoa_results.samples.shape}")
+# print(f"  - Samples columns: {list(pcoa_results.samples.columns)}")
+# print(f"  - Proportion explained length: {len(pcoa_results.proportion_explained)}")
+# print(f"  - Axes should include: {axes_added} metadata variables")
 
 # Quick data validation
-print(f"\nData validation:")
+# print(f"\nData validation:")
 for col in pcoa_results.samples.columns:
     non_null = pcoa_results.samples[col].notna().sum()
     data_type = pcoa_results.samples[col].dtype
     min_val = pcoa_results.samples[col].min() if pd.api.types.is_numeric_dtype(pcoa_results.samples[col]) else "N/A"
     max_val = pcoa_results.samples[col].max() if pd.api.types.is_numeric_dtype(pcoa_results.samples[col]) else "N/A"
-    print(f"  {col}: {non_null} non-null values, dtype: {data_type}, range: {min_val} to {max_val}")
+    # print(f"  {col}: {non_null} non-null values, dtype: {data_type}, range: {min_val} to {max_val}")
 
 # ==================== END USE BINNED DATA FOR AXES ====================
 
@@ -784,8 +784,8 @@ else:
         insertion_idx = start_idx + len(ready_function_end)
         emperor_html = emperor_html[:insertion_idx] + "\n      " + final_precise_custom_js + emperor_html[insertion_idx:]
 
-print("Applied PRECISE tab hiding solution that preserves Color, Visibility, and Axes tabs AND hides settings button")
-print("Added prominent 'Emperor Visualization Page' header")
+# print("Applied PRECISE tab hiding solution that preserves Color, Visibility, and Axes tabs AND hides settings button")
+# print("Added prominent 'Emperor Visualization Page' header")
 # print(f"Added 5 YouTube videos in 2x2+1 grid layout (no minimize controls)")
 # print("- Video overlay is fixed below color classification area (scroll-independent)")
 # print("- Videos 1&2 side by side (top row), videos 3&4 side by side (middle row), video 5 bottom left")

@@ -24,7 +24,7 @@ def _find_dataset_dir(script_dir: str) -> str:
     for loc in candidates:
         if os.path.exists(os.path.join(loc, 'Supplementary_Dataset_S1.xlsx')):
             return loc
-    print("Dataset not found in any of:", *(os.path.abspath(c) for c in candidates), sep="\n  - ")
+    # print("Dataset not found in any of:", *(os.path.abspath(c) for c in candidates), sep="\n  - ")
     sys.exit(1)
 
 def _resolve_s6_sheet(requested: Optional[str], s6_path: str) -> Tuple[str, List[str]]:
@@ -79,10 +79,10 @@ def _ensure_age_column(df: pd.DataFrame) -> pd.DataFrame:
         name = col.strip().lower()
         if any(re.match(p, name) for p in candidates):
             df['Age'] = pd.to_numeric(df[col], errors='coerce')
-            print(f"[dataLoader] Standardized '{col}' -> 'Age'")
+            # print(f"[dataLoader] Standardized '{col}' -> 'Age'")
             return df
 
-    print("[dataLoader] WARNING: No 'Age' column (or variant) found in demographics.")
+    # print("[dataLoader] WARNING: No 'Age' column (or variant) found in demographics.")
     return df
 
 def _candidate_id_columns() -> List[str]:
@@ -184,7 +184,7 @@ def _transpose_if_wide_matrix(df: pd.DataFrame) -> Optional[pd.DataFrame]:
         transposed = abundance_part.T
         transposed.index.name = 'iMSMS_ID'
         transposed = transposed.reset_index()
-        print(f"[dataLoader] Detected wide taxa x samples matrix; transposed to samples x features.")
+        # print(f"[dataLoader] Detected wide taxa x samples matrix; transposed to samples x features.")
         return transposed
 
     return None
@@ -250,7 +250,7 @@ def load_imsms_data(variable2: Optional[str]):
         dependentvar (str): the resolved S6 worksheet actually used
     """
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    print("[dataLoader] Loading iMSMS data...")
+    # print("[dataLoader] Loading iMSMS data...")
 
     dataset_dir = _find_dataset_dir(script_dir)
 
@@ -301,7 +301,7 @@ def load_imsms_data(variable2: Optional[str]):
     if 'iMSMS_ID' not in keep:
         keep.append('iMSMS_ID')
     demographic_data = demographic_data[keep]
-    print(f"[dataLoader] Included demographic columns: {keep}")
+    # print(f"[dataLoader] Included demographic columns: {keep}")
 
     # --- Prepare S6 abundance: try to find ID column; else detect wide and transpose ---
     id_col = _try_find_id_column(s6_raw)
@@ -312,7 +312,7 @@ def load_imsms_data(variable2: Optional[str]):
         promoted = _promote_index_as_id(s6_raw.set_index(s6_raw.columns[0])) if s6_raw.columns.size > 0 else None
         if isinstance(promoted, pd.DataFrame) and 'iMSMS_ID' in promoted.columns:
             s6_df = promoted
-            print("[dataLoader] Promoted index to 'iMSMS_ID' for S6.")
+            # print("[dataLoader] Promoted index to 'iMSMS_ID' for S6.")
         else:
             # Try wide matrix transpose
             transposed = _transpose_if_wide_matrix(s6_raw)
@@ -323,7 +323,7 @@ def load_imsms_data(variable2: Optional[str]):
                 heur = _first_column_as_id(s6_raw)
                 if isinstance(heur, pd.DataFrame) and 'iMSMS_ID' in heur.columns:
                     s6_df = heur
-                    print("[dataLoader] Using first column as 'iMSMS_ID' for S6.")
+                    # print("[dataLoader] Using first column as 'iMSMS_ID' for S6.")
                 else:
                     raise KeyError(
                         "Column 'iMSMS_ID' missing in S6 and could not be inferred. "
@@ -337,12 +337,12 @@ def load_imsms_data(variable2: Optional[str]):
     demographic_data['iMSMS_ID'] = demographic_data['iMSMS_ID'].astype(str).str.strip()
     sheet6_class['iMSMS_ID']     = sheet6_class['iMSMS_ID'].astype(str).str.strip()
 
-    print(f"[dataLoader] S6 shape after processing: {sheet6_class.shape} (rows=samples)")
+    # print(f"[dataLoader] S6 shape after processing: {sheet6_class.shape} (rows=samples)")
 
     # Load the weighted UniFrac distance matrix from Dataset S5.2
-    print("Loading weighted UniFrac distance matrix from Dataset S5.2...")
+    # print("Loading weighted UniFrac distance matrix from Dataset S5.2...")
     weighted_unifrac_df = pd.read_excel(S5_PATH, sheet_name='Dataset S5.2', index_col=0)
-    print(f"Loaded weighted UniFrac matrix with shape: {weighted_unifrac_df.shape}")
+    # print(f"Loaded weighted UniFrac matrix with shape: {weighted_unifrac_df.shape}")
 
 
     return demographic_data, sheet6_class, dependentvar, weighted_unifrac_df

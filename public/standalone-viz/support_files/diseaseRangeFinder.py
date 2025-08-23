@@ -4,7 +4,7 @@ import numpy as np
 def classify_disease(df, column_name):
     """Classify disease into categories with Control first"""
     def categorize_disease(disease_value):
-        print(disease_value)
+        # print(disease_value)
         if pd.isna(disease_value):
             return "c. nan"
         try:

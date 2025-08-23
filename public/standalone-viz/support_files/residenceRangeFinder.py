@@ -3,7 +3,7 @@ import pandas as pd
 def classify_residence(df, column_name):
     """Classify residence into alphabetical categories"""
     def categorize_residence(residence_value):
-        print(residence_value)
+        # print(residence_value)
         if pd.isna(residence_value):
             return "h. nan"
         try:

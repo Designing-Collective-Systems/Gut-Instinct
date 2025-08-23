@@ -3,7 +3,7 @@ import pandas as pd
 def classify_sex(df, column_name):
     """Classify sex into categories with Female first"""
     def categorize_sex(sex_value):
-        print(sex_value)
+        # print(sex_value)
         if pd.isna(sex_value):
             return "c. nan"
         try:
