@@ -108,33 +108,33 @@ Meteor.methods({
   },
 });
 
-// ADD THIS DYNAMIC ROUTE HANDLER TO BYPASS RENDER'S STATIC FILE CACHING
-WebApp.connectHandlers.use('/standalone-viz/visualization.html', (req, res, next) => {
-  try {
-    console.log('[route] Serving dynamic visualization.html');
+// // ADD THIS DYNAMIC ROUTE HANDLER TO BYPASS RENDER'S STATIC FILE CACHING
+// WebApp.connectHandlers.use('/standalone-viz/visualization.html', (req, res, next) => {
+//   try {
+//     console.log('[route] Serving dynamic visualization.html');
     
-    if (!fs.existsSync(outputHtml)) {
-      console.log('[route] File not found:', outputHtml);
-      res.writeHead(404);
-      res.end('Visualization not found');
-      return;
-    }
+//     if (!fs.existsSync(outputHtml)) {
+//       console.log('[route] File not found:', outputHtml);
+//       res.writeHead(404);
+//       res.end('Visualization not found');
+//       return;
+//     }
     
-    // Read the file content
-    const content = fs.readFileSync(outputHtml, 'utf8');
-    console.log('[route] File size served:', content.length);
+//     // Read the file content
+//     const content = fs.readFileSync(outputHtml, 'utf8');
+//     console.log('[route] File size served:', content.length);
     
-    // Serve with proper headers to prevent caching
-    res.setHeader('Content-Type', 'text/html');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+//     // Serve with proper headers to prevent caching
+//     res.setHeader('Content-Type', 'text/html');
+//     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+//     res.setHeader('Pragma', 'no-cache');
+//     res.setHeader('Expires', '0');
     
-    res.writeHead(200);
-    res.end(content);
-  } catch (error) {
-    console.error('[route] Error serving visualization:', error);
-    res.writeHead(500);
-    res.end('Internal server error');
-  }
-});
+//     res.writeHead(200);
+//     res.end(content);
+//   } catch (error) {
+//     console.error('[route] Error serving visualization:', error);
+//     res.writeHead(500);
+//     res.end('Internal server error');
+//   }
+// });
