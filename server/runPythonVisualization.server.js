@@ -64,6 +64,23 @@ Meteor.methods({
         timeout: 120000,
       });
       console.log('[viz] python stdout:', stdout);
+
+      // ADD THE DEBUG CODE RIGHT HERE ↓↓↓
+      console.log('[debug] Checking file after Python execution:');
+      console.log('[debug] File exists:', fs.existsSync(outputHtml));
+      if (fs.existsSync(outputHtml)) {
+        const stats = fs.statSync(outputHtml);
+        console.log('[debug] File modified:', stats.mtime);
+        console.log('[debug] File size:', stats.size);
+        // Read first few characters to verify content
+        const content = fs.readFileSync(outputHtml, 'utf8').slice(0, 200);
+        console.log('[debug] File content preview:', content);
+      }
+      console.log('[debug] Full file path:', outputHtml);
+      console.log('[debug] Current working directory:', process.cwd());
+      // END DEBUG CODE ↑↑↑
+
+      
     } catch (e) {
       const msg = (e.stderr?.toString?.() || e.message || String(e)).slice(0, 4000);
       console.error('[viz] python failed:', msg);
