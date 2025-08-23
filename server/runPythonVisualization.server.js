@@ -78,8 +78,21 @@ Meteor.methods({
       }
       console.log('[debug] Full file path:', outputHtml);
       console.log('[debug] Current working directory:', process.cwd());
+      // Add this right after your existing debug code
+      if (fs.existsSync(outputHtml)) {
+        const content = fs.readFileSync(outputHtml, 'utf8');
+        // Look for your timestamp in the HTML content
+        const timestampMatch = content.match(/Generated on: ([^<]+)/);
+        if (timestampMatch) {
+          console.log('[debug] HTML timestamp in file:', timestampMatch[1]);
+        }
+        // Look for the variable being used in the HTML
+        const variableMatch = content.match(/variable1.*?(\w+)/i);
+        if (variableMatch) {
+          console.log('[debug] Variable found in HTML:', variableMatch[1]);
+        }
+      }
       // END DEBUG CODE ↑↑↑
-
       
     } catch (e) {
       const msg = (e.stderr?.toString?.() || e.message || String(e)).slice(0, 4000);
