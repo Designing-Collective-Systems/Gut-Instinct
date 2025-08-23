@@ -756,9 +756,43 @@ page_header_css = '''
 </style>
 '''
 # ==================== END PAGE HEADER ====================
+from datetime import datetime
+# ==================== ADD TIMESTAMP SECTION ====================
+# Generate current timestamp
+current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+
+# Define the timestamp HTML
+timestamp_html = f'''
+<div class="emperor-timestamp">
+    <p>Generated on: {current_timestamp}</p>
+</div>
+'''
+
+# Define the timestamp CSS
+timestamp_css = '''
+<style>
+.emperor-timestamp {
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.emperor-timestamp p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+</style>
+'''
+# ==================== END TIMESTAMP SECTION ====================
 
 # Insert the header CSS, precise hide CSS, and YouTube video CSS
-emperor_html = emperor_html.replace('</head>', f'{page_header_css}{precise_hide_css}{youtube_video_css}</head>')
+emperor_html = emperor_html.replace('</head>', f'{page_header_css}{timestamp_css}{precise_hide_css}{youtube_video_css}</head>')
 
 # Insert the header HTML right after the body tag
 body_start = emperor_html.find('<body')
@@ -768,10 +802,18 @@ if body_start != -1:
     emperor_html = emperor_html[:body_tag_end] + page_header_html + emperor_html[body_tag_end:]
 
 # Insert the YouTube video HTML right after the page header
+# Insert the timestamp HTML right after the page header
 header_end = emperor_html.find('</div>', emperor_html.find('emperor-page-header'))
 if header_end != -1:
     header_end += 6  # Move past the </div>
-    emperor_html = emperor_html[:header_end] + youtube_video_html + emperor_html[header_end:]
+    emperor_html = emperor_html[:header_end] + timestamp_html + emperor_html[header_end:]
+
+# Insert the YouTube video HTML right after the timestamp
+timestamp_end = emperor_html.find('</div>', emperor_html.find('emperor-timestamp'))
+if timestamp_end != -1:
+    timestamp_end += 6  # Move past the </div>
+    emperor_html = emperor_html[:timestamp_end] + youtube_video_html + emperor_html[timestamp_end:]
+
 
 # Update the final JavaScript to include YouTube controls
 final_precise_custom_js_with_youtube = final_precise_custom_js + "\n\n" + youtube_video_js
