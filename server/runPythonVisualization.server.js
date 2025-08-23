@@ -3,6 +3,7 @@ import { check } from 'meteor/check';
 import { execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { WebApp } from 'meteor/webapp'; // <-- ADD THIS IMPORT
 
 const projectRoot = process.env.PWD || process.cwd();
 const scriptPath  = path.join(projectRoot, 'public', 'standalone-viz', 'iMSMS_emperor.py');
@@ -65,7 +66,7 @@ Meteor.methods({
       });
       console.log('[viz] python stdout:', stdout);
 
-      // ADD THE DEBUG CODE RIGHT HERE ↓↓↓
+      // DEBUG CODE
       console.log('[debug] Checking file after Python execution:');
       console.log('[debug] File exists:', fs.existsSync(outputHtml));
       if (fs.existsSync(outputHtml)) {
@@ -78,7 +79,7 @@ Meteor.methods({
       }
       console.log('[debug] Full file path:', outputHtml);
       console.log('[debug] Current working directory:', process.cwd());
-      // Add this right after your existing debug code
+      
       if (fs.existsSync(outputHtml)) {
         const content = fs.readFileSync(outputHtml, 'utf8');
         // Look for your timestamp in the HTML content
@@ -92,7 +93,6 @@ Meteor.methods({
           console.log('[debug] Variable found in HTML:', variableMatch[1]);
         }
       }
-      // END DEBUG CODE ↑↑↑
       
     } catch (e) {
       const msg = (e.stderr?.toString?.() || e.message || String(e)).slice(0, 4000);
@@ -106,4 +106,35 @@ Meteor.methods({
 
     return { success: true, outputPath: '/standalone-viz/visualization.html' };
   },
+});
+
+// ADD THIS DYNAMIC ROUTE HANDLER TO BYPASS RENDER'S STATIC FILE CACHING
+WebApp.connectHandlers.use('/standalone-viz/visualization.html', (req, res, next) => {
+  try {
+    console.log('[route] Serving dynamic visualization.html');
+    
+    if (!fs.existsSync(outputHtml)) {
+      console.log('[route] File not found:', outputHtml);
+      res.writeHead(404);
+      res.end('Visualization not found');
+      return;
+    }
+    
+    // Read the file content
+    const content = fs.readFileSync(outputHtml, 'utf8');
+    console.log('[route] File size served:', content.length);
+    
+    // Serve with proper headers to prevent caching
+    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    
+    res.writeHead(200);
+    res.end(content);
+  } catch (error) {
+    console.error('[route] Error serving visualization:', error);
+    res.writeHead(500);
+    res.end('Internal server error');
+  }
 });
