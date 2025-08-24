@@ -218,6 +218,7 @@ elif variable1 == 'Gut Bacteria Richness and Evenness':
 variable1_is_discrete = is_discrete_variable(variable1)
 
 print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
+print('yes')
 
 # Define colors for variable1 (coloring variable) - using binned data
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
