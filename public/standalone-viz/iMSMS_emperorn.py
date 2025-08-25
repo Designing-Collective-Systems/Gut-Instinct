@@ -829,10 +829,12 @@ if support_dir in emperor_html:
 # Ensure the output directory exists
 # Save directly to the current directory (where the script is located)
 # This will be public/standalone-viz/ in your Meteor app
-output_path = "visualizationn.html"  # Changed filename to match expected
+# output_path = "visualizationn.html"  # Changed filename to match expected
 
-with open(output_path, 'w') as f:
-    f.write(emperor_html)
+# with open(output_path, 'w') as f:
+#     f.write(emperor_html)
+sys.stdout.write(emperor_html)
+sys.stdout.flush() 
 
 print(f"Emperor visualization saved to {output_path}")
 print(f"- {variable1} binned into {len(variable1_ranges)} categories with {color_scheme_type} colors")
