@@ -1,13 +1,6 @@
 import subprocess
 import sys
 
-# Redirect print to stderr to avoid mixing with HTML output
-def print_to_stderr(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
-
-# Replace built-in print with stderr version
-print = print_to_stderr
-
 def install_package(package):
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "--break-system-packages", package], 
@@ -110,11 +103,11 @@ from support_files.alphaDiversityRangeFinder import classify_richness, classify_
 if len(sys.argv) >= 2:
     variable1 = sys.argv[1]  # Will be used for coloring
     variable2 = sys.argv[2] 
-    print(f"Received variable: {variable1}")
+    # print(f"Received variable: {variable1}")
 else:
     # Default value if no argument provided
     variable1 = "Age"  # Default coloring variable
-    print("No variable provided, using default")
+    # print("No variable provided, using default")
 
 # Load the iMSMS dataset
 demographic_data, sheet6_class, dependentvar, weighted_unifrac_df = load_imsms_data(variable2)
@@ -224,8 +217,8 @@ elif variable1 == 'Gut Bacteria Richness and Evenness':
 # Determine if variable1 should use discrete or continuous color scheme
 variable1_is_discrete = is_discrete_variable(variable1)
 
-print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
-print('yes')
+# print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
+# print('yes')
 
 # Define colors for variable1 (coloring variable) - using binned data
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
@@ -243,8 +236,8 @@ custom_colors = {}
 for i, range_val in enumerate(variable1_ranges):
     custom_colors[range_val] = colors_list[i]
 
-print(f"Variable1 ({variable1}) ranges found: {variable1_ranges}")
-print(f"Color scheme: {color_scheme_type}")
+# print(f"Variable1 ({variable1}) ranges found: {variable1_ranges}")
+# print(f"Color scheme: {color_scheme_type}")
 
 # Emperor work starts here
 sheet6_class = sheet6_class.merge(demographic_data[['iMSMS_ID']], on='iMSMS_ID', how='inner')
@@ -891,20 +884,20 @@ sys.stdout.write(emperor_html)
 sys.stdout.flush() 
 
 # print(f"Emperor visualization saved to {output_path}")
-print(f"- {variable1} binned into {len(variable1_ranges)} categories with {color_scheme_type} colors")
-print(f"- Using {variable1} for coloring only (no shape customization)")
-print("- Variable-specific binning: variable maintains its designated number of bins")
-print("- Adaptive color scheme: discrete variables use distinct colors, continuous variables use YlOrRd gradient")
-print("- Axes renamed from PC1, PC2, PC3 to Axis 1, Axis 2, Axis 3")
-print("- Relative paths for better portability")
-print("- Safe JavaScript escaping for special characters")
-print(f"- Added {axes_added} raw numeric variables as selectable axes")
-print("- Raw data used for axes, binned data used for colors")
-print("- Used safe column renaming to avoid pandas errors")
-print("- Added prominent 'Emperor Visualization Page' header to generated HTML")
-print("- Added 5 YouTube videos in 2x2+1 grid layout (always visible)")
-print("- Video overlay positioned below color classification (fixed, scroll-independent)")
-print("- Videos arranged: 1&2 top row, 3&4 middle row, 5 bottom left")
-print("- Removed all minimize/maximize functionality")
-print("- Fixed responsive breakpoints using !important declarations")
-print("\nScript completed.")
+# print(f"- {variable1} binned into {len(variable1_ranges)} categories with {color_scheme_type} colors")
+# print(f"- Using {variable1} for coloring only (no shape customization)")
+# print("- Variable-specific binning: variable maintains its designated number of bins")
+# print("- Adaptive color scheme: discrete variables use distinct colors, continuous variables use YlOrRd gradient")
+# print("- Axes renamed from PC1, PC2, PC3 to Axis 1, Axis 2, Axis 3")
+# print("- Relative paths for better portability")
+# print("- Safe JavaScript escaping for special characters")
+# print(f"- Added {axes_added} raw numeric variables as selectable axes")
+# print("- Raw data used for axes, binned data used for colors")
+# print("- Used safe column renaming to avoid pandas errors")
+# print("- Added prominent 'Emperor Visualization Page' header to generated HTML")
+# print("- Added 5 YouTube videos in 2x2+1 grid layout (always visible)")
+# print("- Video overlay positioned below color classification (fixed, scroll-independent)")
+# print("- Videos arranged: 1&2 top row, 3&4 middle row, 5 bottom left")
+# print("- Removed all minimize/maximize functionality")
+# print("- Fixed responsive breakpoints using !important declarations")
+# print("\nScript completed.")
