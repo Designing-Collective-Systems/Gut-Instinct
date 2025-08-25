@@ -1,6 +1,13 @@
 import subprocess
 import sys
 
+# Redirect print to stderr to avoid mixing with HTML output
+def print_to_stderr(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
+# Replace built-in print with stderr version
+print = print_to_stderr
+
 def install_package(package):
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "--break-system-packages", package], 
