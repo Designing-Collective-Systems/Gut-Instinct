@@ -406,7 +406,8 @@ for var_name in key_variables:
             traceback.print_exc()
     else:
         # print(f"  {var_name} not found in demographic_data columns")
-        print(f"Available columns: {list(demographic_data.columns)}")
+        print("")
+        # print(f"Available columns: {list(demographic_data.columns)}")
 
 # If no key variables were available, try other variables from demographic_data
 if axes_added == 0:
