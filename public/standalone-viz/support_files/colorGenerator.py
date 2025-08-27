@@ -36,7 +36,7 @@ try:
     import matplotlib.pyplot as plt 
     import matplotlib.colors as mcolors
      # Add this import too
-    print("All packages imported successfully!")
+    # print("All packages imported successfully!")
 except ImportError as e:
     print(f"Import error: {e}")
     # Try alternative import for skbio if it fails

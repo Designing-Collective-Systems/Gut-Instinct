@@ -245,8 +245,21 @@ demographic_data = demographic_data.set_index('iMSMS_ID')
 sheet6_class = sheet6_class.set_index('iMSMS_ID')
 raw_data_for_axes = raw_data_for_axes.set_index('iMSMS_ID')
 
-pcoa_results
-if (variable2 == 'Bray Curtis Dissimilarity'){
+pcoa_results = None 
+if variable2 == 'Bray Curtis Dissimilarity':
+    # Beta Diversity
+    bray_curtis = pdist(sheet6_class, metric='braycurtis')
+    bray_curtis_matrix = squareform(bray_curtis)
+    bray_curtis_df = pd.DataFrame(bray_curtis_matrix, index=sheet6_class.index, columns=sheet6_class.index)
+
+    # Prepare distance matrix
+    distance_matrix = bray_curtis_df.to_numpy()
+    distance_matrix = (distance_matrix + distance_matrix.T) / 2
+    np.fill_diagonal(distance_matrix, 0)
+
+    # Perform PCoA
+    pcoa_results = pcoa(distance_matrix)
+elif variable2 == 'Weighted Unifrac':
     # ==================== WEIGHTED UNIFRAC DISTANCE PROCESSING ====================
     # print("=== PROCESSING WEIGHTED UNIFRAC DISTANCES ===")
 
@@ -297,59 +310,6 @@ if (variable2 == 'Bray Curtis Dissimilarity'){
     # print(f"Explained variance by first 3 axes: {pcoa_results.proportion_explained.iloc[:3].values}")
 
     # ==================== END WEIGHTED UNIFRAC PROCESSING ====================
-}
-else if (variable2 == 'Weighted Unifrac'){
-    # ==================== WEIGHTED UNIFRAC DISTANCE PROCESSING ====================
-    # print("=== PROCESSING WEIGHTED UNIFRAC DISTANCES ===")
-
-    # print(f"Sample ID examples from distance matrix: {list(weighted_unifrac_df.index[:5])}")
-    # print(f"Sample ID examples from metadata: {list(demographic_data.index[:5])}")
-
-    # Ensure the matrix has the same samples as your metadata
-    common_samples = weighted_unifrac_df.index.intersection(demographic_data.index)
-    # print(f"Common samples between distance matrix and metadata: {len(common_samples)}")
-
-    if len(common_samples) == 0:
-        # print("ERROR: No common samples found between distance matrix and metadata!")
-        # print("Distance matrix sample IDs:", list(weighted_unifrac_df.index[:10]))
-        # print("Metadata sample IDs:", list(demographic_data.index[:10]))
-        sys.exit(1)
-
-    # Filter all datasets to common samples
-    weighted_unifrac_df = weighted_unifrac_df.loc[common_samples, common_samples]
-    demographic_data = demographic_data.loc[common_samples]
-    sheet6_class = sheet6_class.loc[common_samples]
-    raw_data_for_axes = raw_data_for_axes.loc[common_samples]
-
-    # print(f"Filtered distance matrix shape: {weighted_unifrac_df.shape}")
-    # print(f"Filtered metadata shape: {demographic_data.shape}")
-
-    # Convert to numpy array for PCoA
-    distance_matrix = weighted_unifrac_df.to_numpy()
-
-    # Validate the distance matrix
-    # print("Validating weighted UniFrac distance matrix...")
-    is_symmetric = np.allclose(distance_matrix, distance_matrix.T, rtol=1e-10)
-    diagonal_zero = np.allclose(np.diag(distance_matrix), 0, atol=1e-10)
-    distance_range = f"{distance_matrix.min():.6f} to {distance_matrix.max():.6f}"
-
-    # print(f"Matrix is symmetric: {is_symmetric}")
-    # print(f"Diagonal is zero: {diagonal_zero}")
-    # print(f"Distance range: {distance_range}")
-
-    # Ensure the matrix is symmetric and diagonal is zero (cleanup if needed)
-    distance_matrix = (distance_matrix + distance_matrix.T) / 2
-    np.fill_diagonal(distance_matrix, 0)
-
-    # Perform PCoA on the weighted UniFrac distances
-    # print("Performing PCoA on weighted UniFrac distances...")
-    pcoa_results = pcoa(distance_matrix)
-
-    # print("PCoA completed using weighted UniFrac distances")
-    # print(f"Explained variance by first 3 axes: {pcoa_results.proportion_explained.iloc[:3].values}")
-
-    # ==================== END WEIGHTED UNIFRAC PROCESSING ====================
-}
 
 
 
@@ -436,7 +396,8 @@ for var_name in key_variables:
                     
                     # Show the full category to number mapping
                     if category_mapping:
-                        print(f"Full mapping: {category_mapping}")
+                        print("")
+                        # print(f"Full mapping: {category_mapping}")
                 else:
                     print(f"✗ Failed to convert {var_name} to numeric values")
             else:
