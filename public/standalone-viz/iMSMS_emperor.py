@@ -805,20 +805,21 @@ if body_start != -1:
 
 # Insert the YouTube video HTML right after the page header
 # Insert the timestamp HTML right after the page header
-header_end = emperor_html.find('</div>', emperor_html.find('emperor-page-header'))
-if header_end != -1:
-    header_end += 6  # Move past the </div>
-    emperor_html = emperor_html[:header_end] + timestamp_html + emperor_html[header_end:]
+# header_end = emperor_html.find('</div>', emperor_html.find('emperor-page-header'))
+# if header_end != -1:
+#     header_end += 6  # Move past the </div>
+#     emperor_html = emperor_html[:header_end] + timestamp_html + emperor_html[header_end:]
 
-# Insert the YouTube video HTML right after the timestamp
-timestamp_end = emperor_html.find('</div>', emperor_html.find('emperor-timestamp'))
-if timestamp_end != -1:
-    timestamp_end += 6  # Move past the </div>
-    emperor_html = emperor_html[:timestamp_end] + youtube_video_html + emperor_html[timestamp_end:]
+# # Insert the YouTube video HTML right after the timestamp
+# timestamp_end = emperor_html.find('</div>', emperor_html.find('emperor-timestamp'))
+# if timestamp_end != -1:
+#     timestamp_end += 6  # Move past the </div>
+#     emperor_html = emperor_html[:timestamp_end] + youtube_video_html + emperor_html[timestamp_end:]
 
 
 # Update the final JavaScript to include YouTube controls
-final_precise_custom_js_with_youtube = final_precise_custom_js + "\n\n" + youtube_video_js
+final_precise_custom_js_with_youtube = final_precise_custom_js 
+# + "\n\n" + youtube_video_js
 
 # Replace the JavaScript insertion
 marker_pattern = "/*__custom_on_ready_code__*/"
