@@ -794,7 +794,7 @@ timestamp_css = '''
 # ==================== END TIMESTAMP SECTION ====================
 
 # Insert the header CSS, precise hide CSS, and YouTube video CSS
-emperor_html = emperor_html.replace('</head>', f'{page_header_css}{timestamp_css}{precise_hide_css}{youtube_video_css}</head>')
+emperor_html = emperor_html.replace('</head>', f'{page_header_css}{precise_hide_css}</head>')
 
 # Insert the header HTML right after the body tag
 body_start = emperor_html.find('<body')
