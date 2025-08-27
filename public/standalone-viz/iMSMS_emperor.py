@@ -526,197 +526,197 @@ complete_precise_solution = precise_hide_js
 # Update your script with the precise solution
 final_precise_custom_js = custom_js + "\n\n" + complete_precise_solution + "\n\n" #+ overlay_js
 
-# ==================== ADD YOUTUBE VIDEO SECTION ====================
-# Configuration for the 5 YouTube videos
-VIDEO_CONFIGS = [
-    {"id": "xCt66prkEbA", "title": "Clustering in Emperor"},
-    {"id": "PGwesst2jLk", "title": "Variance and Clustering in Emperor"}, 
-    {"id": "1p6IEirCBuw", "title": "Choosing Taxa Level (for analysis)"},
-    {"id": "XNDbmaHVPUU", "title": "Using Color, Visibility, and Shape"},
-    {"id": "4W0e7I4fDp4", "title": "Beta Diversity in Emperor"}
-]
+# # ==================== ADD YOUTUBE VIDEO SECTION ====================
+# # Configuration for the 5 YouTube videos
+# VIDEO_CONFIGS = [
+#     {"id": "xCt66prkEbA", "title": "Clustering in Emperor"},
+#     {"id": "PGwesst2jLk", "title": "Variance and Clustering in Emperor"}, 
+#     {"id": "1p6IEirCBuw", "title": "Choosing Taxa Level (for analysis)"},
+#     {"id": "XNDbmaHVPUU", "title": "Using Color, Visibility, and Shape"},
+#     {"id": "4W0e7I4fDp4", "title": "Beta Diversity in Emperor"}
+# ]
 
-# Generate HTML for all 5 videos
-videos_html = ""
-for i, config in enumerate(VIDEO_CONFIGS):
-    videos_html += f'''
-    <div class="individual-video" data-video-index="{i}">
-        <div class="video-header">
-            <h3>{config["title"]}</h3>
-        </div>
-        <div class="video-wrapper" id="video-wrapper-{i}">
-            <iframe 
-                id="youtube-player-{i}"
-                src="https://www.youtube.com/embed/{config["id"]}?enablejsapi=1&controls=1&modestbranding=1&rel=0"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
-    </div>
-    '''
+# # Generate HTML for all 5 videos
+# videos_html = ""
+# for i, config in enumerate(VIDEO_CONFIGS):
+#     videos_html += f'''
+#     <div class="individual-video" data-video-index="{i}">
+#         <div class="video-header">
+#             <h3>{config["title"]}</h3>
+#         </div>
+#         <div class="video-wrapper" id="video-wrapper-{i}">
+#             <iframe 
+#                 id="youtube-player-{i}"
+#                 src="https://www.youtube.com/embed/{config["id"]}?enablejsapi=1&controls=1&modestbranding=1&rel=0"
+#                 frameborder="0"
+#                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+#                 allowfullscreen>
+#             </iframe>
+#         </div>
+#     </div>
+#     '''
 
-# YouTube video container HTML
-youtube_video_html = f'''
-<div id="youtube-video-container" class="youtube-container">
-    <div class="main-header">
-        <h2>Educational Videos</h2>
-    </div>
-    <div class="videos-grid" id="videos-grid">
-        {videos_html}
-    </div>
-</div>
-'''
+# # YouTube video container HTML
+# youtube_video_html = f'''
+# <div id="youtube-video-container" class="youtube-container">
+#     <div class="main-header">
+#         <h2>Educational Videos</h2>
+#     </div>
+#     <div class="videos-grid" id="videos-grid">
+#         {videos_html}
+#     </div>
+# </div>
+# '''
 
-# YouTube video CSS
-youtube_video_css = '''
-<style>
-/* YouTube Video Container */
-.youtube-container {
-    position: absolute;
-    top: 450px; /* Position below color classification area */
-    right: 200px;
-    width: 200px;
-    max-height: calc(100vh - 320px);
-    background: #fff;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 1000;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-}
+# # YouTube video CSS
+# youtube_video_css = '''
+# <style>
+# /* YouTube Video Container */
+# .youtube-container {
+#     position: absolute;
+#     top: 450px; /* Position below color classification area */
+#     right: 200px;
+#     width: 200px;
+#     max-height: calc(100vh - 320px);
+#     background: #fff;
+#     border: 2px solid #ddd;
+#     border-radius: 8px;
+#     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+#     z-index: 1000;
+#     font-family: 'Helvetica Neue', Arial, sans-serif;
+# }
 
-.main-header {
-    background: #2196F3;
-    color: white;
-    padding: 12px 15px;
-    border-radius: 6px 6px 0 0;
-    text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
+# .main-header {
+#     background: #2196F3;
+#     color: white;
+#     padding: 12px 15px;
+#     border-radius: 6px 6px 0 0;
+#     text-align: center;
+#     position: sticky;
+#     top: 0;
+#     z-index: 10;
+# }
 
-.main-header h2 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-}
+# .main-header h2 {
+#     margin: 0;
+#     font-size: 16px;
+#     font-weight: 600;
+# }
 
-.videos-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 0;
-    padding: 0;
-}
+# .videos-grid {
+#     display: grid;
+#     grid-template-columns: repeat(2, 1fr);
+#     grid-gap: 0;
+#     padding: 0;
+# }
 
-.individual-video {
-    border: 1px solid #e9ecef;
-    background: #fff;
-}
+# .individual-video {
+#     border: 1px solid #e9ecef;
+#     background: #fff;
+# }
 
-.individual-video:nth-child(1),
-.individual-video:nth-child(2) {
-    /* Top row videos - no changes needed */
-}
+# .individual-video:nth-child(1),
+# .individual-video:nth-child(2) {
+#     /* Top row videos - no changes needed */
+# }
 
-.individual-video:nth-child(3),
-.individual-video:nth-child(4) {
-    /* Second row videos - no changes needed */
-}
+# .individual-video:nth-child(3),
+# .individual-video:nth-child(4) {
+#     /* Second row videos - no changes needed */
+# }
 
-.individual-video:nth-child(5) {
-    /* Bottom video spans only left column */
-    grid-column: 1;
-}
+# .individual-video:nth-child(5) {
+#     /* Bottom video spans only left column */
+#     grid-column: 1;
+# }
 
-.video-header {
-    background: #f8f9fa;
-    padding: 8px 12px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.2s ease;
-    border-bottom: 1px solid #e9ecef;
-}
+# .video-header {
+#     background: #f8f9fa;
+#     padding: 8px 12px;
+#     cursor: pointer;
+#     display: flex;
+#     justify-content: space-between;
+#     align-items: center;
+#     transition: background-color 0.2s ease;
+#     border-bottom: 1px solid #e9ecef;
+# }
 
-.video-header:hover {
-    background: #e9ecef;
-}
+# .video-header:hover {
+#     background: #e9ecef;
+# }
 
-.video-header h3 {
-    margin: 0;
-    font-size: 11px;
-    color: #333;
-    font-weight: 600;
-    flex: 1;
-}
+# .video-header h3 {
+#     margin: 0;
+#     font-size: 11px;
+#     color: #333;
+#     font-weight: 600;
+#     flex: 1;
+# }
 
-.minimize-indicator {
-    font-size: 14px;
-    font-weight: bold;
-    color: #666;
-    transition: transform 0.2s ease;
-    margin-left: 8px;
-}
+# .minimize-indicator {
+#     font-size: 14px;
+#     font-weight: bold;
+#     color: #666;
+#     transition: transform 0.2s ease;
+#     margin-left: 8px;
+# }
 
-.video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
-    height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
+# .video-wrapper {
+#     position: relative;
+#     padding-bottom: 56.25%; /* 16:9 aspect ratio */
+#     height: 0;
+#     overflow: hidden;
+#     transition: all 0.3s ease;
+# }
 
-.video-wrapper.minimized {
-    padding-bottom: 0;
-    height: 0;
-    opacity: 0;
-}
+# .video-wrapper.minimized {
+#     padding-bottom: 0;
+#     height: 0;
+#     opacity: 0;
+# }
 
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
+# .video-wrapper iframe {
+#     position: absolute;
+#     top: 0;
+#     left: 0;
+#     width: 100%;
+#     height: 100%;
+# }
 
-/* Minimized state indicators */
-.individual-video.minimized .minimize-indicator {
-    transform: rotate(90deg);
-}
+# /* Minimized state indicators */
+# .individual-video.minimized .minimize-indicator {
+#     transform: rotate(90deg);
+# }
 
-/* Scrollbar styling */
-.youtube-container::-webkit-scrollbar {
-    width: 6px;
-}
+# /* Scrollbar styling */
+# .youtube-container::-webkit-scrollbar {
+#     width: 6px;
+# }
 
-.youtube-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
+# .youtube-container::-webkit-scrollbar-track {
+#     background: #f1f1f1;
+# }
 
-.youtube-container::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
-}
+# .youtube-container::-webkit-scrollbar-thumb {
+#     background: #c1c1c1;
+#     border-radius: 3px;
+# }
 
-.youtube-container::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-}
-</style>
-'''
+# .youtube-container::-webkit-scrollbar-thumb:hover {
+#     background: #a8a8a8;
+# }
+# </style>
+# '''
 
-# JavaScript for video controls
-youtube_video_js = '''
-// YouTube Video Controls - No minimize functionality needed
-$(document).ready(function() {
-    // Videos are always visible, no controls needed
-    console.log('Educational videos loaded successfully');
-});
-'''
-# ==================== END YOUTUBE VIDEO SECTION ====================
+# # JavaScript for video controls
+# youtube_video_js = '''
+# // YouTube Video Controls - No minimize functionality needed
+# $(document).ready(function() {
+#     // Videos are always visible, no controls needed
+#     console.log('Educational videos loaded successfully');
+# });
+# '''
+# # ==================== END YOUTUBE VIDEO SECTION ====================
 
 # ==================== ADD PAGE HEADER ====================
 # Define the header HTML and CSS
@@ -758,40 +758,40 @@ page_header_css = '''
 </style>
 '''
 # ==================== END PAGE HEADER ====================
-from datetime import datetime
-# ==================== ADD TIMESTAMP SECTION ====================
-# Generate current timestamp
-current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+# from datetime import datetime
+# # ==================== ADD TIMESTAMP SECTION ====================
+# # Generate current timestamp
+# current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
 
-# Define the timestamp HTML
-timestamp_html = f'''
-<div class="emperor-timestamp">
-    <p>Generated on: {current_timestamp}</p>
-</div>
-'''
+# # Define the timestamp HTML
+# timestamp_html = f'''
+# <div class="emperor-timestamp">
+#     <p>Generated on: {current_timestamp}</p>
+# </div>
+# '''
 
-# Define the timestamp CSS
-timestamp_css = '''
-<style>
-.emperor-timestamp {
-    text-align: center;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-}
+# # Define the timestamp CSS
+# timestamp_css = '''
+# <style>
+# .emperor-timestamp {
+#     text-align: center;
+#     margin: 10px 0;
+#     padding: 10px;
+#     background-color: #f0f0f0;
+#     border: 1px solid #ddd;
+#     border-radius: 5px;
+#     font-family: 'Helvetica Neue', Arial, sans-serif;
+# }
 
-.emperor-timestamp p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
-    font-weight: 500;
-}
-</style>
-'''
-# ==================== END TIMESTAMP SECTION ====================
+# .emperor-timestamp p {
+#     margin: 0;
+#     font-size: 14px;
+#     color: #666;
+#     font-weight: 500;
+# }
+# </style>
+# '''
+# # ==================== END TIMESTAMP SECTION ====================
 
 # Insert the header CSS, precise hide CSS, and YouTube video CSS
 emperor_html = emperor_html.replace('</head>', f'{page_header_css}{precise_hide_css}</head>')
