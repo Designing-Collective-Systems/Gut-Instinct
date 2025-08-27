@@ -270,7 +270,7 @@ def load_imsms_data(variable2: Optional[str]):
     sheet5_1 = pd.read_excel(S5_PATH, sheet_name='Dataset S5.1', **read_kwargs)
 
     # Resolve S6 worksheet robustly
-    requested = variable2 or ""
+    requested = 'species'
     dependentvar, all_sheets = _resolve_s6_sheet(requested, S6_PATH)
     if requested != dependentvar:
         print(f"[dataLoader] Requested S6 sheet '{requested}' not found; using '{dependentvar}'.")
