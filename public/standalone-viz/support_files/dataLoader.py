@@ -22,44 +22,54 @@ def _find_dataset_dir(script_dir: str) -> str:
         'iMSMS_dataset',  # cwd-relative
     ]
     for loc in candidates:
-        if os.path.exists(os.path.join(loc, 'Supplementary_Dataset_S1.xlsx')):
+        # Check for CSV files instead of Excel files
+        if os.path.exists(os.path.join(loc, 'Supplementary_Dataset_S1_Dataset_S1_2.csv')):
             return loc
     # print("Dataset not found in any of:", *(os.path.abspath(c) for c in candidates), sep="\n  - ")
     sys.exit(1)
 
-def _resolve_s6_sheet(requested: Optional[str], s6_path: str) -> Tuple[str, List[str]]:
+def _resolve_s6_csv(requested: Optional[str], dataset_dir: str) -> Tuple[str, List[str]]:
     """
-    Resolve requested S6 worksheet name to a real sheet:
+    Resolve requested S6 CSV file name to a real CSV file:
       1) case-insensitive exact
       2) normalized (ignore spaces/underscores/punct)
       3) fallback to common taxa levels
-      4) fallback to the first sheet
+      4) fallback to the first available file
     """
-    xls = pd.ExcelFile(s6_path, engine="openpyxl")
-    sheets = xls.sheet_names
-    if not sheets:
-        raise ValueError(f"No worksheets found in {s6_path}")
+    # Available S6 CSV files based on the conversion output
+    s6_files = [
+        'phylum', 'class', 'order', 'family', 'genus', 'species', 'pathway'
+    ]
+    
+    # Check which files actually exist
+    existing_files = []
+    for file_suffix in s6_files:
+        csv_path = os.path.join(dataset_dir, f'Supplementary_Dataset_S6_{file_suffix}.csv')
+        if os.path.exists(csv_path):
+            existing_files.append(file_suffix)
+    
+    if not existing_files:
+        raise ValueError(f"No S6 CSV files found in {dataset_dir}")
 
     # 1) case-insensitive exact
-    lower_map = {s.lower(): s for s in sheets}
+    lower_map = {s.lower(): s for s in existing_files}
     if requested and requested.lower() in lower_map:
-        return lower_map[requested.lower()], sheets
+        return lower_map[requested.lower()], existing_files
 
     # 2) normalized
-    norm_map = {_normalize(s): s for s in sheets}
+    norm_map = {_normalize(s): s for s in existing_files}
     req_norm = _normalize(requested or "")
     if req_norm and req_norm in norm_map:
-        return norm_map[req_norm], sheets
+        return norm_map[req_norm], existing_files
 
     # 3) preferred fallbacks
-    prefs = ["genus", "species", "asv", "otu", "class", "counts", "abundance", "sheet6"]
+    prefs = ["genus", "species", "class", "family", "order", "phylum", "pathway"]
     for pref in prefs:
-        for s in sheets:
-            if pref in s.lower():
-                return s, sheets
+        if pref in existing_files:
+            return pref, existing_files
 
-    # 4) first sheet
-    return sheets[0], sheets
+    # 4) first available file
+    return existing_files[0], existing_files
 
 def _ensure_age_column(df: pd.DataFrame) -> pd.DataFrame:
     """Create/standardize an 'Age' column if a close variant exists; coerce to numeric."""
@@ -237,46 +247,50 @@ def _finalize_sheet6(sample_feat_df: pd.DataFrame) -> pd.DataFrame:
 
 def load_imsms_data(variable2: Optional[str]):
     """
-    Load and merge iMSMS dataset files.
+    Load and merge iMSMS dataset files from CSV format.
 
     Args:
-        variable2 (str|None): desired worksheet in Supplementary_Dataset_S6.xlsx
-                              (e.g., 'Genus', 'Species', 'ASV'). This is a SHEET name,
-                              not a metadata column like 'Age'.
+        variable2 (str|None): desired CSV file suffix for Supplementary_Dataset_S6
+                              (e.g., 'genus', 'species', 'class'). This corresponds to 
+                              the taxonomic level CSV file.
 
     Returns:
         demographic_data (pd.DataFrame): subset of demographic/clinical columns incl. iMSMS_ID
         sheet6_class (pd.DataFrame): samples x features abundance table (has 'iMSMS_ID')
-        dependentvar (str): the resolved S6 worksheet actually used
+        dependentvar (str): the resolved S6 CSV file suffix actually used
+        weighted_unifrac_df (pd.DataFrame): weighted UniFrac distance matrix
     """
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    # print("[dataLoader] Loading iMSMS data...")
+    # print("[dataLoader] Loading iMSMS data from CSV files...")
 
     dataset_dir = _find_dataset_dir(script_dir)
 
-    S1_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S1.xlsx')
-    S2_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S2.xlsx')
-    S3_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S3.xlsx')
-    S5_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S5.xlsx')
-    S6_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S6.xlsx')
+    # CSV file paths
+    S1_2_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S1_Dataset_S1_2.csv')
+    S2_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S2_Dataset_S2.csv')
+    S3_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S3_Dataset_S3.csv')
+    S5_1_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S5_Dataset_S5_1.csv')
+    S5_2_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S5_Dataset_S5_2.csv')
 
-    # Ensure IDs are read consistently across sheets
-    read_kwargs = dict(engine="openpyxl", dtype={'iMSMS_ID': 'object'})
+    # Ensure IDs are read consistently across CSV files
+    read_kwargs = dict(dtype={'iMSMS_ID': 'object'})
 
-    # Source sheets
-    sheet1_2 = pd.read_excel(S1_PATH, sheet_name='Dataset S1.2', **read_kwargs)
-    sheet2   = pd.read_excel(S2_PATH, sheet_name='Dataset S2',   **read_kwargs)
-    sheet3   = pd.read_excel(S3_PATH, sheet_name='Dataset S3',   **read_kwargs)
-    sheet5_1 = pd.read_excel(S5_PATH, sheet_name='Dataset S5.1', **read_kwargs)
+    # Read CSV files
+    sheet1_2 = pd.read_csv(S1_2_PATH, **read_kwargs)
+    sheet2   = pd.read_csv(S2_PATH, **read_kwargs)
+    sheet3   = pd.read_csv(S3_PATH, **read_kwargs)
+    sheet5_1 = pd.read_csv(S5_1_PATH, **read_kwargs)
 
-    # Resolve S6 worksheet robustly
-    requested = 'species'
-    dependentvar, all_sheets = _resolve_s6_sheet(requested, S6_PATH)
+    # Resolve S6 CSV file robustly
+    requested = 'species'  # Use variable2 parameter
+    dependentvar, all_files = _resolve_s6_csv(requested, dataset_dir)
     if requested != dependentvar:
-        print(f"[dataLoader] Requested S6 sheet '{requested}' not found; using '{dependentvar}'.")
-        print(f"[dataLoader] Available S6 sheets: {all_sheets}")
+        print(f"[dataLoader] Requested S6 file '{requested}' not found; using '{dependentvar}'.")
+        print(f"[dataLoader] Available S6 files: {all_files}")
 
-    s6_raw = pd.read_excel(S6_PATH, sheet_name=dependentvar, engine="openpyxl")
+    # Read the selected S6 CSV file
+    s6_csv_path = os.path.join(dataset_dir, f'Supplementary_Dataset_S6_{dependentvar}.csv')
+    s6_raw = pd.read_csv(s6_csv_path)
     s6_raw = _standardize_columns(s6_raw)
 
     # --- Build demographics merge (keep S2 optional if you like) ---
@@ -339,10 +353,9 @@ def load_imsms_data(variable2: Optional[str]):
 
     # print(f"[dataLoader] S6 shape after processing: {sheet6_class.shape} (rows=samples)")
 
-    # Load the weighted UniFrac distance matrix from Dataset S5.2
-    # print("Loading weighted UniFrac distance matrix from Dataset S5.2...")
-    weighted_unifrac_df = pd.read_excel(S5_PATH, sheet_name='Dataset S5.2', index_col=0)
+    # Load the weighted UniFrac distance matrix from Dataset S5.2 CSV
+    # print("Loading weighted UniFrac distance matrix from Dataset S5.2 CSV...")
+    weighted_unifrac_df = pd.read_csv(S5_2_PATH, index_col=0)
     # print(f"Loaded weighted UniFrac matrix with shape: {weighted_unifrac_df.shape}")
-
 
     return demographic_data, sheet6_class, dependentvar, weighted_unifrac_df

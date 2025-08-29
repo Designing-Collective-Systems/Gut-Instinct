@@ -1,6 +1,20 @@
 import subprocess
 import sys
 
+import time
+
+# Record script start time immediately
+script_start_time = time.time()
+# print(f"=== PYTHON SCRIPT STARTED at {script_start_time} ===", flush=True)
+
+# Add timing checkpoints throughout
+def log_timing(message):
+    elapsed = time.time() - script_start_time
+    print(f"[{message} {elapsed:.2f}s]", flush=True)
+
+
+log_timing("About to start imports")
+
 def install_package(package):
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "--break-system-packages", package], 
@@ -48,6 +62,8 @@ except ImportError as e:
         from skbio.stats.ordination import pcoa
     except ImportError:
         print("skbio still not available, continuing without it...")
+
+log_timing("Finished imports")
 
 # ... rest of your script continues here
 
@@ -98,6 +114,8 @@ from support_files.occupationRangeFinder import classify_occupation
 from support_files.vitaminDRangeFinder import classify_vitamin_d
 from support_files.alphaDiversityRangeFinder import classify_richness, classify_richness_and_evenness
 
+log_timing("Finished getting supporting files")
+
 
 # Get command line arguments
 if len(sys.argv) >= 2:
@@ -111,6 +129,10 @@ else:
 
 # Load the iMSMS dataset
 demographic_data, sheet6_class, dependentvar, weighted_unifrac_df = load_imsms_data(variable2)
+
+
+
+log_timing("Finished loading data")
 
 
 # print("=== DEBUGGING ORIGINAL DATA ===")
@@ -887,6 +909,8 @@ if support_dir in emperor_html:
 
 sys.stdout.write(emperor_html)
 sys.stdout.flush() 
+
+log_timing("PYTHON SCRIPT COMPLETED")
 
 # print(f"Emperor visualization saved to {output_path}")
 # print(f"- {variable1} binned into {len(variable1_ranges)} categories with {color_scheme_type} colors")
