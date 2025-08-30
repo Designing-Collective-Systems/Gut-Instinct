@@ -13,7 +13,7 @@ def log_timing(message):
     print(f"[{message} {elapsed:.2f}s]", flush=True)
 
 
-log_timing("About to start imports")
+# log_timing("About to start imports")
 
 def install_package(package):
     try:
@@ -63,7 +63,7 @@ except ImportError as e:
     except ImportError:
         print("skbio still not available, continuing without it...")
 
-log_timing("Finished imports")
+# log_timing("Finished imports")
 
 # ... rest of your script continues here
 
@@ -114,7 +114,7 @@ from support_files.occupationRangeFinder import classify_occupation
 from support_files.vitaminDRangeFinder import classify_vitamin_d
 from support_files.alphaDiversityRangeFinder import classify_richness, classify_richness_and_evenness
 
-log_timing("Finished getting supporting files")
+# log_timing("Finished getting supporting files")
 
 
 # Get command line arguments
@@ -132,7 +132,7 @@ demographic_data, sheet6_class, dependentvar, weighted_unifrac_df = load_imsms_d
 
 
 
-log_timing("Finished loading data")
+# log_timing("Finished loading data")
 
 
 # print("=== DEBUGGING ORIGINAL DATA ===")
@@ -195,7 +195,7 @@ elif variable1 == 'Smoking Status':
 # Determine if variable1 should use discrete or continuous color scheme
 variable1_is_discrete = is_discrete_variable(variable1)
 
-print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
+# print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
 # print('yes')
 
 # Define colors for variable1 (coloring variable) - using binned data
@@ -866,7 +866,7 @@ if support_dir in emperor_html:
 sys.stdout.write(emperor_html)
 sys.stdout.flush() 
 
-log_timing("PYTHON SCRIPT COMPLETED")
+# log_timing("PYTHON SCRIPT COMPLETED")
 
 # print(f"Emperor visualization saved to {output_path}")
 # print(f"- {variable1} binned into {len(variable1_ranges)} categories with {color_scheme_type} colors")
