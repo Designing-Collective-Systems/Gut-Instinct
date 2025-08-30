@@ -88,7 +88,7 @@ def classify_residence_and_disease(df, residence_column, disease_column):
     # Create a mapping of category to "category - count values"
     count_mapping = {}
     for category, count in counts.items():
-        count_mapping[category] = f"{category} - {count} values"
+        count_mapping[category] = f"{category}"
     
     # Apply the count summary to each cell
     df[residence_column] = df[residence_column].map(count_mapping)

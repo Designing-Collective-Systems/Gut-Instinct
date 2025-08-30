@@ -163,83 +163,39 @@ for col in raw_data_for_axes.columns:
 # Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
 if variable1 == 'Residence':
     demographic_data = classify_residence_and_disease(demographic_data, variable1, 'Disease')
-elif variable1 == 'Ethnicity':
-    demographic_data = classify_ethnicity(demographic_data, variable1)
+    demographic_data = classify_sex(demographic_data, 'Sex')
+    demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
+    demographic_data = classify_disease(demographic_data, 'Disease')
+    demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
 elif variable1 == 'Sex':
+    demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
     demographic_data = classify_sex(demographic_data, variable1)
+    demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
+    demographic_data = classify_disease(demographic_data, 'Disease')
+    demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
 elif variable1 == 'Age':
+    demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
+    demographic_data = classify_sex(demographic_data, 'Sex')
     demographic_data = convert_age_to_life_stages(demographic_data, variable1)
-elif variable1 == 'Weight':
-    demographic_data = convert_weightKG_to_WeightLbs(demographic_data, variable1)
-elif variable1 == 'Height':
-    demographic_data = convert_heightCM_to_HeightInches(demographic_data, variable1)
-elif variable1 == 'Body Mass Index':
-    demographic_data = classify_bmi(demographic_data, variable1)
-elif variable1 == 'MS Onset Year':
-    demographic_data = classify_yearOfOnset(demographic_data, variable1)
+    demographic_data = classify_disease(demographic_data, 'Disease')
+    demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
 elif variable1 == 'Disease':
+    demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
+    demographic_data = classify_sex(demographic_data, 'Sex')
+    demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
     demographic_data = classify_disease(demographic_data, variable1)
-elif variable1 == 'Duration of MS':
-    demographic_data = classify_durationOfMS(demographic_data, variable1)
-elif variable1 == 'Administration of Treatment':
-    demographic_data = classify_administration(demographic_data, variable1)
-elif variable1 == 'Type of MS':
-    demographic_data = classify_typeOfMS(demographic_data, variable1)
-elif variable1 == 'Treatment Status':
-    demographic_data = classify_treatmentStatus(demographic_data, variable1)
-elif variable1 == 'Treatments Applied':
-    demographic_data = classify_treatmentsApplied(demographic_data, variable1)
-elif variable1 == 'Special need with diet':
-    demographic_data = classify_binary(demographic_data, variable1)
-elif variable1 == 'Specific need with diet':
-    demographic_data = classify_diet(demographic_data, variable1)
-elif variable1 == 'SPMS onset year':
-    demographic_data = classify_yearOfSPMSOnset(demographic_data, variable1)
-elif variable1 == 'Expanded Disability Status Scale':
-    demographic_data = classify_EDSS(demographic_data, variable1)
-elif variable1 == 'Multiple Sclerosis Severity Score':
-    demographic_data = classify_MSSS(demographic_data, variable1)
-elif variable1 == 'Disease modifying therapy' or variable1 == 'Breastfeeding at birth' or variable1 == 'Allergies' or variable1 == 'Asthma' or variable1 == 'Eating Disorder' or variable1 == 'Eczema' or variable1 == 'Anxiety' or variable1 == 'Manic depression(Bipolar disorder)' or variable1 == 'Obsessive Compulsory Disorder' or variable1 == 'Depression' or variable1 == 'Depression after giving birth' or variable1 == 'Type 2 Diabetes' or variable1 == 'Family Member with MS' or variable1 == 'Oral contraceptive pills' or variable1 == 'Non-steroidal anti-inflammatory drugs' or variable1 == 'Probiotics' or variable1 == 'Recreational drug use' or variable1 == 'Pets':
-    demographic_data = classify_trinary(demographic_data, variable1)
-elif variable1 == 'Number of Children':
-    demographic_data = classify_numberOfChildren(demographic_data, variable1)
-elif variable1 == 'Roommates':
-    demographic_data = classify_roommates(demographic_data, variable1)
-elif variable1 == 'Method of birth':
-    demographic_data = classify_methodOfBirth(demographic_data, variable1)
-elif variable1 == 'Specific Allergy':
-    demographic_data = classify_allergy(demographic_data, variable1)
-elif variable1 == 'Specific oral contraceptive pills':
-    demographic_data = classify_oral_contraceptive(demographic_data, variable1)
-elif variable1 == 'Specific non-steroidal anti-inflammatory drugs':
-    demographic_data = classify_nsaid(demographic_data, variable1)
-elif variable1 == 'Over the counter medication':
-    demographic_data = classify_trinary_2(demographic_data, variable1)
-elif variable1 == 'Different Over the Counter Medications':
-    demographic_data = classify_otc_medications(demographic_data, variable1)
+    demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
 elif variable1 == 'Smoking Status':
+    demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
+    demographic_data = classify_sex(demographic_data, 'Sex')
+    demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
+    demographic_data = classify_disease(demographic_data, 'Disease')
     demographic_data = classify_smoking_status(demographic_data, variable1)
-elif variable1 == 'Education level':
-    demographic_data = classify_education_level(demographic_data, variable1)
-elif variable1 == 'Occupation':
-    demographic_data = classify_occupation(demographic_data, variable1)
-elif variable1 == 'Vitamin D':
-    demographic_data = classify_vitamin_d(demographic_data, variable1)
-elif variable1 == 'Total Vegetables' or variable1 == 'Greens and Beans' or variable1 == 'Total Fruit' or variable1 == 'Whole Fruit' or variable1 == 'Total Protein Foods' or variable1 == 'Seafood and Plant Proteins':
-    demographic_data = convert_five_point_HEI_to_grades(demographic_data, variable1)
-elif variable1 == 'Whole Grains' or variable1 == 'Dairy' or variable1 == 'Fatty Acids' or variable1 == 'Sodium' or variable1 == 'Refined Grains' or variable1 == 'Added Sugars' or variable1 == 'Saturated Fats':
-    demographic_data = convert_ten_point_HEI_to_grades(demographic_data, variable1)
-elif variable1 == 'Healthy Eating Index Score':
-    demographic_data = convert_HEI_score_to_grades(demographic_data, variable1)
-elif variable1 == 'Gut Bacteria Richness':
-    demographic_data = classify_richness(demographic_data, variable1)
-elif variable1 == 'Gut Bacteria Richness and Evenness':
-    demographic_data = classify_richness_and_evenness(demographic_data, variable1)
 
 # Determine if variable1 should use discrete or continuous color scheme
 variable1_is_discrete = is_discrete_variable(variable1)
 
-# print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
+print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
 # print('yes')
 
 # Define colors for variable1 (coloring variable) - using binned data
