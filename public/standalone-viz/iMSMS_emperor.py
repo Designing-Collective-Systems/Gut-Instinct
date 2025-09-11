@@ -124,7 +124,7 @@ if len(sys.argv) >= 2:
     # print(f"Received variable: {variable1}")
 else:
     # Default value if no argument provided
-    variable1 = "Age"  # Default coloring variable
+    variable1 = "body-site"  # Default coloring variable
     # print("No variable provided, using default")
 
 # Load the iMSMS dataset
@@ -161,43 +161,43 @@ for col in raw_data_for_axes.columns:
 # ==================== END RAW DATA PRESERVATION ====================
 
 # Convert variable1 (coloring variable) to its specified number of bins OR life stages for age
-if variable1 == 'Residence':
-    demographic_data = classify_residence_and_disease(demographic_data, variable1, 'Disease')
-    demographic_data = classify_sex(demographic_data, 'Sex')
-    demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
-    demographic_data = classify_disease(demographic_data, 'Disease')
-    demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
-elif variable1 == 'Sex':
-    demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
-    demographic_data = classify_sex(demographic_data, variable1)
-    demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
-    demographic_data = classify_disease(demographic_data, 'Disease')
-    demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
-elif variable1 == 'Age':
-    demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
-    demographic_data = classify_sex(demographic_data, 'Sex')
-    demographic_data = convert_age_to_life_stages(demographic_data, variable1)
-    demographic_data = classify_disease(demographic_data, 'Disease')
-    demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
-elif variable1 == 'Disease':
-    demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
-    demographic_data = classify_sex(demographic_data, 'Sex')
-    demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
-    demographic_data = classify_disease(demographic_data, variable1)
-    demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
-elif variable1 == 'Smoking Status':
-    demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
-    demographic_data = classify_sex(demographic_data, 'Sex')
-    demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
-    demographic_data = classify_disease(demographic_data, 'Disease')
-    demographic_data = classify_smoking_status(demographic_data, variable1)
+# if variable1 == 'Residence':
+#     demographic_data = classify_residence_and_disease(demographic_data, variable1, 'Disease')
+#     demographic_data = classify_sex(demographic_data, 'Sex')
+#     demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
+#     demographic_data = classify_disease(demographic_data, 'Disease')
+#     demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
+# elif variable1 == 'Sex':
+#     demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
+#     demographic_data = classify_sex(demographic_data, variable1)
+#     demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
+#     demographic_data = classify_disease(demographic_data, 'Disease')
+#     demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
+# elif variable1 == 'Age':
+#     demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
+#     demographic_data = classify_sex(demographic_data, 'Sex')
+#     demographic_data = convert_age_to_life_stages(demographic_data, variable1)
+#     demographic_data = classify_disease(demographic_data, 'Disease')
+#     demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
+# elif variable1 == 'Disease':
+#     demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
+#     demographic_data = classify_sex(demographic_data, 'Sex')
+#     demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
+#     demographic_data = classify_disease(demographic_data, variable1)
+#     demographic_data = classify_smoking_status(demographic_data, 'Smoking Status')
+# elif variable1 == 'Smoking Status':
+#     demographic_data = classify_residence_and_disease(demographic_data, 'Residence', 'Disease')
+#     demographic_data = classify_sex(demographic_data, 'Sex')
+#     demographic_data = convert_age_to_life_stages(demographic_data, 'Age')
+#     demographic_data = classify_disease(demographic_data, 'Disease')
+#     demographic_data = classify_smoking_status(demographic_data, variable1)
 
 # Determine if variable1 should use discrete or continuous color scheme
 variable1_is_discrete = is_discrete_variable(variable1)
 
 # print(f"Variable1 ({variable1}) detected as: {'Discrete' if variable1_is_discrete else 'Continuous'}")
 # print('yes')
-
+# print(demographic_data, file=sys.stderr)
 # Define colors for variable1 (coloring variable) - using binned data
 variable1_ranges = demographic_data[variable1].dropna().unique().tolist()
 variable1_ranges.sort()
@@ -218,10 +218,10 @@ for i, range_val in enumerate(variable1_ranges):
 # print(f"Color scheme: {color_scheme_type}")
 
 # Emperor work starts here
-sheet6_class = sheet6_class.merge(demographic_data[['iMSMS_ID']], on='iMSMS_ID', how='inner')
-demographic_data = demographic_data.set_index('iMSMS_ID')
-sheet6_class = sheet6_class.set_index('iMSMS_ID')
-raw_data_for_axes = raw_data_for_axes.set_index('iMSMS_ID')
+sheet6_class = sheet6_class.merge(demographic_data[['sample-id']], on='sample-id', how='inner')
+demographic_data = demographic_data.set_index('sample-id')
+sheet6_class = sheet6_class.set_index('sample-id')
+raw_data_for_axes = raw_data_for_axes.set_index('sample-id')
 
 pcoa_results = None 
 if variable2 == 'Bray Curtis Dissimilarity':
@@ -288,7 +288,7 @@ elif variable2 == 'Weighted Unifrac':
     # print(f"Explained variance by first 3 axes: {pcoa_results.proportion_explained.iloc[:3].values}")
 
     # ==================== END WEIGHTED UNIFRAC PROCESSING ====================
-
+# print(pcoa_results, file=sys.stderr)
 
 
 # ==================== USE BINNED DATA FOR AXES ====================

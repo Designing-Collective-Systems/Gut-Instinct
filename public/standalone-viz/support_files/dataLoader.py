@@ -22,8 +22,8 @@ def _find_dataset_dir(script_dir: str) -> str:
         'iMSMS_dataset',  # cwd-relative
     ]
     for loc in candidates:
-        # Check for CSV files instead of Excel files
-        if os.path.exists(os.path.join(loc, 'Supplementary_Dataset_S1_Dataset_S1_2.csv')):
+        # Check for TSV files instead of CSV files
+        if os.path.exists(os.path.join(loc, 'metadata.tsv')):
             return loc
     # print("Dataset not found in any of:", *(os.path.abspath(c) for c in candidates), sep="\n  - ")
     sys.exit(1)
@@ -98,7 +98,7 @@ def _ensure_age_column(df: pd.DataFrame) -> pd.DataFrame:
 def _candidate_id_columns() -> List[str]:
     """Common sample ID column names seen across microbiome spreadsheets."""
     return [
-        'imsms_id', 'iMSMS_ID', 'iMSMS ID', 'sampleid', 'sample id', 'sample',
+        'sample-id', 'sample_id', 'sampleid', 'sample id', 'sample',
         '#sampleid', 'subjectid', 'subject id', 'id', 'sample_name', 'sample name'
     ]
 
@@ -109,7 +109,7 @@ def _standardize_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 def _try_find_id_column(df: pd.DataFrame) -> Optional[str]:
-    """Return the column name that should be used as 'iMSMS_ID', if found."""
+    """Return the column name that should be used as 'sample-id', if found."""
     lower_map = {c.lower(): c for c in df.columns}
     for cand in _candidate_id_columns():
         if cand.lower() in lower_map:
@@ -122,7 +122,7 @@ def _try_find_id_column(df: pd.DataFrame) -> Optional[str]:
     return None
 
 def _promote_index_as_id(df: pd.DataFrame) -> Optional[pd.DataFrame]:
-    """If index looks like sample IDs, promote it to an 'iMSMS_ID' column."""
+    """If index looks like sample IDs, promote it to a 'sample-id' column."""
     if df.index is None:
         return None
     idx = df.index
@@ -131,12 +131,12 @@ def _promote_index_as_id(df: pd.DataFrame) -> Optional[pd.DataFrame]:
     # Heuristic: index unique and mostly non-numeric strings
     if idx.is_unique and (idx.astype(str) != pd.RangeIndex(len(idx)).astype(str)).any():
         out = df.copy()
-        out = out.reset_index().rename(columns={'index': 'iMSMS_ID'})
+        out = out.reset_index().rename(columns={'index': 'sample-id'})
         return out
     return None
 
 def _first_column_as_id(df: pd.DataFrame) -> Optional[pd.DataFrame]:
-    """If first column looks like an ID column, rename it to 'iMSMS_ID'."""
+    """If first column looks like an ID column, rename it to 'sample-id'."""
     if df.shape[1] == 0:
         return None
     first = df.columns[0]
@@ -145,7 +145,7 @@ def _first_column_as_id(df: pd.DataFrame) -> Optional[pd.DataFrame]:
     if series.dtype == object or series.map(lambda x: isinstance(x, str)).mean() > 0.5:
         if series.nunique(dropna=True) >= 0.8 * len(series):
             out = df.copy()
-            out = out.rename(columns={first: 'iMSMS_ID'})
+            out = out.rename(columns={first: 'sample-id'})
             return out
     return None
 
@@ -160,7 +160,7 @@ def _taxa_metadata_columns() -> List[str]:
 def _transpose_if_wide_matrix(df: pd.DataFrame) -> Optional[pd.DataFrame]:
     """
     Detect a wide matrix where rows are taxa/features and columns are sample IDs.
-    If detected, transpose to samples x features and add 'iMSMS_ID'.
+    If detected, transpose to samples x features and add 'sample-id'.
     """
     df2 = _standardize_columns(df)
     lower_cols = [c.lower() for c in df2.columns]
@@ -192,7 +192,7 @@ def _transpose_if_wide_matrix(df: pd.DataFrame) -> Optional[pd.DataFrame]:
     # Heuristic: if >=60% of remaining columns are numeric, we assume wide sample columns
     if abundance_part.shape[1] > 0 and numeric_like >= 0.6 * abundance_part.shape[1]:
         transposed = abundance_part.T
-        transposed.index.name = 'iMSMS_ID'
+        transposed.index.name = 'sample-id'
         transposed = transposed.reset_index()
         # print(f"[dataLoader] Detected wide taxa x samples matrix; transposed to samples x features.")
         return transposed
@@ -202,36 +202,36 @@ def _transpose_if_wide_matrix(df: pd.DataFrame) -> Optional[pd.DataFrame]:
 def _finalize_sheet6(sample_feat_df: pd.DataFrame) -> pd.DataFrame:
     """
     Ensure:
-      - 'iMSMS_ID' exists as a column (string)
+      - 'sample-id' exists as a column (string)
       - Only numeric feature columns (drop non-numeric except ID)
     """
     df = _standardize_columns(sample_feat_df).copy()
 
     # Ensure ID column present
     id_col = _try_find_id_column(df)
-    if id_col and id_col != 'iMSMS_ID':
-        df = df.rename(columns={id_col: 'iMSMS_ID'})
-    elif not id_col and 'iMSMS_ID' not in df.columns:
+    if id_col and id_col != 'sample-id':
+        df = df.rename(columns={id_col: 'sample-id'})
+    elif not id_col and 'sample-id' not in df.columns:
         # try index -> column
         promoted = _promote_index_as_id(df.set_index(df.columns[0])) if df.columns.size > 0 else None
-        if isinstance(promoted, pd.DataFrame) and 'iMSMS_ID' in promoted.columns:
+        if isinstance(promoted, pd.DataFrame) and 'sample-id' in promoted.columns:
             df = promoted
         else:
             # try first column heuristic on original df
             heur = _first_column_as_id(df)
-            if isinstance(heur, pd.DataFrame) and 'iMSMS_ID' in heur.columns:
+            if isinstance(heur, pd.DataFrame) and 'sample-id' in heur.columns:
                 df = heur
             else:
                 raise KeyError("Could not find or infer a sample ID column for S6. "
-                               "Expected something like 'iMSMS_ID', 'SampleID', '#SampleID', etc.")
+                               "Expected something like 'sample-id', 'SampleID', '#SampleID', etc.")
 
     # Make IDs strings
-    df['iMSMS_ID'] = df['iMSMS_ID'].astype(str).str.strip()
+    df['sample-id'] = df['sample-id'].astype(str).str.strip()
 
     # Keep only numeric features besides ID
     numeric_cols = []
     for c in df.columns:
-        if c == 'iMSMS_ID':
+        if c == 'sample-id':
             continue
         try:
             df[c] = pd.to_numeric(df[c], errors='coerce')
@@ -239,7 +239,7 @@ def _finalize_sheet6(sample_feat_df: pd.DataFrame) -> pd.DataFrame:
         except Exception:
             pass
 
-    keep_cols = ['iMSMS_ID'] + numeric_cols
+    keep_cols = ['sample-id'] + numeric_cols
     df = df[keep_cols]
     return df
 
@@ -247,115 +247,69 @@ def _finalize_sheet6(sample_feat_df: pd.DataFrame) -> pd.DataFrame:
 
 def load_imsms_data(variable2: Optional[str]):
     """
-    Load and merge iMSMS dataset files from CSV format.
+    Load and merge iMSMS dataset files from TSV format.
 
     Args:
-        variable2 (str|None): desired CSV file suffix for Supplementary_Dataset_S6
-                              (e.g., 'genus', 'species', 'class'). This corresponds to 
-                              the taxonomic level CSV file.
+        variable2 (str|None): Not used anymore since we're loading bray-curtis-distance-matrix.tsv
 
     Returns:
-        demographic_data (pd.DataFrame): subset of demographic/clinical columns incl. iMSMS_ID
-        sheet6_class (pd.DataFrame): samples x features abundance table (has 'iMSMS_ID')
-        dependentvar (str): the resolved S6 CSV file suffix actually used
+        demographic_data (pd.DataFrame): subset of demographic/clinical columns incl. sample-id
+        sheet6_class (pd.DataFrame): Bray-Curtis distance matrix
+        dependentvar (str): 'bray-curtis' (fixed value)
         weighted_unifrac_df (pd.DataFrame): weighted UniFrac distance matrix
     """
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    # print("[dataLoader] Loading iMSMS data from CSV files...")
+    # print("[dataLoader] Loading iMSMS data from TSV files...")
 
     dataset_dir = _find_dataset_dir(script_dir)
 
-    # CSV file paths
-    S1_2_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S1_Dataset_S1_2.csv')
-    S2_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S2_Dataset_S2.csv')
-    S3_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S3_Dataset_S3.csv')
-    S5_1_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S5_Dataset_S5_1.csv')
-    S5_2_PATH = os.path.join(dataset_dir, 'Supplementary_Dataset_S5_Dataset_S5_2.csv')
+    # TSV file paths
+    METADATA_PATH = os.path.join(dataset_dir, 'metadata.tsv')
+    BRAY_CURTIS_PATH = os.path.join(dataset_dir, 'bray-curtis-distance-matrix.tsv')
+    WEIGHTED_UNIFRAC_PATH = os.path.join(dataset_dir, 'weighted-unifrac-distance-matrix.tsv')
 
-    # Ensure IDs are read consistently across CSV files
-    read_kwargs = dict(dtype={'iMSMS_ID': 'object'})
+    # Ensure IDs are read consistently across TSV files
+    read_kwargs = dict(dtype={'sample-id': 'object'}, sep='\t')
 
-    # Read CSV files
-    sheet1_2 = pd.read_csv(S1_2_PATH, **read_kwargs)
-    sheet2   = pd.read_csv(S2_PATH, **read_kwargs)
-    sheet3   = pd.read_csv(S3_PATH, **read_kwargs)
-    sheet5_1 = pd.read_csv(S5_1_PATH, **read_kwargs)
-
-    # Resolve S6 CSV file robustly
-    requested = 'species'  # Use variable2 parameter
-    dependentvar, all_files = _resolve_s6_csv(requested, dataset_dir)
-    if requested != dependentvar:
-        print(f"[dataLoader] Requested S6 file '{requested}' not found; using '{dependentvar}'.")
-        print(f"[dataLoader] Available S6 files: {all_files}")
-
-    # Read the selected S6 CSV file
-    s6_csv_path = os.path.join(dataset_dir, f'Supplementary_Dataset_S6_{dependentvar}.csv')
-    s6_raw = pd.read_csv(s6_csv_path)
-    s6_raw = _standardize_columns(s6_raw)
-
-    # --- Build demographics merge (keep S2 optional if you like) ---
-    demographic_data = (
-        sheet1_2
-        .merge(sheet3,   on='iMSMS_ID', how='left')
-        # .merge(sheet2, on='iMSMS_ID', how='left')  # uncomment when needed
-        .merge(sheet5_1, on='iMSMS_ID', how='left')
-    )
+    # Read metadata TSV file
+    demographic_data = pd.read_csv(METADATA_PATH, **read_kwargs)
 
     # Validate presence of IDs in demographics
-    if 'iMSMS_ID' not in demographic_data.columns:
-        raise KeyError("Column 'iMSMS_ID' missing from demographic data after merges.")
+    if 'sample-id' not in demographic_data.columns:
+        raise KeyError("Column 'sample-id' missing from metadata file.")
 
     # Standardize/ensure Age
     demographic_data = _ensure_age_column(demographic_data)
 
     # Keep a tidy subset (case-insensitive)
-    want = {'age', 'residence', 'smoking status', 'sex', 'imsms_id', 'disease'}
+    want = {'body-site', 'year', 'subject', 'reported-antibiotic-usage'}
     lower_to_orig = {c.lower(): c for c in demographic_data.columns}
     keep = [lower_to_orig[k] for k in want if k in lower_to_orig]
-    if 'iMSMS_ID' not in keep:
-        keep.append('iMSMS_ID')
+    if 'sample-id' not in keep:
+        keep.append('sample-id')
     demographic_data = demographic_data[keep]
     # print(f"[dataLoader] Included demographic columns: {keep}")
 
-    # --- Prepare S6 abundance: try to find ID column; else detect wide and transpose ---
-    id_col = _try_find_id_column(s6_raw)
-    if id_col:
-        s6_df = s6_raw.rename(columns={id_col: 'iMSMS_ID'}).copy()
-    else:
-        # Try index promotion
-        promoted = _promote_index_as_id(s6_raw.set_index(s6_raw.columns[0])) if s6_raw.columns.size > 0 else None
-        if isinstance(promoted, pd.DataFrame) and 'iMSMS_ID' in promoted.columns:
-            s6_df = promoted
-            # print("[dataLoader] Promoted index to 'iMSMS_ID' for S6.")
-        else:
-            # Try wide matrix transpose
-            transposed = _transpose_if_wide_matrix(s6_raw)
-            if isinstance(transposed, pd.DataFrame):
-                s6_df = transposed
-            else:
-                # Try first-column-as-ID heuristic
-                heur = _first_column_as_id(s6_raw)
-                if isinstance(heur, pd.DataFrame) and 'iMSMS_ID' in heur.columns:
-                    s6_df = heur
-                    # print("[dataLoader] Using first column as 'iMSMS_ID' for S6.")
-                else:
-                    raise KeyError(
-                        "Column 'iMSMS_ID' missing in S6 and could not be inferred. "
-                        f"S6 columns: {list(s6_raw.columns)[:10]} ..."
-                    )
-
-    # Finalize S6 to numeric features with explicit 'iMSMS_ID'
-    sheet6_class = _finalize_sheet6(s6_df)
+    # Load Bray-Curtis distance matrix
+    sheet6_class = pd.read_csv(BRAY_CURTIS_PATH, sep='\t', index_col=0)
+    # Convert to format expected by rest of code (samples x features format)
+    # Reset index to make sample IDs a column
+    sheet6_class = sheet6_class.reset_index()
+    if sheet6_class.columns[0] != 'sample-id':
+        sheet6_class = sheet6_class.rename(columns={sheet6_class.columns[0]: 'sample-id'})
 
     # Normalize ID types to string to guarantee join compatibility
-    demographic_data['iMSMS_ID'] = demographic_data['iMSMS_ID'].astype(str).str.strip()
-    sheet6_class['iMSMS_ID']     = sheet6_class['iMSMS_ID'].astype(str).str.strip()
+    demographic_data['sample-id'] = demographic_data['sample-id'].astype(str).str.strip()
+    sheet6_class['sample-id'] = sheet6_class['sample-id'].astype(str).str.strip()
 
-    # print(f"[dataLoader] S6 shape after processing: {sheet6_class.shape} (rows=samples)")
+    # print(f"[dataLoader] Bray-Curtis matrix shape after processing: {sheet6_class.shape} (rows=samples)")
 
-    # Load the weighted UniFrac distance matrix from Dataset S5.2 CSV
-    # print("Loading weighted UniFrac distance matrix from Dataset S5.2 CSV...")
-    weighted_unifrac_df = pd.read_csv(S5_2_PATH, index_col=0)
+    # Load the weighted UniFrac distance matrix TSV
+    # print("Loading weighted UniFrac distance matrix from TSV...")
+    weighted_unifrac_df = pd.read_csv(WEIGHTED_UNIFRAC_PATH, sep='\t', index_col=0)
     # print(f"Loaded weighted UniFrac matrix with shape: {weighted_unifrac_df.shape}")
+
+    # Set dependentvar to indicate we're using Bray-Curtis
+    dependentvar = 'bray-curtis'
 
     return demographic_data, sheet6_class, dependentvar, weighted_unifrac_df

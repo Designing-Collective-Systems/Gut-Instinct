@@ -163,11 +163,10 @@
                             <div class="variable-list">
                                 <h4>iMSMS Dataset Variables</h4>
                                 <ul>
-                                    <li onclick="setVariable1(this)">Age</li>
-                                    <li onclick="setVariable1(this)">Disease</li>
-                                    <li onclick="setVariable1(this)">Residence</li>
-                                    <li onclick="setVariable1(this)">Smoking Status</li>
-                                    <li onclick="setVariable1(this)">Sex</li>
+                                    <li onclick="setVariable1(this)">body-site</li>
+                                    <li onclick="setVariable1(this)">reported-antibiotic-usage</li>
+                                    <li onclick="setVariable1(this)">subject</li>
+                                    <li onclick="setVariable1(this)">year</li>
                                 </ul>
                             </div>
                             
@@ -191,7 +190,7 @@
                             <label for="variable2"> Enter Algorithm</label>
                         </div>
                         
-                        <a href="#" id="seeViz" class="viz-link">Click to see the plot for this question: "How does ___ affect microbial diversity in the iMSMS dataset, as shown by the ____ algorithm?"</a>
+                        <a href="#" id="seeViz" class="viz-link">Click to see the plot for this question: "How does ___ affect microbial diversity in the moving pictures dataset, as shown by the ____ algorithm?"</a>
                     </div>
                 </div>
             </div>
@@ -208,7 +207,7 @@
             const var1Text = variable1 || '___';
             const var2Text = variable2 || '___';
             
-            vizLink.textContent = `Click to see the plot for this question: "How does ${var1Text} affect microbial diversity in the iMSMS dataset, as shown by the ${var2Text} algorithm?"`;
+            vizLink.textContent = `Click to see the plot for this question: "How does ${var1Text} affect microbial diversity in the moving pictures dataset, as shown by the ${var2Text} algorithm?"`;
         }
         
         function setVariable1(element) {
