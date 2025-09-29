@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Emperor</title>
+    <!-- core dependencies that are otherwise included via the jupyter notebook -->
+<script src="https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/require-2.1.22.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/jquery-2.1.4.min.js"></script>
+    <meta charset="utf-8">
+
+    <script type="text/javascript">
+if (document.querySelector("#emperor-css") === null){
+    document.querySelector("head").insertAdjacentHTML("beforeend",[
+        '<link id="emperor-css" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/css/emperor.css">',
+        '<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/css/jquery-ui.min.css">',
+        '<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/css/slick.grid.min.css">',
+        '<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/css/spectrum.min.css">',
+        '<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/css/chosen.min.css">',
+        '<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/css/jquery.contextMenu.min.css">'
+    ]);
+}
+</script>
+
+
+    <style>
+      #emperor-notebook-0xfbfdafb {
+        height:100vh !important;
+        padding: 0px !important;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='emperor-notebook-0xfbfdafb' style="position: relative; width:100%; height:500px;">
+  <div class='loading' style="position: absolute;top: 50%;left: 50%;margin-left: -229px; margin-top: -59px; z-index: 10000;height:118px;width:458px;padding:0px"><img src='https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/img/emperor.png' alt='Emperor resources missing. Expected them to be found in https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files'></div>
+</div>
+</div>
+    <script type="text/javascript">
+    // When running in the Jupyter notebook we've encountered version conflicts
+// with some dependencies. So instead of polluting the global require context,
+// we define a new context.
+var emperorRequire = require.config({
+'context': 'emperor',
+// the left side is the module name, and the right side is the path
+// relative to the baseUrl attribute, do NOT include the .js extension
+'paths': {
+  /* jQuery */
+  'jquery': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/jquery-2.1.4.min',
+  'jqueryui': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/jquery-ui.min',
+  'jquery_drag': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/jquery.event.drag-2.2.min',
+
+  /* jQuery plugins */
+  'chosen': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/chosen.jquery.min',
+  'spectrum': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/spectrum.min',
+  'position': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/jquery.ui.position.min',
+  'contextmenu': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/jquery.contextMenu.min',
+
+  /* other libraries */
+  'underscore': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/underscore-min',
+  'chroma': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/chroma.min',
+  'filesaver': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/FileSaver.min',
+  'blob': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/Blob',
+  'canvastoblob': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/canvas-toBlob',
+  'd3': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/d3.min',
+
+  /* THREE.js and plugins */
+  'three': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/three.min',
+  'orbitcontrols': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/three.js-plugins/OrbitControls',
+  'projector': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/three.js-plugins/Projector',
+  'svgrenderer': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/three.js-plugins/SVGRenderer',
+  'canvasrenderer': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/three.js-plugins/CanvasRenderer',
+  'selectionbox': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/three.js-plugins/SelectionBox',
+  'selectionhelper': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/three.js-plugins/SelectionHelper',
+
+  /* SlickGrid */
+  'slickcore': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/slick.core.min',
+  'slickgrid': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/slick.grid.min',
+  'slickformatters': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/slick.editors.min',
+  'slickeditors': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/slick.formatters.min',
+  'slickdataview': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/vendor/js/slick.dataview.min',
+
+  /* Emperor's objects */
+  'util': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/util',
+  'model': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/model',
+  'multi-model': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/multi-model',
+  'view': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/view',
+  'controller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/controller',
+  'draw': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/draw',
+  'scene3d': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/sceneplotview3d',
+  'shapes': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/shapes',
+  'animationdirector': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/animate',
+  'trajectory': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/trajectory',
+  'uistate': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/ui-state',
+
+  /* controllers */
+  'abcviewcontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/abc-view-controller',
+  'viewcontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/view-controller',
+  'colorviewcontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/color-view-controller',
+  'visibilitycontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/visibility-controller',
+  'opacityviewcontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/opacity-view-controller',
+  'scaleviewcontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/scale-view-controller',
+  'shapecontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/shape-controller',
+  'axescontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/axes-controller',
+  'animationscontroller': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/animations-controller',
+
+  /* editors */
+  'shape-editor': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/shape-editor',
+  'color-editor': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/color-editor',
+  'scale-editor': 'https://cdn.jsdelivr.net/gh/biocore/emperor@1.0.4/emperor/support_files/js/scale-editor'
+
+},
+/*
+   Libraries that are not AMD compatible need shim to declare their
+   dependencies.
+ */
+'shim': {
+  'jquery_drag': {
+    'deps': ['jquery', 'jqueryui']
+  },
+  'chosen': {
+    'deps': ['jquery'],
+    'exports': 'jQuery.fn.chosen'
+  },
+  'contextmenu' : {
+    'deps': ['jquery', 'jqueryui', 'position']
+  },
+  'filesaver' : {
+    'deps': ['blob']
+  },
+  'canvastoblob' : {
+    'deps': ['blob']
+  },
+  'slickcore': ['jqueryui'],
+  'slickgrid': ['slickcore', 'jquery_drag', 'slickformatters', 'slickeditors',
+                'slickdataview']
+}
+});
+
+emperorRequire(
+["jquery", "model", "controller"],
+function($, model, EmperorController) {
+  var DecompositionModel = model.DecompositionModel;
+
+  var div = $('#emperor-notebook-0xfbfdafb');
+
+  var data = {"info": null, "plot": {"decomposition": {"axes_names": [0], "ci": null, "coordinates": [[0.07990251123680987], [-0.5704252724308407], [-0.4829426349104389], [-0.6635106983105898], [-0.8494495707543702], [-0.5450634828632499], [-0.4028239507586117], [0.7011509239328487], [0.7139335259175486], [0.6682073160981253], [0.33089925470165715], [0.2861694958613339], [0.7553651717157452], [0.49619089791363535], [0.6743944153143806], [0.7625661807473537], [0.7165721708638836], [0.5277892857337595], [0.40115688580352155], [0.4519510800725767], [0.4029372300601788], [0.23061786835495787], [0.2515653644955936], [0.6256551368782732], [0.779266043584482], [0.6310398464470708], [0.5787066430835272], [0.44063674261764696], [0.5283083146744486], [0.5693871368754888], [0.5049970370765685], [0.5521920821225891], [0.8003227323095473], [0.9208191892190264], [0.8596923589798708], [0.81253196976506], [0.9093364733975311], [0.9085706027092706], [0.9247961920890311], [0.7814555984988714], [-0.13958964868155924], [0.009938123194398752], [-0.07441132226490395], [-0.6970324912159399], [-0.020159798433219064], [-0.34117515935113774], [0.10218594345636706], [-0.10958037269870217], [-0.36897740901812365], [-1.0], [-0.8933923611420884], [-0.778982153950208], [-0.9385568901840902], [-0.7700364387279832], [-0.8939052195480884], [-0.9619933711253136], [-0.773987372306458], [-0.754436931260103], [-0.8726874852884294], [-0.9663033579315192], [-0.9793515500526309], [-0.626170576285011], [-0.9774258232080516], [-0.8609595452170504], [-0.7396819539942925], [-0.7074809710027385], [0.24081685469236486], [-0.7273024696793945], [0.719944226687946], [0.35044125555101713], [0.33758655974189267], [0.26470696751051764], [0.3552102033621826], [0.21740806033024038], [0.19737749066471544], [-0.24108170015560385], [0.06404689371316247], [-0.4128882044207784], [-0.09746312220760758], [-0.04753759095607329], [0.5805130768539705], [0.15684829403627654], [-0.39157417394359995], [-0.7187625598622689], [-0.4118329271929033], [-0.41367919778880574], [-0.33797145839752435], [0.7779578875155028], [-0.6993673658281064], [-0.9250419942526106], [0.34959779677069497], [-0.5232852914330365]], "edges": [], "percents_explained": [9300.0], "sample_ids": ["CFS011", "CFS013", "CFS003", "CFS004", "CFS002", "CFS001", "CFS008", "CFS009", "CD001-01", "CD001-02", "CD001-03", "CD001-04", "CD001-05", "CD001-06", "CD002-04", "CD002-06", "CD003-01", "CD003-02", "CD003-03", "CD003-04", "CD003-05", "CD003-06", "CD003-07", "CD006-01", "CD006-02", "CD006-03", "CD006-04", "CD006-05", "CD006-06", "CD006-07", "CFS015", "CD010-01", "CD014-01", "CD014-02", "CD014-03", "CD014-04", "CD014-05", "CD014-06", "CD014-07", "CFS014", "CFS016", "CFS017", "CFS018", "CFS019", "CFS022", "CFS023", "HC001", "HC002", "HC003", "HC004", "HC005", "HC006", "HC007", "HC008", "HC009", "HC010", "HC011", "HC012", "HC013", "HC014", "HC015", "HC016", "HC017", "HC018", "HC019", "HC020", "HC021B", "HC022A", "CD016-01", "CD016-02", "CD016-03", "CD016-04", "CD016-05", "CD016-06", "CD016-07", "CFS024", "CFS025", "CFS026", "CFS029", "CFS031", "CFS032", "CFS033", "CFS034", "CFS035", "CFS036", "CFS037", "CFS038", "FS006", "FS009", "CFS027", "FS007", "HC021"]}, "metadata": [["CFS011", "CGTTTGGAATGA", "GTGYCAGCMGCCGCGGTAA", "CFS011", "SEQ053", "1", "CFS", "53", "145.12", "4/7/23", "BSC", "MK", "1", "A02"], ["CFS013", "ACGCTTAACGAC", "GTGYCAGCMGCCGCGGTAA", "CFS013", "SEQ053", "1", "CFS", "52", "133.22", "4/7/23", "BSC", "MK", "1", "A03"], ["CFS003", "TCTCTTTCGACA", "GTGYCAGCMGCCGCGGTAA", "CFS003", "SEQ053", "1", "CFS", "46.9", "124.19", "4/11/23", "BSC", "MK", "1", "A04"], ["CFS004", "GCGATCACACCT", "GTGYCAGCMGCCGCGGTAA", "CFS004", "SEQ053", "1", "CFS", "40.1", "133.44", "4/11/23", "BSC", "MK", "1", "A05"], ["CFS002", "TGCACAGTCGCT", "GTGYCAGCMGCCGCGGTAA", "CFS002", "SEQ053", "1", "CFS", "37.3", "128.84", "4/11/23", "BSC", "MK", "1", "A06"], ["CFS001", "GTCATGCTCCAG", "GTGYCAGCMGCCGCGGTAA", "CFS001", "SEQ053", "1", "CFS", "19.4", "119.48", "4/11/23", "BSC", "MK", "1", "A07"], ["CFS008", "CAAACGCACTAA", "GTGYCAGCMGCCGCGGTAA", "CFS008", "SEQ053", "1", "CFS", "18.5", "128.03", "4/11/23", "BSC", "MK", "1", "A08"], ["CFS009", "ACGTGAGGAACG", "GTGYCAGCMGCCGCGGTAA", "CFS009", "SEQ053", "1", "CFS", "3.1", "109.61", "4/11/23", "BSC", "MK", "1", "A09"], ["CD001-01", "CGGTATAGCAAT", "GTGYCAGCMGCCGCGGTAA", "CD001", "SEQ057", "1", "CD", "0.8", "124.96", "5/31/23", "BSC", "MK", "1", "C08"], ["CD001-02", "TTGCTGGACGCT", "GTGYCAGCMGCCGCGGTAA", "CD001", "SEQ057", "2", "CD", "1.2", "141.22", "5/31/23", "BSC", "MK", "1", "C06"], ["CD001-03", "ACTCCCGTGTGA", "GTGYCAGCMGCCGCGGTAA", "CD001", "SEQ057", "3", "CD", "20.3", "138.61", "5/31/23", "BSC", "MK", "1", "B08"], ["CD001-04", "ACTCGCTCGCTG", "GTGYCAGCMGCCGCGGTAA", "CD001", "SEQ057", "4", "CD", "6.9", "146.23", "5/31/23", "BSC", "MK", "1", "C02"], ["CD001-05", "TTGCGGACCCTA", "GTGYCAGCMGCCGCGGTAA", "CD001", "SEQ057", "5", "CD", "1", "119.54", "5/31/23", "BSC", "MK", "1", "C07"], ["CD001-06", "TCTCTTTCGACA", "GTGYCAGCMGCCGCGGTAA", "CD001", "SEQ057", "6", "CD", "0.6", "103.83", "5/31/23", "BSC", "MK", "1", "C09"], ["CD002-04", "CGTTTGGAATGA", "GTGYCAGCMGCCGCGGTAA", "CD002", "SEQ057", "4", "CD", "9.7", "113.41", "5/31/23", "BSC", "MK", "1", "B11"], ["CD002-06", "AGTAAAGATCGT", "GTGYCAGCMGCCGCGGTAA", "CD002", "SEQ057", "6", "CD", "2.1", "145.09", "5/31/23", "BSC", "MK", "1", "C05"], ["CD003-01", "ATGCTGCAACAC", "GTGYCAGCMGCCGCGGTAA", "CD003", "SEQ057", "1", "CD", "54", "140.59", "5/31/23", "BSC", "MK", "1", "B02"], ["CD003-02", "AGCCCTGCTACA", "GTGYCAGCMGCCGCGGTAA", "CD003", "SEQ057", "2", "CD", "9.4", "124.45", "5/31/23", "BSC", "MK", "1", "C01"], ["CD003-03", "CGCGCCTTAAAC", "GTGYCAGCMGCCGCGGTAA", "CD003", "SEQ057", "3", "CD", "14.1", "128.12", "5/31/23", "BSC", "MK", "1", "B09"], ["CD003-04", "CGGGACACCCGA", "GTGYCAGCMGCCGCGGTAA", "CD003", "SEQ057", "4", "CD", "44.6", "138.08", "5/31/23", "BSC", "MK", "1", "B03"], ["CD003-05", "GTAGTAGACCAT", "GTGYCAGCMGCCGCGGTAA", "CD003", "SEQ057", "5", "CD", "25.5", "131.57", "5/31/23", "BSC", "MK", "1", "B05"], ["CD003-06", "CTGTCTATACTA", "GTGYCAGCMGCCGCGGTAA", "CD003", "SEQ057", "6", "CD", "6.6", "138.61", "5/31/23", "BSC", "MK", "1", "C03"], ["CD003-07", "CGTCCGTATGAA", "GTGYCAGCMGCCGCGGTAA", "CD003", "SEQ057", "7", "CD", "10.4", "119.97", "5/31/23", "BSC", "MK", "1", "B10"], ["CD006-01", "CCGGACAAGAAG", "GTGYCAGCMGCCGCGGTAA", "CD006", "SEQ057", "1", "CD", "25.3", "144.78", "5/31/23", "BSC", "MK", "1", "B06"], ["CD006-02", "GTCATGCTCCAG", "GTGYCAGCMGCCGCGGTAA", "CD006", "SEQ057", "2", "CD", "0.2", "112.29", "5/31/23", "BSC", "MK", "1", "C12"], ["CD006-03", "TCCATACCGGAA", "GTGYCAGCMGCCGCGGTAA", "CD006", "SEQ057", "3", "CD", "59", "140.98", "5/31/23", "BSC", "MK", "1", "B01"], ["CD006-04", "ACCTTACACCTT", "GTGYCAGCMGCCGCGGTAA", "CD006", "SEQ057", "4", "CD", "37.3", "128.33", "5/31/23", "BSC", "MK", "1", "B04"], ["CD006-05", "CCTAACGGTCCA", "GTGYCAGCMGCCGCGGTAA", "CD006", "SEQ057", "5", "CD", "0.2", "112.12", "5/31/23", "BSC", "MK", "1", "D01"], ["CD006-06", "TAATCTCGCCGG", "GTGYCAGCMGCCGCGGTAA", "CD006", "SEQ057", "6", "CD", "2.9", "114.56", "5/31/23", "BSC", "MK", "1", "C04"], ["CD006-07", "GCGATCACACCT", "GTGYCAGCMGCCGCGGTAA", "CD006", "SEQ057", "7", "CD", "0.3", "113.73", "5/31/23", "BSC", "MK", "1", "C10"], ["CFS015", "ACGCTTAACGAC", "GTGYCAGCMGCCGCGGTAA", "CFS015", "SEQ057", "1", "CFS", "9.4", "139.42", "5/31/23", "BSC", "MK", "1", "B12"], ["CD010-01", "TCAAGTCCGCAC", "GTGYCAGCMGCCGCGGTAA", "CD010", "SEQ094", "1", "CD", "0.3", "102.11", "7/16/24", "BSC", "LT", "2", "E09"], ["CD014-01", "CACACAAAGTCA", "GTGYCAGCMGCCGCGGTAA", "CD014", "SEQ094", "1", "CD", "0.1", "104.96", "7/16/24", "BSC", "LT", "2", "E10"], ["CD014-02", "AGCAGTGCGGTG", "GTGYCAGCMGCCGCGGTAA", "CD014", "SEQ094", "2", "CD", "2", "128.39", "7/16/24", "BSC", "LT", "2", "D04"], ["CD014-03", "TAAGGCATCGCT", "GTGYCAGCMGCCGCGGTAA", "CD014", "SEQ094", "3", "CD", "1.3", "107.67", "7/16/24", "BSC", "LT", "2", "D10"], ["CD014-04", "GGAGAACGACAC", "GTGYCAGCMGCCGCGGTAA", "CD014", "SEQ094", "4", "CD", "3.5", "110.42", "7/16/24", "BSC", "LT", "2", "B08"], ["CD014-05", "AATGTTCAACTT", "GTGYCAGCMGCCGCGGTAA", "CD014", "SEQ094", "5", "CD", "2.3", "125.86", "7/16/24", "BSC", "LT", "2", "D03"], ["CD014-06", "AAGAACTCATGA", "GTGYCAGCMGCCGCGGTAA", "CD014", "SEQ094", "6", "CD", "13.4", "117.05", "7/16/24", "BSC", "LT", "1", "C06"], ["CD014-07", "GAAATCTTGAAG", "GTGYCAGCMGCCGCGGTAA", "CD014", "SEQ094", "7", "CD", "11.6", "104.27", "7/16/24", "BSC", "LT", "1", "C11"], ["CFS014", "GCGATCACACCT", "GTGYCAGCMGCCGCGGTAA", "CFS014", "SEQ094", "1", "CFS", "8.6", "117.34", "7/16/24", "BSC", "LT", "1", "F05"], ["CFS016", "ACTACTGAGGAT", "GTGYCAGCMGCCGCGGTAA", "CFS016", "SEQ094", "1", "CFS", "41.3", "102.96", "7/16/24", "BSC", "LT", "1", "A11"], ["CFS017", "TTGAACAAGCCA", "GTGYCAGCMGCCGCGGTAA", "CFS017", "SEQ094", "1", "CFS", "0.1", "61.23", "7/16/24", "BSC", "LT", "2", "E12"], ["CFS018", "TACCGAAGGTAT", "GTGYCAGCMGCCGCGGTAA", "CFS018", "SEQ094", "1", "CFS", "6.3", "111.63", "7/16/24", "BSC", "LT", "1", "H06"], ["CFS019", "AATCTTGCGCCG", "GTGYCAGCMGCCGCGGTAA", "CFS019", "SEQ094", "1", "CFS", "10", "93.59", "7/16/24", "BSC", "LT", "1", "D09"], ["CFS022", "GGTTGCCCTGTA", "GTGYCAGCMGCCGCGGTAA", "CFS022", "SEQ094", "1", "CFS", "20.5", "111.12", "7/16/24", "BSC", "LT", "1", "B07"], ["CFS023", "GCCTATGAGATC", "GTGYCAGCMGCCGCGGTAA", "CFS023", "SEQ094", "1", "CFS", "19.3", "103.24", "7/16/24", "BSC", "LT", "1", "B09"], ["HC001", "GCTGCCCACCTA", "GTGYCAGCMGCCGCGGTAA", "HC001", "SEQ094", "1", "HC", "2.7", "121.97", "7/16/24", "BSC", "LT", "2", "C05"], ["HC002", "TATTTGATTGGT", "GTGYCAGCMGCCGCGGTAA", "HC002", "SEQ094", "1", "HC", "7.2", "113.55", "7/16/24", "BSC", "LT", "1", "G11"], ["HC003", "TAATCCATAATC", "GTGYCAGCMGCCGCGGTAA", "HC003", "SEQ094", "1", "HC", "3.3", "110.6", "7/16/24", "BSC", "LT", "2", "B11"], ["HC004", "TGTGCACGCCAT", "GTGYCAGCMGCCGCGGTAA", "HC004", "SEQ094", "1", "HC", "9", "105.87", "7/16/24", "BSC", "LT", "1", "F01"], ["HC005", "GTAGTAGACCAT", "GTGYCAGCMGCCGCGGTAA", "HC005", "SEQ094", "1", "HC", "9.6", "98.11", "7/16/24", "BSC", "LT", "1", "E02"], ["HC006", "ACTTGGTGTAAG", "GTGYCAGCMGCCGCGGTAA", "HC006", "SEQ094", "1", "HC", "9.1", "96.64", "7/16/24", "BSC", "LT", "1", "E10"], ["HC007", "TTACACAAAGGC", "GTGYCAGCMGCCGCGGTAA", "HC007", "SEQ094", "1", "HC", "8.3", "88.74", "7/16/24", "BSC", "LT", "1", "F09"], ["HC008", "CCTTGACCGATG", "GTGYCAGCMGCCGCGGTAA", "HC008", "SEQ094", "1", "HC", "4.1", "123.66", "7/16/24", "BSC", "LT", "2", "B03"], ["HC009", "TACGGATTATGG", "GTGYCAGCMGCCGCGGTAA", "HC009", "SEQ094", "1", "HC", "10.2", "116.97", "7/18/24", "BSC", "LT", "1", "D06"], ["HC010", "TACTAACGCGGT", "GTGYCAGCMGCCGCGGTAA", "HC010", "SEQ094", "1", "HC", "8.6", "97.97", "7/16/24", "BSC", "LT", "1", "F04"], ["HC011", "TATTGCAGCAGC", "GTGYCAGCMGCCGCGGTAA", "HC011", "SEQ094", "1", "HC", "9.8", "88.39", "7/16/24", "BSC", "LT", "1", "D12"], ["HC012", "ACGCTTAACGAC", "GTGYCAGCMGCCGCGGTAA", "HC012", "SEQ094", "1", "HC", "10.2", "101.3", "7/16/24", "BSC", "LT", "1", "D05"], ["HC013", "CTTAGTGCAGAA", "GTGYCAGCMGCCGCGGTAA", "HC013", "SEQ094", "1", "HC", "10", "98.18", "7/16/24", "BSC", "LT", "1", "D08"], ["HC014", "AGTAAAGATCGT", "GTGYCAGCMGCCGCGGTAA", "HC014", "SEQ094", "1", "HC", "9.6", "97.24", "7/16/24", "BSC", "LT", "1", "E03"], ["HC015", "GTCATGCTCCAG", "GTGYCAGCMGCCGCGGTAA", "HC015", "SEQ094", "1", "HC", "6.5", "94.47", "7/16/24", "BSC", "LT", "1", "H05"], ["HC016", "AATGCGCGTATA", "GTGYCAGCMGCCGCGGTAA", "HC016", "SEQ094", "1", "HC", "13.1", "107.1", "7/18/24", "BSC", "LT", "1", "C09"], ["HC017", "CCGGACAAGAAG", "GTGYCAGCMGCCGCGGTAA", "HC017", "SEQ094", "1", "HC", "9", "93.55", "7/16/24", "BSC", "LT", "1", "F02"], ["HC018", "CGTCCGTATGAA", "GTGYCAGCMGCCGCGGTAA", "HC018", "SEQ094", "1", "HC", "23.9", "99.8", "7/18/24", "BSC", "LT", "1", "B05"], ["HC019", "GGTTCATGAACA", "GTGYCAGCMGCCGCGGTAA", "HC019", "SEQ094", "1", "HC", "7.6", "113.74", "7/18/24", "BSC", "LT", "1", "G07"], ["HC020", "TATCCAAGCGCA", "GTGYCAGCMGCCGCGGTAA", "HC020", "SEQ094", "1", "HC", "8.3", "100.48", "7/16/24", "BSC", "LT", "1", "F11"], ["HC021B", "TCTCTTTCGACA", "GTGYCAGCMGCCGCGGTAA", "HC021B", "SEQ094", "1", "FS", "9.5", "111.09", "7/16/24", "BSC", "LT", "1", "E05"], ["HC022A", "GTCAACGCTGTC", "GTGYCAGCMGCCGCGGTAA", "HC022A", "SEQ094", "1", "FS", "9.1", "112.78", "7/16/24", "BSC", "LT", "1", "E08"], ["CD016-01", "AGAGGGTGATCG", "GTGYCAGCMGCCGCGGTAA", "CD016-01", "SEQ111", "1", "CD", "13.7", "92.123", "4/2/25", "BSC", "MK", "2", "C02"], ["CD016-02", "CAAACTGCGTTG", "GTGYCAGCMGCCGCGGTAA", "CD016-02", "SEQ111", "2", "CD", "24", "89.271", "4/2/25", "BSC", "MK", "2", "B04"], ["CD016-03", "AGCAGTGCGGTG", "GTGYCAGCMGCCGCGGTAA", "CD016-03", "SEQ111", "3", "CD", "7.3", "94.055", "4/2/25", "BSC", "MK", "2", "D04"], ["CD016-04", "GTTCATTAAACT", "GTGYCAGCMGCCGCGGTAA", "CD016-04", "SEQ111", "4", "CD", "26", "97.378", "4/2/25", "BSC", "MK", "2", "B01"], ["CD016-05", "TGAGTCATTGAG", "GTGYCAGCMGCCGCGGTAA", "CD016-05", "SEQ111", "5", "CD", "35.7", "90.227", "4/2/25", "BSC", "MK", "2", "A07"], ["CD016-06", "TCGAGAGTTTGC", "GTGYCAGCMGCCGCGGTAA", "CD016-06", "SEQ111", "6", "CD", "23.6", "94.309", "4/2/25", "BSC", "MK", "2", "B05"], ["CD016-07", "ACGGTACCCTAC", "GTGYCAGCMGCCGCGGTAA", "CD016-07", "SEQ111", "7", "CD", "37.1", "100.123", "4/2/25", "BSC", "MK", "2", "A06"], ["CFS024", "TAATCTCGCCGG", "GTGYCAGCMGCCGCGGTAA", "CFS024", "SEQ111", "1", "CFS", "52", "133.496", "4/8/25", "BSC", "MK", "1", "D03"], ["CFS025", "ACTCGCTCGCTG", "GTGYCAGCMGCCGCGGTAA", "CFS025", "SEQ111", "1", "CFS", "57", "127.957", "4/8/25", "BSC", "MK", "1", "B03"], ["CFS026", "GTTGATACGATG", "GTGYCAGCMGCCGCGGTAA", "CFS026", "SEQ111", "1", "CFS", "49.1", "116.125", "4/8/25", "BSC", "MK", "1", "E07"], ["CFS029", "ATCTAGTGGCAA", "GTGYCAGCMGCCGCGGTAA", "CFS029", "SEQ111", "1", "CFS", "52", "125.603", "4/8/25", "BSC", "MK", "1", "D04"], ["CFS031", "TAGCAGTTGCGT", "GTGYCAGCMGCCGCGGTAA", "CFS031", "SEQ111", "1", "CFS", "1", "83.02", "4/8/25", "BSC", "MK", "2", "D12"], ["CFS032", "AATGCGCGTATA", "GTGYCAGCMGCCGCGGTAA", "CFS032", "SEQ111", "1", "CFS", "53", "131.537", "4/8/25", "BSC", "MK", "1", "C09"], ["CFS033", "GAAGAGGGTTGA", "GTGYCAGCMGCCGCGGTAA", "CFS033", "SEQ111", "1", "CFS", "45.2", "147.345", "4/8/25", "BSC", "MK", "1", "F07"], ["CFS034", "CTATATTATCCG", "GTGYCAGCMGCCGCGGTAA", "CFS034", "SEQ111", "1", "CFS", "39.5", "109.136", "4/8/25", "BSC", "MK", "2", "A04"], ["CFS035", "GTCAACGCTGTC", "GTGYCAGCMGCCGCGGTAA", "CFS035", "SEQ111", "1", "CFS", "48.8", "123.649", "4/2/25", "BSC", "MK", "1", "E08"], ["CFS036", "CAAACGCACTAA", "GTGYCAGCMGCCGCGGTAA", "CFS036", "SEQ111", "1", "CFS", "45.5", "145.622", "4/2/25", "BSC", "MK", "1", "F06"], ["CFS037", "GTTGGACGAAGG", "GTGYCAGCMGCCGCGGTAA", "CFS037", "SEQ111", "1", "CFS", "0.3", "75.178", "4/8/25", "BSC", "MK", "2", "E04"], ["CFS038", "AGATCGTGCCTA", "GTGYCAGCMGCCGCGGTAA", "CFS038", "SEQ111", "1", "CFS", "12", "95.434", "4/2/25", "BSC", "MK", "2", "C07"], ["FS006", "GTGCCGGCCGAC", "GTGYCAGCMGCCGCGGTAA", "FS006", "SEQ111", "1", "FS", "24.9", "101.76", "4/8/25", "BSC", "MK", "2", "B02"], ["FS009", "TAAGGCATCGCT", "GTGYCAGCMGCCGCGGTAA", "FS009", "SEQ111", "1", "FS", "1.5", "85.518", "4/8/25", "BSC", "MK", "2", "D10"], ["CFS027", "CGTTCTGGTGGT", "GTGYCAGCMGCCGCGGTAA", "CFS027", "SEQ112", "1", "FS", "45.2", "93.148", "5/14/25", "BSC", "CP", "2", "E06"], ["FS007", "GTTGGACGAAGG", "GTGYCAGCMGCCGCGGTAA", "FS007", "SEQ112", "1", "FS", "5.7", "107.597", "5/14/25", "BSC", "CP", "2", "E04"], ["HC021", "GTCACTCCGAAC", "GTGYCAGCMGCCGCGGTAA", "HC021", "SEQ112", "1", "FS", "58", "101.615", "5/14/25", "BSC", "CP", "2", "E05"]], "metadata_headers": ["SampleID", "BarcodeSequence", "LinkerPrimerSequence", "PID", "SEQ", "Time_Point", "Study", "DNA_Conc", "Amp_Conc", "Ext_Date", "Extraction_Location", "Ext_By", "Plate", "Well"], "settings": {"color": {"category": "Study", "colormap": "discrete-coloring-qiime", "continuous": false, "data": {}}}, "type": "scatter"}};
+
+  var plot, biplot = null, ec;
+
+  function init() {
+    // Initialize the DecompositionModel for the scatter plot, and optionally
+    // add one for the biplot arrows
+    plot = new DecompositionModel(data.plot.decomposition,
+                                  data.plot.metadata_headers,
+                                  data.plot.metadata,
+                                  data.plot.type);
+
+    if (data.biplot) {
+      biplot = new DecompositionModel(data.biplot.decomposition,
+                                      data.biplot.metadata_headers,
+                                      data.biplot.metadata,
+                                      data.biplot.type);
+    }
+
+    ec = new EmperorController(plot, biplot, "emperor-notebook-0xfbfdafb", undefined,
+                               data.info);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    ec.render();
+  }
+  $(window).resize(function() {
+    ec.resize(div.innerWidth(), div.innerHeight());
+  });
+
+  $(function(){
+    init();
+    animate();
+
+    ec.ready = function () {
+      // any other code that needs to be executed when emperor is loaded should
+      // go here
+      ec.loadConfig(data.plot.settings);
+
+      // sets up generic callbacks for 3rd party consumers
+      var plotView = ec.sceneViews[0];
+      /*__custom_on_ready_code__*/
+      
+    }
+  });
+
+}); // END REQUIRE.JS block
+    </script>
+  </body>
+</html>

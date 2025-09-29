@@ -148,7 +148,7 @@
                             <h3 class="demo-header">System Demo</h3>
                             <div class="video-container">
                                 <iframe 
-                                    src="https://www.youtube.com/embed/epE0_aEZlYQ" 
+                                    src="https://www.youtube.com/embed/Pq47WUV0jU0" 
                                     title="Gut Instinct Demo Video" 
                                     frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -161,25 +161,28 @@
                         <!-- Variable Lists -->
                         <div class="variable-lists">
                             <div class="variable-list">
-                                <h4>iMSMS Dataset Variables</h4>
+                                <h4>Demographic Variables</h4>
                                 <ul>
-                                    <li onclick="setVariable1(this)">Age</li>
-                                    <li onclick="setVariable1(this)">Disease</li>
-                                    <li onclick="setVariable1(this)">Residence</li>
-                                    <li onclick="setVariable1(this)">Smoking Status</li>
-                                    <li onclick="setVariable1(this)">Sex</li>
+                                    <li onclick="setVariable1(this)">SampleID</li>
+                                    <li onclick="setVariable1(this)">PID</li>
+                                    <li onclick="setVariable1(this)">Time_Point</li>
+                                    <li onclick="setVariable1(this)">Study</li>
+                                    <li onclick="setVariable1(this)">Ext_Date</li>
+                                    <li onclick="setVariable1(this)">Extraction_Location</li>
+                                    <li onclick="setVariable1(this)">Ext_By</li>
+                                    <li onclick="setVariable1(this)">Plate</li>
+                                    <li onclick="setVariable1(this)">Well</li>
                                 </ul>
                             </div>
                             
                             <div class="variable-list">
-                                <h4>Taxa Level Variables</h4>
+                                <h4>Other Variables</h4>
                                 <ul>
-                                    <li onclick="setVariable2(this)">phylum</li>
-                                    <li onclick="setVariable2(this)">class</li>
-                                    <li onclick="setVariable2(this)">order</li>
-                                    <li onclick="setVariable2(this)">family</li>
-                                    <li onclick="setVariable2(this)">genus</li>
-                                    <li onclick="setVariable2(this)">species</li>
+                                    <li onclick="setVariable2(this)">BarcodeSequence</li>
+                                    <li onclick="setVariable2(this)">LinkerPrimerSequence</li>
+                                    <li onclick="setVariable2(this)">SEQ</li>
+                                    <li onclick="setVariable2(this)">DNA_Conc</li>
+                                    <li onclick="setVariable2(this)">Amp_Conc</li>
                                 </ul>
                             </div>
                         </div>
@@ -192,10 +195,10 @@
                         
                         <div class="input-field">
                             <input id="variable2" type="text" placeholder="Click an item above to select" readonly>
-                            <label for="variable2"> Enter Taxa level variable</label>
+                            <label for="variable2"> Enter Algorithm</label>
                         </div>
                         
-                        <a href="#" id="seeViz" class="viz-link">Click to see viz for this question: "How does ___ and taxa level ___ affect microbial diversity in the iMSMS dataset?"</a>
+                        <a href="#" id="seeViz" class="viz-link">Click to see the plot for this question: "How does ___ affect microbial diversity in the moving pictures dataset, as shown by the ____ algorithm?"</a>
                     </div>
                 </div>
             </div>
@@ -212,7 +215,7 @@
             const var1Text = variable1 || '___';
             const var2Text = variable2 || '___';
             
-            vizLink.textContent = `Click to see viz for this question: "How does ${var1Text} and taxa level ${var2Text} affect microbial diversity in the iMSMS dataset?"`;
+            vizLink.textContent = `Click to see the plot for this question: "How does ${var1Text} affect microbial diversity in the moving pictures dataset, as shown by the ${var2Text} algorithm?"`;
         }
         
         function setVariable1(element) {

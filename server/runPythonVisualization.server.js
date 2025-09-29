@@ -28,7 +28,6 @@ function pickPython() {
   }
   return null;
 }
-
 // UPDATED: Dynamic route handler that generates HTML on-demand
 WebApp.connectHandlers.use('/standalone-viz/visualization.html', (req, res, next) => {
   try {
